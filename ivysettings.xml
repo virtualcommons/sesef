@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!--
+vim:sts=2:sw=2:
+-->
+<ivysettings>
+  <settings defaultResolver="chain-resolver" checkUpToDate="false"/>
+  <resolvers>
+    <chain name='chain-resolver' returnFirst='true'>
+      <ibiblio name='tdar-archiva' m2compatible='true' root='http://dev.tdar.org/archiva/repository/internal'/>
+      <filesystem name="internal">
+        <ivy pattern="${repository.dir}/[module]/ivy-[revision].xml"/>
+        <artifact pattern="${repository.dir}/[module]/[artifact]-[revision].[ext]"/>
+      </filesystem>
+    </chain>
+  </resolvers>
+</ivysettings>

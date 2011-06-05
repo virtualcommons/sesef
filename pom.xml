@@ -1,0 +1,87 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<!-- 
+vim:sts=2:sw=2
+-->
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>edu.asu.commons</groupId>
+  <artifactId>csidex</artifactId>
+  <packaging>jar</packaging>
+  <version>0.2-SNAPSHOT</version>
+  <name>csidex</name>
+  <url>http://commons.asu.edu/software/csidex</url>
+  <description>The csidex experimental framework is utilized in 
+  several concrete experiments developed by the Virtual Commons, namely the
+  foraging and irrigation experiments.
+  </description>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+  <licenses>
+    <license>
+      <name>GNU General Public License, Version 3.0</name>
+      <url>http://www.gnu.org/copyleft/gpl.html</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+  <scm>
+    <url>https://virtualcommons.svn.sourceforge.net/svnroot/virtualcommons/csidex</url>
+  </scm>
+  <repositories>
+    <repository>
+      <id>dev.commons.asu.edu</id>
+      <name>dev.commons archiva repo</name>
+      <url>http://dev.commons.asu.edu/archiva/repository/internal</url>
+    </repository>
+    <repository>
+      <id>dev.tdar.org</id>
+      <name>tDAR archiva repo</name>
+      <url>http://dev.tdar.org/archiva/repository/internal</url>
+    </repository>
+  </repositories>
+  <dependencies>
+    <dependency>
+      <groupId>org.freemarker</groupId>
+      <artifactId>freemarker</artifactId>
+      <version>2.3.16</version>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.5</version>
+    </dependency>
+    <dependency>
+      <groupId>com.thoughtworks.xstream</groupId>
+      <artifactId>xstream</artifactId>
+      <version>1.3.1</version>
+    </dependency>
+    <dependency>
+      <groupId>xpp3</groupId>
+      <artifactId>xpp3</artifactId>
+      <version>1.1.4c</version>
+    </dependency>
+  </dependencies>
+  <build>
+    <finalName>csidex</finalName>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>2.6.1</version>
+        <configuration>
+          <links>
+            <link>http://xstream.codehaus.org/javadoc/</link>
+          </links>
+          <detectLinks>true</detectLinks>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>1.6</source>
+          <target>1.6</target>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>

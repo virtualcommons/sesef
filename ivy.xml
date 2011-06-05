@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!--
+vim:sts=2:sw=2:
+-->
+<ivy-module version="2.0">
+    <info organisation="edu.asu.commons" module="csidex"/>
+    <dependencies>
+        <dependency org='org.freemarker' name='freemarker' rev='4.5'/>
+        <dependency org='junit' name='junit' rev='4.5'/>
+        <dependency org='xpp3' name='xpp3' rev='1.1.4c'/>
+        <dependency org='com.thoughtworks.xstream' name='xstream' rev='1.3.1'/>
+    </dependencies>
+</ivy-module>
+
+
+
