@@ -15,7 +15,7 @@ import java.util.Map;
  * @author <a href='mailto:Allen.Lee@asu.edu'>Allen Lee</a>
  * @version $Rev: 454 $
  */
-@SuppressWarnings("unchecked")
+@SuppressWarnings(value={"unchecked", "rawtypes"})
 public class EventTypeChannel implements EventChannel {
 
     private final Map<Class, List<EventProcessor>> equalTypesEventProcessorMap = 
