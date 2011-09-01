@@ -11,11 +11,12 @@ import edu.asu.commons.util.Duration;
  *
  * Per-round experimental parameters for a given Experiment server instance.
  * 
+ * FIXME: can we do mutually recursive generics properly here?
  * 
  * @author <a href='mailto:Allen.Lee@asu.edu'>Allen Lee</a>
  * @version $Revision: 524 $
  */
-@SuppressWarnings("unchecked")
+@SuppressWarnings("rawtypes")
 public interface ExperimentRoundParameters<T extends ExperimentConfiguration> extends Serializable {
 
     public String getInstructions();
@@ -41,8 +42,7 @@ public interface ExperimentRoundParameters<T extends ExperimentConfiguration> ex
         
         public Base(String resource) {
             if (resource == null || "".equals(resource)) {
-                throw new IllegalArgumentException("null or empty resource name: "
-                        + resource);
+                throw new IllegalArgumentException("null or empty resource name: " + resource);
             }
             this.resource = resource;
             assistant.loadProperties(resource);
@@ -131,9 +131,9 @@ public interface ExperimentRoundParameters<T extends ExperimentConfiguration> ex
         public String getProperty(String key, String defaultValue) {
             return assistant.getProperty(key, defaultValue);
         }
-
+        
         public String getProperty(String key) {
-            return assistant.getProperty(key);
+            return getProperty(key, parentConfiguration.getProperty(key));
         }
         public boolean isFirstRound() {
             return parentConfiguration.isFirstRound();
@@ -141,7 +141,6 @@ public interface ExperimentRoundParameters<T extends ExperimentConfiguration> ex
         public boolean isLastRound() {
             return parentConfiguration.isLastRound();
         }
-        
 
 //        
 //        public String getTemplate(String templateName) {
