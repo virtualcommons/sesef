@@ -16,12 +16,17 @@ public interface Identifier extends Serializable {
 //    public int getAssignedNumber();
     
 //    public void setAssignedNumber(int assignedNumber);
+    
+    public String getChatHandle();
 
 	public static final Identifier NULL = new Identifier() {
         private static final long serialVersionUID = 3451864583823314294L;
         @Override
         public String toString() {
             return "Null/System Identifier";
+        }
+        public String getChatHandle() {
+            return toString();
         }
     };
     
@@ -35,9 +40,12 @@ public interface Identifier extends Serializable {
             return (a instanceof Identifier)
                 && ((Identifier) a).toString().equals(toString());
         }
+        public String getChatHandle() {
+            return toString();
+        }
     };
     
-    public static class Base implements Identifier {
+    public static class Base<T extends Base<T>> implements Identifier, Comparable<T> {
 
         private static final long serialVersionUID = -722419864070305185L;
 
@@ -46,6 +54,8 @@ public interface Identifier extends Serializable {
         private volatile static int ordinal = 0;
 
         private final int hash;
+        
+        private String chatHandle;
 
         public Base() {
             hash = ordinal++;
@@ -54,14 +64,6 @@ public interface Identifier extends Serializable {
 
         public String toString() {
             return "[unique identifier: " + id + "]";
-        }
-
-        public boolean equals(Object o) {
-            return (o instanceof Base) && equals((Base) o);
-        }
-
-        public boolean equals(Base uid) {
-            return (uid != null) && id.equals(uid.id);
         }
         
         public int index() {
@@ -72,11 +74,7 @@ public interface Identifier extends Serializable {
             return id.hashCode();
         }
 
-        public int compareTo(Object o) {
-            return this.compareTo((Base) o);
-        }
-
-        public int compareTo(Base uid) {
+        public int compareTo(T uid) {
             if (uid == null) {
                 return 1;
             }
@@ -84,6 +82,14 @@ public interface Identifier extends Serializable {
                 return 0;
             }
             return hash - uid.hash;
+        }
+        
+        public String getChatHandle() {
+            return chatHandle;
+        }
+
+        public void setChatHandle(String chatHandle) {
+            this.chatHandle = chatHandle;
         }
     }
 }

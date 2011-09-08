@@ -15,7 +15,7 @@ import java.util.StringTokenizer;
  * @author <a href='Allen.Lee@asu.edu'>Allen Lee</a>
  * @version $Revision: 460 $
  */
-public class SocketIdentifier implements Identifier, Comparable<SocketIdentifier> {
+public class SocketIdentifier extends Identifier.Base<SocketIdentifier> {
 
     private final InetSocketAddress localSocketAddress;
     private final InetSocketAddress remoteSocketAddress;
@@ -27,10 +27,6 @@ public class SocketIdentifier implements Identifier, Comparable<SocketIdentifier
 
     private String remoteHostName;
     
-    private static volatile int ordinal = 0;
-    
-    private final int id = ordinal++;
-
     private static final long serialVersionUID = 2371746759512286392L;
 
     public SocketIdentifier(Socket socket) {
@@ -111,7 +107,7 @@ public class SocketIdentifier implements Identifier, Comparable<SocketIdentifier
 
     public String toString() {
         int stationNumberInt = getStationNumber();
-        return (stationed) ? String.format("Station %d:%d", stationNumberInt, id) : remoteSocketAddress.toString();
+        return (stationed) ? String.format("Station %d:%d", stationNumberInt, index()) : remoteSocketAddress.toString();
     }
     
     /**
@@ -166,7 +162,7 @@ public class SocketIdentifier implements Identifier, Comparable<SocketIdentifier
         }
         catch (NumberFormatException e) {
             stationed = false;
-            return id;
+            return index();
         }
     }
 
@@ -182,7 +178,7 @@ public class SocketIdentifier implements Identifier, Comparable<SocketIdentifier
         if (comparison == 0) {
             // if these two socket ids are .equals, comparison of 0 is fine.  Otherwise go by the id.
             if (! equals(socketId)) {
-                comparison = Integer.valueOf(id).compareTo(Integer.valueOf(socketId.id)); 
+                comparison = Integer.valueOf(index()).compareTo(Integer.valueOf(socketId.index())); 
             }
         }
         return comparison;
