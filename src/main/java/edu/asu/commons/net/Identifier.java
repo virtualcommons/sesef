@@ -26,7 +26,7 @@ public interface Identifier extends Serializable {
             return "Null/System Identifier";
         }
         public String getChatHandle() {
-            return toString();
+            return "System message";
         }
     };
     
