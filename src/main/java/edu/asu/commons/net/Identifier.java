@@ -18,32 +18,39 @@ public interface Identifier extends Serializable {
 //    public void setAssignedNumber(int assignedNumber);
     
     public String getChatHandle();
+    public void setChatHandle(String handle);
 
-	public static final Identifier NULL = new Identifier() {
+	public static final Identifier NULL = new SystemIdentifier() {
         private static final long serialVersionUID = 3451864583823314294L;
-        @Override
-        public String toString() {
-            return "Null/System Identifier";
-        }
-        public String getChatHandle() {
-            return "System message";
-        }
     };
     
-    public static final Identifier ALL = new Identifier() {
+    public static final Identifier ALL = new SystemIdentifier() {
         private static final long serialVersionUID = -2831336158562033508L;
         @Override
         public String toString() {
             return "All";
         }
-        public boolean equals(Object a) {
-            return (a instanceof Identifier)
-                && ((Identifier) a).toString().equals(toString());
-        }
         public String getChatHandle() {
             return toString();
         }
+
     };
+    
+    public abstract static class SystemIdentifier implements Identifier {
+        private static final long serialVersionUID = 3504270875695958633L;
+        public String getChatHandle() {
+            return "System message";
+        }
+        public void setChatHandle(String chatHandle) {
+            throw new UnsupportedOperationException("Cannot change system chat handle");
+        }
+        public String toString() {
+            return "system identifier";
+        }
+        public boolean equals(Object a) {
+            return (a instanceof Identifier) && toString().equals(a.toString());
+        }
+    }
     
     public static class Base<T extends Base<T>> implements Identifier, Comparable<T> {
 
