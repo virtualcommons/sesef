@@ -46,6 +46,10 @@ public interface ExperimentConfiguration<T extends ExperimentRoundParameters> ex
     
     public String getProperty(String key);
     public String getProperty(String key, String defaultValue);
+    
+    public int getIntProperty(String key);
+    public double getDoubleProperty(String key);
+    public boolean getBooleanProperty(String key); 
 
     public PersistenceType getPersistenceType();
 
@@ -119,6 +123,7 @@ public interface ExperimentConfiguration<T extends ExperimentRoundParameters> ex
             loadParameters();
         }
 
+        @SuppressWarnings("unchecked")
         private void loadParameters() {
             for (int roundNumber = 0; roundNumber < getNumberOfRounds(); roundNumber++) {
                 String roundConfigurationResource = getConfigurationDirectory() + getRoundParametersFile(roundNumber);
@@ -221,10 +226,18 @@ public interface ExperimentConfiguration<T extends ExperimentRoundParameters> ex
         public String getProperty(String key, String defaultValue) {
             return assistant.getProperty(key, defaultValue);
         }
-
-        // public String getTemplate(String templateName) {
-        // return assistant.transform(templateName, this);
-        // }
+        
+        public int getIntProperty(String key) {
+            return assistant.getIntProperty(key);
+        }
+        
+        public double getDoubleProperty(String key) {
+            return assistant.getDoubleProperty(key);
+        }
+        
+        public boolean getBooleanProperty(String key) {
+            return assistant.getBooleanProperty(key);
+        }
 
     }
 
