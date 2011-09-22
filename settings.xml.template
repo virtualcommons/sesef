@@ -1,0 +1,14 @@
+<settings>
+    <servers>
+        <server>
+            <id>archiva.internal</id>
+            <username>mavendeploy</username>
+            <password>an archiva password</password>
+        </server>
+        <server>
+            <id>archiva.snapshots</id>
+            <username>mavendeploy</username>
+            <password>an archiva password</password>
+        </server>
+    </servers>
+</settings>

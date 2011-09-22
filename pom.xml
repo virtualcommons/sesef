@@ -25,8 +25,20 @@ vim:sts=2:sw=2
     </license>
   </licenses>
   <scm>
-    <url>https://virtualcommons.svn.sourceforge.net/svnroot/virtualcommons/csidex</url>
+    <url>https://bitbucket.org/virtualcommons/csidex</url>
   </scm>
+  <distributionManagement>
+    <repository>
+      <id>archiva.internal</id>
+      <name>Internal Release Repository</name>
+      <url>http://dev.commons.asu.edu/archiva/repository/internal/</url>
+    </repository>
+    <snapshotRepository>
+      <id>archiva.snapshots</id>
+      <name>Internal Snapshot Repository</name>
+      <url>http://dev.commons.asu.edu/archiva/repository/snapshots/</url>
+    </snapshotRepository>
+  </distributionManagement>
   <repositories>
     <repository>
       <id>dev.commons.asu.edu</id>
@@ -63,6 +75,14 @@ vim:sts=2:sw=2
   </dependencies>
   <build>
     <finalName>csidex</finalName>
+
+    <extensions>
+        <extension>
+          <groupId>org.apache.maven.wagon</groupId>
+          <artifactId>wagon-webdav</artifactId>
+          <version>1.0-beta-2</version>
+        </extension>
+    </extensions>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
