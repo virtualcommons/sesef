@@ -3,7 +3,9 @@ package edu.asu.commons.conf;
 import java.io.Serializable;
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 /**
  * $Id: ExperimentConfiguration.java 453 2010-02-03 05:01:54Z alllee $
@@ -18,7 +20,7 @@ import java.util.List;
  * @version $Revision: 453 $
  */
 @SuppressWarnings("rawtypes")
-public interface ExperimentConfiguration<T extends ExperimentRoundParameters> extends Serializable {
+public interface ExperimentConfiguration<T extends ExperimentRoundParameters> extends Serializable, Iterable<T> {
 
     public List<T> getAllParameters();
 
@@ -28,7 +30,22 @@ public interface ExperimentConfiguration<T extends ExperimentRoundParameters> ex
 
     public int getNumberOfRounds();
 
+    /**
+     * Advances to the next round.
+     * @return
+     */
     public T nextRound();
+    
+    /**
+     * Returns the previous round's configuration without modification.
+     */
+    public T getPreviousRoundConfiguration();
+    
+    /**
+     * Returns the next round configuration without modification.
+     * @return
+     */
+    public T getNextRoundConfiguration();
 
     public String getServerName();
 
@@ -193,6 +210,25 @@ public interface ExperimentConfiguration<T extends ExperimentRoundParameters> ex
 
         public boolean isLastRound() {
             return currentRoundIndex == (getNumberOfRounds() - 1);
+        }
+        
+        public Iterator<E> iterator() {
+            return allParameters.iterator();
+        }
+        
+        public ListIterator<E> listIterator() {
+            return allParameters.listIterator();
+        }
+        
+        public E getPreviousRoundConfiguration() {
+            return allParameters.get(Math.max(0, currentRoundIndex - 1));
+        }
+        
+        public E getNextRoundConfiguration() {
+            if (isLastRound()) {
+                return getCurrentParameters();
+            }
+            return allParameters.get(currentRoundIndex + 1);
         }
 
         /**
