@@ -19,6 +19,8 @@ public interface Identifier extends Serializable {
     
     public String getChatHandle();
     public void setChatHandle(String handle);
+    public String getSurveyId();
+    public void setSurveyId(String surveyId);
 
 	public static final Identifier NULL = new SystemIdentifier() {
         private static final long serialVersionUID = 3451864583823314294L;
@@ -44,6 +46,12 @@ public interface Identifier extends Serializable {
         public void setChatHandle(String chatHandle) {
             throw new UnsupportedOperationException("Cannot change system chat handle");
         }
+        public String getSurveyId() {
+            return toString();
+        }
+        public void setSurveyId(String uniqueId) {
+            throw new UnsupportedOperationException("Tried to set survey id on the system identifier.");
+        }
         public String toString() {
             return "system identifier";
         }
@@ -57,6 +65,7 @@ public interface Identifier extends Serializable {
         private static final long serialVersionUID = -722419864070305185L;
 
         private final String id;
+        private String surveyId;
 
         private volatile static int ordinal = 0;
 
@@ -98,5 +107,14 @@ public interface Identifier extends Serializable {
         public void setChatHandle(String chatHandle) {
             this.chatHandle = chatHandle;
         }
+
+        public String getSurveyId() {
+            return surveyId;
+        }
+
+        public void setSurveyId(String surveyId) {
+            this.surveyId = surveyId;
+        }
+
     }
 }
