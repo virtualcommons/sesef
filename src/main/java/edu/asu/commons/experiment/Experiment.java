@@ -16,7 +16,7 @@ import edu.asu.commons.conf.ExperimentRoundParameters;
  * @version $Revision: 1 $
  */
 
-public interface Experiment<C extends ExperimentConfiguration<? extends ExperimentRoundParameters<C>>> {
+public interface Experiment<C extends ExperimentConfiguration<RC>, RC extends ExperimentRoundParameters<C>> {
 
     public Logger getLogger();
 

@@ -1,6 +1,8 @@
 package edu.asu.commons.event;
 
 import edu.asu.commons.command.Command;
+import edu.asu.commons.conf.ExperimentConfiguration;
+import edu.asu.commons.conf.ExperimentRoundParameters;
 import edu.asu.commons.experiment.Experiment;
 
 
@@ -20,7 +22,7 @@ public abstract class EventTypeProcessor<E extends Event> implements EventProces
     
     private final boolean acceptsSubtypes;
     
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("rawtypes")
     private Experiment experiment;
     
     /**
@@ -85,8 +87,7 @@ public abstract class EventTypeProcessor<E extends Event> implements EventProces
         return acceptsSubtypes;
     }
 
-    @SuppressWarnings("unchecked")
-	public void setExperiment(Experiment experiment) {
+	public <C extends ExperimentConfiguration<R>, R extends ExperimentRoundParameters<C>, EX extends Experiment<C, R>> void setExperiment(EX experiment) {
 		this.experiment = experiment;
 	}
 }

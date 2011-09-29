@@ -1,5 +1,7 @@
 package edu.asu.commons.event;
 
+import edu.asu.commons.conf.ExperimentConfiguration;
+import edu.asu.commons.conf.ExperimentRoundParameters;
 import edu.asu.commons.experiment.Experiment;
 
 
@@ -22,7 +24,6 @@ public interface EventProcessor<E extends Event> extends EventHandler<E>, EventC
     
     public void handleInExperimentThread(E event);
     
-    @SuppressWarnings("unchecked")
-    public void setExperiment(Experiment experiment);
+    public <C extends ExperimentConfiguration<R>, R extends ExperimentRoundParameters<C>, EX extends Experiment<C, R>> void setExperiment(EX experiment);
 
 }
