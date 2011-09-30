@@ -2,18 +2,24 @@ package edu.asu.commons.util;
 
 import java.awt.AWTEventMulticaster;
 import java.awt.Component;
+import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.Properties;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JEditorPane;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
+import javax.swing.event.HyperlinkEvent;
+import javax.swing.event.HyperlinkListener;
 import javax.swing.text.Document;
 import javax.swing.text.Element;
 import javax.swing.text.View;
@@ -43,7 +49,32 @@ public final class HtmlEditorPane extends JEditorPane {
         setContentType("text/html");
 //        putClientProperty(JEditorPane.HONOR_DISPLAY_PROPERTIES, Boolean.TRUE);
 //        setFont(new Font("Helvetica", Font.TRUETYPE_FONT, 14));
+        
         setEditable(false);
+        addHyperlinkListener(new HyperlinkListener() {
+            @Override
+            public void hyperlinkUpdate(HyperlinkEvent e) {
+                URL url = e.getURL();
+                StringBuilder errorMessageBuilder = new StringBuilder("Couldn't display ").append(url);
+                if (Desktop.isDesktopSupported()) {
+                    Desktop desktop = Desktop.getDesktop();
+                    if (desktop.isSupported(Desktop.Action.BROWSE)) {
+                        try {
+                            desktop.browse(url.toURI());
+                        } catch (IOException e1) {
+                            e1.printStackTrace();
+                            errorMessageBuilder.append(e1.getMessage());
+                        } catch (URISyntaxException e1) {
+                            e1.printStackTrace();
+                            errorMessageBuilder.append(e1.getMessage());
+                        }
+                        return;
+                    }
+                }
+                JOptionPane.showMessageDialog(HtmlEditorPane.this, errorMessageBuilder.toString());
+            }
+        });
+
     }
     
     /**
