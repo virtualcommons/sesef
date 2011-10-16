@@ -54,6 +54,9 @@ public final class HtmlEditorPane extends JEditorPane {
         addHyperlinkListener(new HyperlinkListener() {
             @Override
             public void hyperlinkUpdate(HyperlinkEvent e) {
+                if (e.getEventType() != HyperlinkEvent.EventType.ACTIVATED) {
+                    return;
+                }
                 URL url = e.getURL();
                 StringBuilder errorMessageBuilder = new StringBuilder("Couldn't display ").append(url);
                 if (Desktop.isDesktopSupported()) {
