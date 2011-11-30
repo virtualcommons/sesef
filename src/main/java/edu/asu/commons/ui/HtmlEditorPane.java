@@ -1,4 +1,4 @@
-package edu.asu.commons.util;
+package edu.asu.commons.ui;
 
 import java.awt.AWTEventMulticaster;
 import java.awt.Component;
@@ -29,13 +29,13 @@ import javax.swing.text.html.HTML;
 import javax.swing.text.html.HTMLEditorKit;
 
 /**
- * $Id: HtmlEditorPane.java 1 2008-07-23 22:15:18Z alllee $
+ * $Id$
  * 
  * Provides HTML form processing 
  * (inspired by Allen Holub's JavaWorld article) 
  * 
  * @author <a href='anonymouslee@gmail.com'>Allen Lee</a>
- * @version $Revision: 1 $
+ * @version $Revision$
  */
 @SuppressWarnings("serial")
 public final class HtmlEditorPane extends JEditorPane {
