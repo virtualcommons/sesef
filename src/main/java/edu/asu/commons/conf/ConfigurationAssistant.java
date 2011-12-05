@@ -5,16 +5,18 @@ import java.io.InputStream;
 import java.io.Serializable;
 import java.util.Properties;
 
+import org.stringtemplate.v4.ST;
+
 import edu.asu.commons.util.ResourceLoader;
 
 /**
- * $Id: ConfigurationAssistant.java 453 2010-02-03 05:01:54Z alllee $
+ * $Id$
  * 
  * Provides convenience methods to read configuration properties from a java.util.Properties
  * instance.
  * 
  * @author <a href='Allen.Lee@asu.edu'>Allen Lee</a>
- * @version $Revision: 453 $
+ * @version $Revision$
  */
 public class ConfigurationAssistant implements Serializable {
     
@@ -134,5 +136,18 @@ public class ConfigurationAssistant implements Serializable {
     
     public void setProperty(String key, String value) {
         properties.setProperty(key, value);
+    }
+    
+    /**
+     * Returns a stringtemplate ST instance using {} as delimiters.
+     * @param template
+     * @return
+     */
+    public ST createStringTemplate(String template) {
+        return new ST(template, '{', '}');
+    }
+    
+    public ST templatize(String template, char startDelimiter, char endDelimiter) {
+        return new ST(template, startDelimiter, endDelimiter);
     }
 }

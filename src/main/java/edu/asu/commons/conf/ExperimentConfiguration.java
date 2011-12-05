@@ -7,8 +7,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
+import org.stringtemplate.v4.ST;
+
 /**
- * $Id: ExperimentConfiguration.java 453 2010-02-03 05:01:54Z alllee $
+ * $Id$
  * 
  * All experiment server configurations should follow this contract.
  * 
@@ -17,7 +19,7 @@ import java.util.ListIterator;
  * ExperimentConfiguration<T extends ExperimentRoundParameters<this-type>>
  * 
  * @author <a href='mailto:Allen.Lee@asu.edu'>Allen Lee</a>
- * @version $Revision: 453 $
+ * @version $Revision$
  */
 @SuppressWarnings("rawtypes")
 public interface ExperimentConfiguration<T extends ExperimentRoundParameters> extends Serializable, Iterable<T> {
@@ -273,6 +275,10 @@ public interface ExperimentConfiguration<T extends ExperimentRoundParameters> ex
         
         public boolean getBooleanProperty(String key) {
             return assistant.getBooleanProperty(key);
+        }
+        
+        public ST createStringTemplate(String template) {
+            return assistant.createStringTemplate(template);
         }
 
     }

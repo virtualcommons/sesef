@@ -4,17 +4,19 @@ import java.io.PrintStream;
 import java.io.Serializable;
 import java.util.Properties;
 
+import org.stringtemplate.v4.ST;
+
 import edu.asu.commons.util.Duration;
 
 /**
- * $Id: ExperimentRoundParameters.java 524 2010-08-06 00:53:30Z alllee $
+ * $Id$
  *
  * Per-round experimental parameters for a given Experiment server instance.
  * 
  * FIXME: can we do mutually recursive generics properly here?
  * 
  * @author <a href='mailto:Allen.Lee@asu.edu'>Allen Lee</a>
- * @version $Revision: 524 $
+ * @version $Revision$
  */
 @SuppressWarnings("rawtypes")
 public interface ExperimentRoundParameters<T extends ExperimentConfiguration> extends Serializable {
@@ -141,10 +143,11 @@ public interface ExperimentRoundParameters<T extends ExperimentConfiguration> ex
         public boolean isLastRound() {
             return parentConfiguration.isLastRound();
         }
+        
+        public ST createStringTemplate(String template) {
+            return assistant.createStringTemplate(template);
+        }
 
-//        
-//        public String getTemplate(String templateName) {
-//            return assistant.transform(templateName, this);
-//        }
+
     }
 }

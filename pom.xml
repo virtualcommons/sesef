@@ -53,11 +53,6 @@ vim:sts=2:sw=2
   </repositories>
   <dependencies>
     <dependency>
-      <groupId>org.freemarker</groupId>
-      <artifactId>freemarker</artifactId>
-      <version>2.3.16</version>
-    </dependency>
-    <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>4.5</version>
@@ -71,6 +66,11 @@ vim:sts=2:sw=2
       <groupId>xpp3</groupId>
       <artifactId>xpp3</artifactId>
       <version>1.1.4c</version>
+    </dependency>
+    <dependency>
+      <groupId>org.antlr</groupId>
+      <artifactId>stringtemplate</artifactId>
+      <version>4.0.2</version>
     </dependency>
   </dependencies>
   <build>
