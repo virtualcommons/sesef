@@ -74,8 +74,12 @@ public interface ExperimentRoundParameters<T extends ExperimentConfiguration> ex
             return parentConfiguration;
         }
         
+        public int getDuration() {
+            return assistant.getIntProperty("duration", getDefaultRoundDuration()); 
+        }
+        
         public Duration getRoundDuration() {
-            return Duration.create(assistant.getIntProperty("duration", getDefaultRoundDuration())); 
+            return Duration.create(getDuration());
         }
         
         /**
