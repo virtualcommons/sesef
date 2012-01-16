@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Map;
 
 import org.stringtemplate.v4.ST;
 
@@ -212,6 +213,10 @@ public interface ExperimentConfiguration<T extends ExperimentRoundParameters> ex
 
         public boolean isLastRound() {
             return currentRoundIndex == (getNumberOfRounds() - 1);
+        }
+        
+        public Map<String, Object> toMap() {
+        	return assistant.toMap(this);
         }
         
         public Iterator<E> iterator() {

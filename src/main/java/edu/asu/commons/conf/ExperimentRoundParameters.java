@@ -2,6 +2,7 @@ package edu.asu.commons.conf;
 
 import java.io.PrintStream;
 import java.io.Serializable;
+import java.util.Map;
 import java.util.Properties;
 
 import org.stringtemplate.v4.ST;
@@ -35,6 +36,7 @@ public interface ExperimentRoundParameters<T extends ExperimentConfiguration> ex
     public static abstract class Base<E extends ExperimentConfiguration> implements ExperimentRoundParameters<E> {
         private static final long serialVersionUID = -7904104481473406817L;
         private final ConfigurationAssistant assistant = new ConfigurationAssistant();
+
         private final String resource;
         private E parentConfiguration;
         
@@ -80,6 +82,11 @@ public interface ExperimentRoundParameters<T extends ExperimentConfiguration> ex
         
         public Duration getRoundDuration() {
             return Duration.create(getDuration());
+        }
+        
+
+        public Map<String, Object> toMap() {
+        	return assistant.toMap(this);
         }
         
         /**

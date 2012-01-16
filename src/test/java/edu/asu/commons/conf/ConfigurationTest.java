@@ -1,5 +1,7 @@
 package edu.asu.commons.conf;
 
+import static org.junit.Assert.assertEquals;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -9,8 +11,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import edu.asu.commons.util.Duration;
-
-import static org.junit.Assert.*;
 
 public class ConfigurationTest {
 
@@ -24,6 +24,16 @@ public class ConfigurationTest {
     @Test
     public void testConfigurationAssistant() {
         assertEquals(0.0d, assistant.getDoubleProperty("foo", 0.0d), 0.0d);
+    }
+    
+    @Test
+    public void testAsBeanPropertyMap() {
+    	ServerConfiguration configuration = new ServerConfiguration();
+    	RoundConfiguration roundConfiguration = configuration.getCurrentParameters();
+    	Map<String, Object> roundConfigAsMap = roundConfiguration.toMap();
+    	assertEquals(roundConfiguration.getDuration(), roundConfigAsMap.get("duration"));
+    	assertEquals(roundConfiguration.getClientsPerGroup(), roundConfigAsMap.get("clientsPerGroup"));
+    	assertEquals(roundConfiguration.getInstructions(), roundConfigAsMap.get("instructions"));
     }
     
     @Test
@@ -43,9 +53,7 @@ public class ConfigurationTest {
 
         private static final long serialVersionUID = 7867208205942476733L;
 
-        private final static String CONFIGURATION_FILE_NAME = "irrigation.xml";
-
-        private final static String DEFAULT_LOG_FILE_DESTINATION = "irrigation.log";
+        private final static String CONFIGURATION_FILE_NAME = "server.xml";
 
         public ServerConfiguration() {
             super();
@@ -56,7 +64,7 @@ public class ConfigurationTest {
         }
 
         public String getLogFileDestination() {
-            return assistant.getStringProperty("log", DEFAULT_LOG_FILE_DESTINATION);
+            return assistant.getStringProperty("log");
         }
 
         public String getPersistenceDirectory() {
@@ -69,7 +77,7 @@ public class ConfigurationTest {
 
         @Override
         protected RoundConfiguration createRoundConfiguration(String roundConfigurationFile) {
-            return new RoundConfiguration(roundConfigurationFile);
+            return new RoundConfiguration();
         }
 
         @Override
@@ -221,10 +229,6 @@ public class ConfigurationTest {
             else {
                 return 0;
             }
-        }
-        
-        public RoundConfiguration(String resource) {
-            super(resource);
         }
 
         public int getMaximumClientFlowCapacity() {

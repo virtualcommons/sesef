@@ -1,8 +1,16 @@
 package edu.asu.commons.conf;
 
+import java.beans.BeanInfo;
+import java.beans.IntrospectionException;
+import java.beans.Introspector;
+import java.beans.PropertyDescriptor;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 import org.stringtemplate.v4.ST;
@@ -23,6 +31,8 @@ public class ConfigurationAssistant implements Serializable {
     private static final long serialVersionUID = -9093022080387404606L;
     
     private final Properties properties;
+
+	private final Map<String, Object> cachedPropertyMap = new HashMap<String, Object>();
     
     public ConfigurationAssistant() {
         this(new Properties());
@@ -150,4 +160,27 @@ public class ConfigurationAssistant implements Serializable {
     public ST templatize(String template, char startDelimiter, char endDelimiter) {
         return new ST(template, startDelimiter, endDelimiter);
     }
+
+	public Map<String, Object> toMap(Object configuration) {
+		if (! cachedPropertyMap.isEmpty()) {
+    		return cachedPropertyMap ;
+    	}
+    	try {
+			BeanInfo beanInfo = Introspector.getBeanInfo(configuration.getClass());
+			for (PropertyDescriptor descriptor: beanInfo.getPropertyDescriptors()) {
+				Object value = descriptor.getReadMethod().invoke(configuration);
+				cachedPropertyMap.put(descriptor.getName(), value);
+			}
+			return cachedPropertyMap;
+		} catch (IntrospectionException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		}
+		return Collections.emptyMap();
+	}
 }
