@@ -283,7 +283,9 @@ public interface ExperimentConfiguration<T extends ExperimentRoundParameters> ex
         }
         
         public ST createStringTemplate(String template) {
-            return assistant.createStringTemplate(template);
+            ST st = assistant.createStringTemplate(template);
+            st.add("self", this);
+            return st;
         }
 
     }
