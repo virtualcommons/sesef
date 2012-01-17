@@ -73,15 +73,12 @@ class SocketDispatcherWorker implements Runnable {
     public void write(Event event) {
         try {
             synchronized (socket) {
-//                ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
-//                out.writeObject(event);
-//                out.flush();
                 cachedOut.reset();
                 cachedOut.writeObject(event);
                 cachedOut.flush();
             }
             // XXX: don't close() the stream.  It closes the wrapped Socket 
-            // output stream and essentially fubars the socket.
+            // OutputStream and all subsequent usage / reads will fail 
         }
         catch (IOException e) {
             e.printStackTrace();

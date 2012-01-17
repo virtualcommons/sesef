@@ -15,6 +15,7 @@ import edu.asu.commons.event.Event;
 import edu.asu.commons.event.EventChannel;
 import edu.asu.commons.event.EventChannelFactory;
 import edu.asu.commons.event.EventTypeProcessor;
+import edu.asu.commons.event.PersistableEvent;
 import edu.asu.commons.net.DispatcherFactory;
 import edu.asu.commons.net.ServerDispatcher;
 
@@ -125,6 +126,19 @@ public abstract class AbstractExperiment<C extends ExperimentConfiguration<R>, R
     protected void transmit(Event event) {
         dispatcher.transmit(event);
     }   
+    
+    protected void transmitAndStore(PersistableEvent event) {
+    	dispatcher.transmit(event);
+    	getPersister().store(event);
+    }
+    
+    /**
+     * Asks getPersister() to store the given PersistableEvent.
+     * @param event
+     */
+    protected void store(PersistableEvent event) {
+    	getPersister().store(event);
+    }
     
     protected EventChannel getEventChannel() {
         return channel;

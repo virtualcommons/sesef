@@ -27,7 +27,7 @@ import edu.asu.commons.event.RoundStartedMarkerEvent;
  * @author <a href='mailto:Allen.Lee@asu.edu'>Allen Lee</a>
  * @version $Revision: 521 $
  */
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class SavedRoundData implements Serializable {
     
     private static final long serialVersionUID = -2136359143854670064L;

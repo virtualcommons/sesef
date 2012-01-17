@@ -43,7 +43,7 @@ import edu.asu.commons.event.RoundEndedMarkerEvent;
  * @param <R>
  */
 
-public abstract class Persister<T extends ExperimentConfiguration<R>, R extends ExperimentRoundParameters<T>> {
+public abstract class Persister<T extends ExperimentConfiguration<R>, R extends ExperimentRoundParameters<T>> implements IPersister<T, R> {
 
     // FIXME: test on windows and mac to make sure that File.separator doesn't cause any bugs.
     private final static String ROUND_SAVE_DIRECTORY_FORMAT = "MM-dd-yyyy" + File.separator + "HH.mm.ss";
@@ -125,17 +125,29 @@ public abstract class Persister<T extends ExperimentConfiguration<R>, R extends 
         }
     }
     
-    public void stop() {
+    /* (non-Javadoc)
+	 * @see edu.asu.commons.experiment.IPersister#stop()
+	 */
+    @Override
+	public void stop() {
         channel.remove(this);
         chatLogger.removeHandler(chatLogFileHandler);
         chatLogFileHandler.close();
     }
     
-    public SortedSet<PersistableEvent> getActions() {
+    /* (non-Javadoc)
+	 * @see edu.asu.commons.experiment.IPersister#getActions()
+	 */
+    @Override
+	public SortedSet<PersistableEvent> getActions() {
         return Collections.unmodifiableSortedSet(actions);
     }
     
-    public void store(PersistableEvent event) {
+    /* (non-Javadoc)
+	 * @see edu.asu.commons.experiment.IPersister#store(edu.asu.commons.event.PersistableEvent)
+	 */
+    @Override
+	public void store(PersistableEvent event) {
         // XXX: timestamp before acquiring the lock to ensure
         // as-close-to-invoked-time-accuracy
         event.timestamp();
@@ -144,11 +156,19 @@ public abstract class Persister<T extends ExperimentConfiguration<R>, R extends 
         }
     }
     
-    public void clearChatData() {
+    /* (non-Javadoc)
+	 * @see edu.asu.commons.experiment.IPersister#clearChatData()
+	 */
+    @Override
+	public void clearChatData() {
         chatRequests.clear();
     }
     
-    public void store(ChatRequest request) {
+    /* (non-Javadoc)
+	 * @see edu.asu.commons.experiment.IPersister#store(edu.asu.commons.event.ChatRequest)
+	 */
+    @Override
+	public void store(ChatRequest request) {
         request.timestamp();
         // FIXME: right now all cumulative chat requests are stored in each round file.  Should either
         // switch to one set of chats per round, or a single chat file, as in the chatLogger.  There
@@ -165,7 +185,11 @@ public abstract class Persister<T extends ExperimentConfiguration<R>, R extends 
                         request.toString()));
     }
 
-    public final void initialize(R roundConfiguration) {
+    /* (non-Javadoc)
+	 * @see edu.asu.commons.experiment.IPersister#initialize(R)
+	 */
+    @Override
+	public final void initialize(R roundConfiguration) {
         clear();
         this.roundConfiguration = roundConfiguration;
         xmlEnabled = roundConfiguration.getParentConfiguration().getPersistenceType().isXmlEnabled();
@@ -263,7 +287,11 @@ public abstract class Persister<T extends ExperimentConfiguration<R>, R extends 
         }
     }
     
-    public final <E extends DataModel<R>> void persist(E serverDataModel) {
+    /* (non-Javadoc)
+	 * @see edu.asu.commons.experiment.IPersister#persist(E)
+	 */
+    @Override
+	public final <E extends DataModel<R>> void persist(E serverDataModel) {
         // shouldn't need to synchronize but just to be sure / threadsafe
         synchronized (actions) {
             actions.add(new RoundEndedMarkerEvent());
@@ -295,7 +323,11 @@ public abstract class Persister<T extends ExperimentConfiguration<R>, R extends 
     }
     
     
-    public final void clear() {
+    /* (non-Javadoc)
+	 * @see edu.asu.commons.experiment.IPersister#clear()
+	 */
+    @Override
+	public final void clear() {
         synchronized (actions) {
             actions.clear();
         }

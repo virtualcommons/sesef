@@ -32,4 +32,6 @@ public interface Experiment<C extends ExperimentConfiguration<RC>, RC extends Ex
     
     public void schedule(Command command);
     
+    public IPersister<C, RC> getPersister();
+    
 }
