@@ -20,14 +20,14 @@ import edu.asu.commons.net.DispatcherFactory;
 import edu.asu.commons.net.ServerDispatcher;
 
 /**
- * $Id: AbstractExperiment.java 454 2010-02-04 04:17:29Z alllee $
+ * $Id$
  *
  * Abstract base class for Experiments, providing convenience methods for 
  * obtaining an ExperimentConfiguration of the appropriate type, registering
  * with an ExperimentService specified via Spring, 
  * 
  * @author <a href='mailto:Allen.Lee@asu.edu'>Allen Lee</a> 
- * @version $Revision: 454 $
+ * @version $Revision$
  */
 public abstract class AbstractExperiment<C extends ExperimentConfiguration<R>, R extends ExperimentRoundParameters<C>> implements Experiment<C, R> {
 

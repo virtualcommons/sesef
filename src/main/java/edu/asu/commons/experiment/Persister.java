@@ -30,7 +30,7 @@ import edu.asu.commons.event.PersistableEvent;
 import edu.asu.commons.event.RoundEndedMarkerEvent;
 
 /**
- * $Id: Persister.java 524 2010-08-06 00:53:30Z alllee $
+ * $Id$
  * 
  * Base class responsible for persistence strategies.  
  * 
@@ -38,7 +38,7 @@ import edu.asu.commons.event.RoundEndedMarkerEvent;
  * it is an ad-hoc mess.
  * 
  * @author <a href='mailto:Allen.Lee@asu.edu'>Allen Lee</a>
- * @version $Revision: 524 $
+ * @version $Revision$
  * @param <T>
  * @param <R>
  */

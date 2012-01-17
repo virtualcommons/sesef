@@ -11,14 +11,14 @@ import edu.asu.commons.event.Event;
 import edu.asu.commons.net.event.DisconnectionRequest;
 
 /**
- * $Id: SocketDispatcherWorker.java 305 2009-10-20 00:15:43Z alllee $
+ * $Id$
  *
  * This class is a basic Socket-based Runnable that helps Client and Server SocketDispatchers perform 
  * reading and writing of Events.  Will read Events from the socket via blocking I/O after this Runnable
  * is start()-ed.  Writes occur within caller's thread of execution.
  * 
  * @author <a href='allen.lee@asu.edu'>Allen Lee</a>
- * @version $Revision: 305 $
+ * @version $Revision$
  */
 class SocketDispatcherWorker implements Runnable {
 

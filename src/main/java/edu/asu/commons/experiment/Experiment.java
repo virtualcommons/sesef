@@ -7,13 +7,13 @@ import edu.asu.commons.conf.ExperimentConfiguration;
 import edu.asu.commons.conf.ExperimentRoundParameters;
 
 /**
- * $Id: Experiment.java 1 2008-07-23 22:15:18Z alllee $
+ * $Id$
  * 
  * Contract interface for all Experiment subtypes.
  *   
  * 
  * @author Allen Lee
- * @version $Revision: 1 $
+ * @version $Revision$
  */
 
 public interface Experiment<C extends ExperimentConfiguration<RC>, RC extends ExperimentRoundParameters<C>> {

@@ -16,7 +16,7 @@ import edu.asu.commons.event.PersistableEvent;
 import edu.asu.commons.event.RoundStartedMarkerEvent;
 
 /**
- * $Id: SavedRoundData.java 521 2010-06-29 16:08:12Z alllee $
+ * $Id$
  * 
  * Struct-ish class for saved round data.  Should see if we can somehow preserve type information here.  
  * 
@@ -25,7 +25,7 @@ import edu.asu.commons.event.RoundStartedMarkerEvent;
  * this class just return the base interface type so casts are necessary to extract any round-specific data from the ExperimentRoundParameters or DataModel.    
  * 
  * @author <a href='mailto:Allen.Lee@asu.edu'>Allen Lee</a>
- * @version $Revision: 521 $
+ * @version $Revision$
  */
 @SuppressWarnings({"rawtypes", "unchecked"})
 public class SavedRoundData implements Serializable {
