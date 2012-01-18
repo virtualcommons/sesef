@@ -5,7 +5,7 @@ import java.net.Socket;
 import java.util.StringTokenizer;
 
 /**
- * $Id: SocketIdentifier.java 460 2010-02-05 00:06:44Z alllee $
+ * $Id$
  * 
  * Uniquely identifies a socket connection and provides translation methods to convert 
  * IP addresses of a certain format to "station numbers".  Mostly used for our experimental
@@ -13,7 +13,7 @@ import java.util.StringTokenizer;
  * the appropriate station number.
  *  
  * @author <a href='Allen.Lee@asu.edu'>Allen Lee</a>
- * @version $Revision: 460 $
+ * @version $Revision$
  */
 public class SocketIdentifier extends Identifier.Base<SocketIdentifier> {
 
@@ -124,11 +124,11 @@ public class SocketIdentifier extends Identifier.Base<SocketIdentifier> {
         StringTokenizer tokenizer = new StringTokenizer(remoteHostname, ".");
         String stationId = tokenizer.nextToken();
 
-        //System.err.println("remote host name: "+  getRemoteHostName());
-        //System.err.println("remote socket address: " + remoteSocketAddress);
-        //System.err.println("remote host address: " + getRemoteHostAddress());
-        //System.err.println("local host name: " + getLocalHostName());
-        //System.err.println("local host address: " + localSocketAddress);
+        System.err.println("remote host name: "+  getRemoteHostName());
+        System.err.println("remote socket address: " + remoteSocketAddress);
+        System.err.println("remote host address: " + getRemoteHostAddress());
+        System.err.println("local host name: " + getLocalHostName());
+        System.err.println("local host address: " + localSocketAddress);
 
         int startIndex = stationId.lastIndexOf('-');
         String station = stationId.substring(startIndex + 1, stationId.length());
@@ -148,12 +148,10 @@ public class SocketIdentifier extends Identifier.Base<SocketIdentifier> {
             return stationNumber.intValue();
         }
         String remoteHost = remoteSocketAddress.toString();
-        /*
         System.err.println("remote host name: "+  getRemoteHostName());
         System.err.println("remote socket address: " + remoteSocketAddress);
         System.err.println("local host name: " + getLocalHostName());
         System.err.println("local host address: " + localSocketAddress);
-        */
         String lastIPDigits = remoteHost.substring(remoteHost.lastIndexOf('.') + 1, remoteHost.lastIndexOf(':'));
         try {
             stationNumber = Math.abs(Integer.parseInt(lastIPDigits));
@@ -167,7 +165,10 @@ public class SocketIdentifier extends Identifier.Base<SocketIdentifier> {
     }
 
     public void setStationNumber(Integer stationNumber) {
-        this.stationNumber = stationNumber;
+        if (stationNumber != null) {
+            this.stationNumber = stationNumber;
+            stationed = true;
+        }
     }
 
     public int compareTo(SocketIdentifier socketId) {
