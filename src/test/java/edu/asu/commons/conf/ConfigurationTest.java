@@ -176,7 +176,7 @@ public class ConfigurationTest {
         }
 
         @Override
-        public Type getDispatcherType() {
+        public Type getServerDispatcherType() {
             return Type.SOCKET;
         }
 

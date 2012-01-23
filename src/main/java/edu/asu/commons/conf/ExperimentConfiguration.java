@@ -76,7 +76,7 @@ public interface ExperimentConfiguration<T extends ExperimentRoundParameters> ex
 
     public boolean isLastRound();
     
-    public ServerDispatcher.Type getDispatcherType();
+    public ServerDispatcher.Type getServerDispatcherType();
     public int getWorkerPoolSize();
 
     public static abstract class Base<E extends ExperimentRoundParameters> implements ExperimentConfiguration<E> {
