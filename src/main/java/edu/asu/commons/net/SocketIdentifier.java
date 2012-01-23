@@ -8,9 +8,12 @@ import java.util.StringTokenizer;
  * $Id$
  * 
  * Uniquely identifies a socket connection and provides translation methods to convert 
- * IP addresses of a certain format to "station numbers".  Mostly used for our experimental
- * lab at the COOR building which has IP hostnames of the format "xxx.xxx.xxx.14", where 14 is
- * the appropriate station number.
+ * IP addresses of a certain format to "station numbers".  In order of preference:  
+ * 
+ * <ol>
+ * <li>ostrom-lab-12.dhcp.asu.edu will have a station number of 12 and emit a toString() of "Station 12"
+ * <li>if the hostname doesn't have any trailing numbers, it will try to use the last digits of the IP address to define the station number
+ * </ol>
  *  
  * @author <a href='Allen.Lee@asu.edu'>Allen Lee</a>
  * @version $Revision$
@@ -107,7 +110,7 @@ public class SocketIdentifier extends Identifier.Base<SocketIdentifier> {
 
     public String toString() {
         int stationNumberInt = getStationNumber();
-        return (stationed) ? String.format("Station %d:%d", stationNumberInt, index()) : remoteSocketAddress.toString();
+        return (stationed) ? String.format("Station %d (uid: %d)", stationNumberInt, index()) : remoteSocketAddress.toString();
     }
     
     /**
@@ -122,7 +125,7 @@ public class SocketIdentifier extends Identifier.Base<SocketIdentifier> {
         }
         String remoteHostname = remoteSocketAddress.getHostName();
         StringTokenizer tokenizer = new StringTokenizer(remoteHostname, ".");
-        String stationId = tokenizer.nextToken();
+        String hostname = tokenizer.nextToken();
 
         System.err.println("remote host name: "+  getRemoteHostName());
         System.err.println("remote socket address: " + remoteSocketAddress);
@@ -130,8 +133,8 @@ public class SocketIdentifier extends Identifier.Base<SocketIdentifier> {
         System.err.println("local host name: " + getLocalHostName());
         System.err.println("local host address: " + localSocketAddress);
 
-        int startIndex = stationId.lastIndexOf('-');
-        String station = stationId.substring(startIndex + 1, stationId.length());
+        int startIndex = hostname.lastIndexOf('-');
+        String station = hostname.substring(startIndex + 1, hostname.length());
         try {
             stationNumber = Math.abs(Integer.parseInt(station));
             stationed = true;
@@ -162,6 +165,10 @@ public class SocketIdentifier extends Identifier.Base<SocketIdentifier> {
             stationed = false;
             return index();
         }
+    }
+    
+    public String getStationId() {
+        return "Station " + stationNumber;
     }
 
     public void setStationNumber(Integer stationNumber) {

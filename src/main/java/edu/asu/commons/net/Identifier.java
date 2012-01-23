@@ -3,13 +3,13 @@ package edu.asu.commons.net;
 import java.io.Serializable;
 
 /**
- * $Id: Identifier.java 456 2010-02-04 05:20:33Z alllee $
+ * $Id$
  * 
  * Marker interface used to uniquely identify client connections within 
  * the framework.
  * 
  * @author alllee
- * @version $Revision: 456 $
+ * @version $Revision$
  */
 public interface Identifier extends Serializable {
     
@@ -21,6 +21,7 @@ public interface Identifier extends Serializable {
     public void setChatHandle(String handle);
     public String getSurveyId();
     public void setSurveyId(String surveyId);
+    public String getStationId();
 
 	public static final Identifier NULL = new SystemIdentifier() {
         private static final long serialVersionUID = 3451864583823314294L;
@@ -52,6 +53,9 @@ public interface Identifier extends Serializable {
         public void setSurveyId(String uniqueId) {
             throw new UnsupportedOperationException("Tried to set survey id on the system identifier.");
         }
+        public String getStationId() {
+            return toString();
+        }
         public String toString() {
             return "system identifier";
         }
@@ -79,7 +83,7 @@ public interface Identifier extends Serializable {
         }
 
         public String toString() {
-            return "[unique identifier: " + id + "]";
+            return String.format("uid: %s", id);
         }
         
         public int index() {
@@ -98,6 +102,10 @@ public interface Identifier extends Serializable {
                 return 0;
             }
             return hash - uid.hash;
+        }
+        
+        public String getStationId() {
+            return toString();
         }
         
         public String getChatHandle() {

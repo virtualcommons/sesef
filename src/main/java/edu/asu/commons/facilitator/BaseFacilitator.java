@@ -13,13 +13,13 @@ import edu.asu.commons.net.DispatcherFactory;
 import edu.asu.commons.net.Identifier;
 
 /**
- * $Id: BaseFacilitator.java 1 2008-07-23 22:15:18Z alllee $
+ * $Id$
  * 
  * @author <a href='Allen.Lee@asu.edu'>Allen Lee</a>
- * @version $Revision: 1 $
+ * @version $Revision$
  * @param <E> the concrete ExperimentConfiguration class
  */
-public abstract class BaseFacilitator<E extends ExperimentConfiguration<? extends ExperimentRoundParameters<E>>> {
+public abstract class BaseFacilitator<E extends ExperimentConfiguration<R>, R extends ExperimentRoundParameters<E>> {
 
     private final EventChannel channel;
     
@@ -34,7 +34,7 @@ public abstract class BaseFacilitator<E extends ExperimentConfiguration<? extend
     }
     
     public BaseFacilitator(E serverConfiguration, EventChannel channel) {
-        this(serverConfiguration, channel, DispatcherFactory.getInstance().createClientDispatcher(channel));
+        this(serverConfiguration, channel, DispatcherFactory.getInstance().createClientDispatcher(channel, serverConfiguration));
     }
     
     public BaseFacilitator(E serverConfiguration, EventChannel channel, ClientDispatcher dispatcher) {

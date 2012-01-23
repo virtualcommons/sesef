@@ -13,7 +13,7 @@ import edu.asu.commons.conf.ExperimentConfiguration;
 import edu.asu.commons.conf.ExperimentRoundParameters;
 import edu.asu.commons.event.Event;
 import edu.asu.commons.event.EventChannel;
-import edu.asu.commons.event.EventChannelFactory;
+import edu.asu.commons.event.EventTypeChannel;
 import edu.asu.commons.event.EventTypeProcessor;
 import edu.asu.commons.event.PersistableEvent;
 import edu.asu.commons.net.DispatcherFactory;
@@ -45,17 +45,14 @@ public abstract class AbstractExperiment<C extends ExperimentConfiguration<R>, R
     
     private C defaultConfiguration;
     
-    public AbstractExperiment() {
-        this(EventChannelFactory.create());
+    public AbstractExperiment(C configuration) {
+        this(configuration, new EventTypeChannel());
     }
     
-    public AbstractExperiment(EventChannel channel) {
-        this(channel, DispatcherFactory.getInstance().createServerDispatcher(channel));
-    }
-    
-    public AbstractExperiment(EventChannel channel, ServerDispatcher dispatcher) {
+    public AbstractExperiment(C configuration, EventChannel channel) {
+        setConfiguration(configuration);
         this.channel = channel;
-        this.dispatcher = dispatcher;
+        this.dispatcher = DispatcherFactory.getInstance().createServerDispatcher(channel, configuration);
     }
     
     public C getConfiguration() {

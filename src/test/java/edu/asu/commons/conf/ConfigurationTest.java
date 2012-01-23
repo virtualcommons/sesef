@@ -1,7 +1,5 @@
 package edu.asu.commons.conf;
 
-import static org.junit.Assert.assertEquals;
-
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -10,7 +8,9 @@ import java.util.Properties;
 import org.junit.Before;
 import org.junit.Test;
 
+import edu.asu.commons.net.ServerDispatcher.Type;
 import edu.asu.commons.util.Duration;
+import static org.junit.Assert.*;
 
 public class ConfigurationTest {
 
@@ -28,8 +28,8 @@ public class ConfigurationTest {
     
     @Test
     public void testAsBeanPropertyMap() {
-    	ServerConfiguration configuration = new ServerConfiguration();
-    	RoundConfiguration roundConfiguration = configuration.getCurrentParameters();
+    	MockServerConfiguration configuration = new MockServerConfiguration();
+    	MockRoundConfiguration roundConfiguration = configuration.getCurrentParameters();
     	Map<String, Object> roundConfigAsMap = roundConfiguration.toMap();
     	assertEquals(roundConfiguration.getDuration(), roundConfigAsMap.get("duration"));
     	assertEquals(roundConfiguration.getClientsPerGroup(), roundConfigAsMap.get("clientsPerGroup"));
@@ -48,18 +48,18 @@ public class ConfigurationTest {
         
     }
 
-    public static class ServerConfiguration 
-    extends ExperimentConfiguration.Base<RoundConfiguration> {
+    public static class MockServerConfiguration 
+    extends ExperimentConfiguration.Base<MockRoundConfiguration> {
 
         private static final long serialVersionUID = 7867208205942476733L;
 
         private final static String CONFIGURATION_FILE_NAME = "server.xml";
 
-        public ServerConfiguration() {
+        public MockServerConfiguration() {
             super();
         }
 
-        public ServerConfiguration(String configurationDirectory) {
+        public MockServerConfiguration(String configurationDirectory) {
             super(configurationDirectory);
         }
 
@@ -76,8 +76,8 @@ public class ConfigurationTest {
         }
 
         @Override
-        protected RoundConfiguration createRoundConfiguration(String roundConfigurationFile) {
-            return new RoundConfiguration();
+        protected MockRoundConfiguration createRoundConfiguration(String roundConfigurationFile) {
+            return new MockRoundConfiguration();
         }
 
         @Override
@@ -175,9 +175,14 @@ public class ConfigurationTest {
             return assistant.getProperty("game-screenshot-instructions");
         }
 
+        @Override
+        public Type getDispatcherType() {
+            return Type.SOCKET;
+        }
+
     }
     
-    public static class RoundConfiguration extends ExperimentRoundParameters.Base<ServerConfiguration> {
+    public static class MockRoundConfiguration extends ExperimentRoundParameters.Base<MockServerConfiguration> {
 
         private static final long serialVersionUID = -5053624886508752562L;
 

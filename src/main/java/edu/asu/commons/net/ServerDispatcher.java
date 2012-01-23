@@ -2,15 +2,27 @@ package edu.asu.commons.net;
 
 
 /**
- * $Id: ServerDispatcher.java 1 2008-07-23 22:15:18Z alllee $
+ * $Id$
  * 
  * A server dispatcher can listen for incoming requests on a particular port.
  * 
  * 
  * @author Allen Lee 
- * @version $Revision: 1 $
+ * @version $Revision$
  */
 public interface ServerDispatcher extends Dispatcher {
+    
+    enum Type {
+        NIO, SOCKET;
+        public static Type fromString(String name) {
+            try {
+                return Type.valueOf(name);
+            }
+            catch (Exception exception) {
+                return SOCKET;
+            }
+        }
+    }
 
     /**
      * Attempts to determine if the connection identified by id

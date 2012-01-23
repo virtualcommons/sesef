@@ -1,10 +1,10 @@
 package edu.asu.commons.event;
 
 /**
- * $Id: EventChannelFactory.java 1 2008-07-23 22:15:18Z alllee $
+ * $Id$
  *   
  * @author <a href='Allen.Lee@asu.edu'>Allen Lee</a>
- * @version $Revision: 1 $
+ * @version $Revision$
  */
 public class EventChannelFactory {
     

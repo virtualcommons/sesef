@@ -12,13 +12,13 @@ import edu.asu.commons.net.Identifier;
 import edu.asu.commons.net.event.DisconnectionRequest;
 
 /**
- * $ Id$
+ * $Id$
  *  
  *
  * @author <a href='mailto:Allen.Lee@asu.edu'>Allen Lee</a>
- * @version $Revision: 524 $
+ * @version $Revision$
  */
-public abstract class BaseClient<E extends ExperimentConfiguration<? extends ExperimentRoundParameters<E>>> {
+public abstract class BaseClient<E extends ExperimentConfiguration<R>, R extends ExperimentRoundParameters<E>> {
     
     private final ClientDispatcher dispatcher;
     
@@ -29,11 +29,11 @@ public abstract class BaseClient<E extends ExperimentConfiguration<? extends Exp
     private E serverConfiguration;
     
     public BaseClient(E configuration) {
-        this( configuration, EventChannelFactory.create() );
+        this(configuration, EventChannelFactory.create());
     }
     
     public BaseClient(E configuration, EventChannel channel) {
-        this(configuration, channel, DispatcherFactory.getInstance().createClientDispatcher(channel));
+        this(configuration, channel, DispatcherFactory.getInstance().createClientDispatcher(channel, configuration));
     }
     
     public BaseClient(E configuration, EventChannel channel, ClientDispatcher dispatcher) {
@@ -50,8 +50,11 @@ public abstract class BaseClient<E extends ExperimentConfiguration<? extends Exp
         this.channel = channel;
         this.dispatcher = dispatcher;
     }
+    
+    
     // FIXME: figure out a better way to copy over the configuration for integrating multiple clients..
-    public BaseClient(BaseClient<E> client) {
+    @Deprecated
+    public BaseClient(BaseClient<E, R> client) {
         this(client.serverConfiguration, client.channel, client.dispatcher);
         this.id = client.id;
     }

@@ -12,13 +12,13 @@ import edu.asu.commons.net.event.ConnectionEvent;
 import edu.asu.commons.net.event.DisconnectionEvent;
 
 /**
- * $Id: ServerSocketDispatcher.java 296 2009-10-13 17:09:51Z alllee $
+ * $Id$
  * 
  * This class uses traditional blocking I/O via java.net.Socket-S to implement 
  * the Dispatcher interface.
  *
  * @author <a href='mailto:Allen.Lee@asu.edu'>Allen Lee</a>
- * @version $Revision: 296 $
+ * @version $Revision$
  */
 
 public class ServerSocketDispatcher extends AbstractServerDispatcher {
@@ -86,10 +86,7 @@ public class ServerSocketDispatcher extends AbstractServerDispatcher {
     protected void processIncomingConnections() throws IOException {
         Socket incoming = serverSocket.accept();
         getLogger().info("incoming connection: " + incoming);
-        if (incoming == null) {
-            getLogger().warning("incoming socket was null, ignoring.");
-            return;
-        }
+        incoming.setTcpNoDelay(true);
         Identifier id = new SocketIdentifier(incoming);
         SocketDispatcherWorker worker = new SocketDispatcherWorker(this, incoming, id);
         // immediately write a ConnectionEvent to the incoming connection.

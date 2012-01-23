@@ -10,14 +10,13 @@ import java.util.Map;
 
 import org.stringtemplate.v4.ST;
 
+import edu.asu.commons.net.ServerDispatcher;
+
 /**
  * $Id$
  * 
  * All experiment server configurations should follow this contract.
  * 
- * FIXME: properly genericize ExperimentRoundParameters circular types...
- * something like
- * ExperimentConfiguration<T extends ExperimentRoundParameters<this-type>>
  * 
  * @author <a href='mailto:Allen.Lee@asu.edu'>Allen Lee</a>
  * @version $Revision$
@@ -76,6 +75,9 @@ public interface ExperimentConfiguration<T extends ExperimentRoundParameters> ex
     public boolean isFirstRound();
 
     public boolean isLastRound();
+    
+    public ServerDispatcher.Type getDispatcherType();
+    public int getWorkerPoolSize();
 
     public static abstract class Base<E extends ExperimentRoundParameters> implements ExperimentConfiguration<E> {
 
@@ -287,7 +289,14 @@ public interface ExperimentConfiguration<T extends ExperimentRoundParameters> ex
             st.add("self", this);
             return st;
         }
-
+        
+        public ServerDispatcher.Type getServerDispatcherType() {
+            return ServerDispatcher.Type.fromString(assistant.getProperty("server-dispatcher-type", "SOCKET"));
+        }
+        
+        public int getWorkerPoolSize() {
+            return assistant.getIntProperty("worker-pool-size", 5);
+        }
     }
 
 }
