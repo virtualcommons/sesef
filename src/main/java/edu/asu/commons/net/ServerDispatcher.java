@@ -13,7 +13,7 @@ package edu.asu.commons.net;
 public interface ServerDispatcher extends Dispatcher {
     
     enum Type {
-        NIO, SOCKET;
+        NIO, SOCKET, NETTY_NIO;
         public static Type fromString(String name) {
             try {
                 return Type.valueOf(name);

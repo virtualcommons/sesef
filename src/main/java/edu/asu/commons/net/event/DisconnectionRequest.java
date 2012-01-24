@@ -6,29 +6,29 @@ import edu.asu.commons.net.Identifier;
 
 
 /**
- * $Id: DisconnectionRequest.java 293 2009-10-10 01:18:43Z alllee $ 
+ * $Id$ 
  *
  * Signifies that a disconnection should happen for the given identifier.
  * 
  * @author Allen Lee
- * @version $Revision: 293 $
+ * @version $Revision$
  */
 public class DisconnectionRequest extends AbstractEvent {
     
     private static final long serialVersionUID = 8135584626891675116L;
     
-    private final Exception exception;       
+    private final Throwable exception;       
 
     public DisconnectionRequest(Identifier id) {
         this(id, null);
     }
     
-    public DisconnectionRequest(Identifier id, Exception exception) {
+    public DisconnectionRequest(Identifier id, Throwable exception) {
         super(id);
         this.exception = exception;
     }
     
-    public Exception getException() {
+    public Throwable getException() {
         return exception;
     }
     

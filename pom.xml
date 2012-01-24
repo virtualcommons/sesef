@@ -7,13 +7,10 @@ vim:sts=2:sw=2
   <groupId>edu.asu.commons</groupId>
   <artifactId>csidex</artifactId>
   <packaging>jar</packaging>
-  <version>0.2-SNAPSHOT</version>
+  <version>0.3-SNAPSHOT</version>
   <name>csidex</name>
   <url>http://commons.asu.edu/software/csidex</url>
-  <description>The csidex experimental framework is utilized in 
-  several concrete experiments developed by the Virtual Commons, namely the
-  foraging and irrigation experiments.
-  </description>
+  <description>The csidex experimental framework is a common base layer providing useful abstractions for the foraging and irrigation experiments developed by the Virtual Commons.</description>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
@@ -69,8 +66,13 @@ vim:sts=2:sw=2
     </dependency>
     <dependency>
       <groupId>org.antlr</groupId>
-      <artifactId>stringtemplate</artifactId>
-      <version>4.0.2</version>
+      <artifactId>ST4</artifactId>
+      <version>4.0.4</version>
+    </dependency>
+    <dependency>
+    	<groupId>io.netty</groupId>
+    	<artifactId>netty</artifactId>
+    	<version>3.3.0.Final</version>
     </dependency>
   </dependencies>
   <build>

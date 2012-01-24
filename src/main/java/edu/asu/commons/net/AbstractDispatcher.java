@@ -9,12 +9,12 @@ import edu.asu.commons.net.event.DisconnectionRequest;
 
 
 /**
- * $Id: AbstractDispatcher.java 1 2008-07-23 22:15:18Z alllee $
+ * $Id$
  *
  * Abstract base class for Dispatchers.
  * 
  * @author Allen Lee
- * @version $Revision: 1 $
+ * @version $Revision$
  */
 
 public abstract class AbstractDispatcher implements Dispatcher {
@@ -37,7 +37,7 @@ public abstract class AbstractDispatcher implements Dispatcher {
         return channel;
     }
     
-    protected void requestDisconnection(Identifier id, Exception cause) {
+    protected void requestDisconnection(Identifier id, Throwable cause) {
         getLocalEventHandler().handle(new DisconnectionRequest(id, cause));
     }
 

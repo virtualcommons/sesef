@@ -3,6 +3,8 @@ package edu.asu.commons.net;
 import edu.asu.commons.conf.ExperimentConfiguration;
 import edu.asu.commons.conf.ExperimentRoundParameters;
 import edu.asu.commons.event.EventChannel;
+import edu.asu.commons.netty.ClientNettyDispatcher;
+import edu.asu.commons.netty.NettyDispatcher;
 
 
 /**
@@ -28,6 +30,8 @@ public class DispatcherFactory {
         switch (serverConfiguration.getServerDispatcherType()) {
             case NIO:
                 return new NioDispatcher(channel, 1);
+            case NETTY_NIO:
+                return new ClientNettyDispatcher(channel);
             case SOCKET:
             default:
                 return new ClientSocketDispatcher(channel);
@@ -46,6 +50,8 @@ public class DispatcherFactory {
         switch (serverDispatcherType) {
             case NIO:
                 return new NioDispatcher(channel, workerPoolSize);
+            case NETTY_NIO:
+                return new NettyDispatcher(channel);
                 // default fall through is a socket dispatcher (safer) 
             case SOCKET:
             default:

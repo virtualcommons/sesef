@@ -36,11 +36,15 @@ public class SocketIdentifier extends Identifier.Base<SocketIdentifier> {
         this(socket.getLocalAddress().getHostName(), socket.getLocalPort(),
                 getRemoteHostName(socket), socket.getPort());
     }
+    
+    public SocketIdentifier(InetSocketAddress localAddress, InetSocketAddress remoteAddress) {
+        this.localSocketAddress = localAddress;
+        this.remoteSocketAddress = remoteAddress;
 
-    public SocketIdentifier(String localHost, int localPort, String remoteHost,
-            int remotePort) {
-        localSocketAddress = new InetSocketAddress(localHost, localPort);
-        remoteSocketAddress = new InetSocketAddress(remoteHost, remotePort);
+    }
+
+    public SocketIdentifier(String localHost, int localPort, String remoteHost, int remotePort) {
+        this(new InetSocketAddress(localHost, localPort), new InetSocketAddress(remoteHost, remotePort));
     }
 
     private static String getRemoteHostName(Socket socket) {

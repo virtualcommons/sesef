@@ -24,7 +24,7 @@ import edu.asu.commons.net.event.DisconnectionEvent;
 
 
 /**
- * $Id: NioDispatcher.java 293 2009-10-10 01:18:43Z alllee $
+ * $Id$
  *
  * This class manages network connections via the java.nio package and can be 
  * used by both clients and servers.  Network connection descriptors (Identifiers)
@@ -37,7 +37,7 @@ import edu.asu.commons.net.event.DisconnectionEvent;
  * instead from java.util.concurrent.
  *
  * @author <a href='Allen.Lee@asu.edu'>Allen Lee</a>
- * @version $Revision: 293 $
+ * @version $Revision$
  */
 public class NioDispatcher extends AbstractServerDispatcher implements ClientDispatcher {
 
@@ -397,7 +397,7 @@ public class NioDispatcher extends AbstractServerDispatcher implements ClientDis
             @Override
             public void run() {
                 Identifier id = worker.process(incoming);
-//                System.err.println("generated id" + id);
+                getLogger().info("generated id" + id);
                 addMapping(id, incoming);
                 // send the newly generated Identifier to the client dispatcher, 
                 // which should be blocked, waiting for it.
