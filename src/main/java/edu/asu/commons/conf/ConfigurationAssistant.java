@@ -8,13 +8,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
+import java.text.NumberFormat;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
 
 import org.stringtemplate.v4.ST;
 
+import edu.asu.commons.util.Duration;
 import edu.asu.commons.util.ResourceLoader;
 
 /**
@@ -40,10 +43,6 @@ public class ConfigurationAssistant implements Serializable {
     
     public ConfigurationAssistant(Properties properties) {
         this.properties = properties;
-//        this.freemarkerConfiguration = new Configuration();
-//        this.templateLoader = new StringTemplateLoader();
-//        freemarkerConfiguration.setObjectWrapper(new DefaultObjectWrapper());
-//        freemarkerConfiguration.setTemplateLoader(templateLoader);
     }
     
     public Properties getProperties() {
@@ -56,33 +55,10 @@ public class ConfigurationAssistant implements Serializable {
             properties.loadFromXML(stream);
         } 
         catch (IOException e) {
-            // FIXME: try to load them manually, not via loadFromXML?
             e.printStackTrace();
-            throw new IllegalArgumentException("Couldn't load properties via loadFromXML - resource: "
-                    + resource + " - stream: " + stream, e);
+            throw new IllegalArgumentException("Couldn't loadFromXML using resource: " + resource + " and stream: " + stream, e);
         }
     }
-    
-//    public void addTemplate(String templateName, String templateSource) {
-//        templateLoader.putTemplate(templateName, templateSource);
-//    }
-//    
-//    public String transform(String templateName, Object data) {
-//        try {
-//            Template template = freemarkerConfiguration.getTemplate(templateName);
-//            StringWriter writer = new StringWriter();
-//            template.process(data, writer);
-//            return writer.toString();
-//        }
-//        catch (IOException exception) {
-//            exception.printStackTrace();
-//        }
-//        catch (TemplateException exception) {
-//            exception.printStackTrace();
-//        }
-//        return "";
-//    }
-
     
     public String getProperty(String key) {
         return getStringProperty(key, "");
@@ -123,7 +99,7 @@ public class ConfigurationAssistant implements Serializable {
     
     public boolean getBooleanProperty(String key, boolean defaultValue) {
         if (properties.containsKey(key)) {
-            return "true".equals(properties.getProperty(key));
+            return "true".equalsIgnoreCase(properties.getProperty(key));
         }
         return defaultValue;
     }
@@ -146,6 +122,18 @@ public class ConfigurationAssistant implements Serializable {
     
     public void setProperty(String key, String value) {
         properties.setProperty(key, value);
+    }
+    
+    public long inMinutes(long seconds) {
+        return TimeUnit.MINUTES.convert(seconds, TimeUnit.SECONDS);
+    }
+    
+    public long inMinutes(Duration duration) {
+        return inMinutes(duration.getTimeLeftInSeconds());
+    }
+    
+    public String toCurrencyString(double amount) {
+        return NumberFormat.getCurrencyInstance().format(amount);
     }
     
     /**

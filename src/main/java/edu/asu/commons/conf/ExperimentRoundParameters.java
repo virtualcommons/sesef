@@ -2,8 +2,10 @@ package edu.asu.commons.conf;
 
 import java.io.PrintStream;
 import java.io.Serializable;
+import java.text.NumberFormat;
 import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
 
 import org.stringtemplate.v4.ST;
 
@@ -106,7 +108,7 @@ public interface ExperimentRoundParameters<T extends ExperimentConfiguration> ex
         }
 
         public boolean getBooleanProperty(String key) {
-            return assistant.getBooleanProperty(key);
+            return assistant.getBooleanProperty(key, parentConfiguration.getBooleanProperty(key));
         }
 
         public double getDoubleProperty(String key, double defaultValue) {
@@ -114,7 +116,7 @@ public interface ExperimentRoundParameters<T extends ExperimentConfiguration> ex
         }
 
         public double getDoubleProperty(String key) {
-            return assistant.getDoubleProperty(key);
+            return assistant.getDoubleProperty(key, parentConfiguration.getDoubleProperty(key));
         }
 
         public int getIntProperty(String key, int defaultValue) {
@@ -122,7 +124,7 @@ public interface ExperimentRoundParameters<T extends ExperimentConfiguration> ex
         }
 
         public int getIntProperty(String key) {
-            return assistant.getIntProperty(key);
+            return assistant.getIntProperty(key, parentConfiguration.getIntProperty(key));
         }
 
         public Properties getProperties() {
@@ -134,7 +136,7 @@ public interface ExperimentRoundParameters<T extends ExperimentConfiguration> ex
         }
 
         public String getStringProperty(String key) {
-            return assistant.getStringProperty(key);
+            return assistant.getStringProperty(key, parentConfiguration.getProperty(key));
         }
 
         public void setProperty(String key, String value) {
@@ -160,7 +162,18 @@ public interface ExperimentRoundParameters<T extends ExperimentConfiguration> ex
             st.add("self", this);
             return st;
         }
-
+        
+        public long inMinutes(long seconds) {
+            return TimeUnit.MINUTES.convert(seconds, TimeUnit.SECONDS);
+        }
+        
+        public long inMinutes(Duration duration) {
+            return inMinutes(duration.getTimeLeftInSeconds());
+        }
+        
+        public String toCurrencyString(double amount) {
+            return NumberFormat.getCurrencyInstance().format(amount);
+        }
 
     }
 }

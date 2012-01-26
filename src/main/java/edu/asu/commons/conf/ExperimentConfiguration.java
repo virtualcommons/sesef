@@ -248,7 +248,8 @@ public interface ExperimentConfiguration<T extends ExperimentRoundParameters> ex
             if (isLastRound()) {
                 return getCurrentParameters();
             }
-            return allParameters.get(++currentRoundIndex);
+            currentRoundIndex++;
+            return allParameters.get(currentRoundIndex);
         }
 
         public String getConfigurationDirectory() {
@@ -297,6 +298,7 @@ public interface ExperimentConfiguration<T extends ExperimentRoundParameters> ex
         public int getWorkerPoolSize() {
             return assistant.getIntProperty("worker-pool-size", 5);
         }
+
     }
 
 }
