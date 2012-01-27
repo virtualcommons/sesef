@@ -21,7 +21,7 @@ public interface IPersister<T extends ExperimentConfiguration<R>, R extends Expe
 
 	public void initialize(R roundConfiguration);
 
-	public <E extends DataModel<R>> void persist(E serverDataModel);
+	public <E extends DataModel<T, R>> void persist(E serverDataModel);
 
 	public void clear();
 

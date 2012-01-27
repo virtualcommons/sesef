@@ -291,7 +291,7 @@ public abstract class Persister<T extends ExperimentConfiguration<R>, R extends 
 	 * @see edu.asu.commons.experiment.IPersister#persist(E)
 	 */
     @Override
-	public final <E extends DataModel<R>> void persist(E serverDataModel) {
+	public final <E extends DataModel<T, R>> void persist(E serverDataModel) {
         // shouldn't need to synchronize but just to be sure / threadsafe
         synchronized (actions) {
             actions.add(new RoundEndedMarkerEvent());
@@ -299,7 +299,7 @@ public abstract class Persister<T extends ExperimentConfiguration<R>, R extends 
         save(serverDataModel);
     }
     
-    private final <E extends DataModel<R>> void save(E serverDataModel) {
+    private final <E extends DataModel<T, R>> void save(E serverDataModel) {
         try {
             saveRound(serverDataModel, persistenceDirectory);
         }
@@ -400,7 +400,7 @@ public abstract class Persister<T extends ExperimentConfiguration<R>, R extends 
         }
     }
 
-    private <E extends DataModel<R>> void saveRound(E serverDataModel, String persistenceDirectory) throws IOException {
+    private <E extends DataModel<T, R>> void saveRound(E serverDataModel, String persistenceDirectory) throws IOException {
         String saveDestination = getSavePath(persistenceDirectory);
         logger.info("saving to " + saveDestination);
         ObjectOutputStream oos = 

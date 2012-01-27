@@ -9,16 +9,16 @@ import edu.asu.commons.event.EventChannel;
 import edu.asu.commons.net.Identifier;
 
 /**
- * $Id: DataModel.java 1 2008-07-23 22:15:18Z alllee $
+ * $Id$
  * 
  * Marker interface for data models
  * 
  * @author <a href='Allen.Lee@asu.edu'>Allen Lee</a>
- * @version $Revision: 1 $
+ * @version $Revision$
  */
-public interface DataModel<E extends ExperimentRoundParameters<? extends ExperimentConfiguration<E>>> extends Serializable {
+public interface DataModel<S extends ExperimentConfiguration<R>, R extends ExperimentRoundParameters<S>> extends Serializable {
 
-    public E getRoundConfiguration();
+    public R getRoundConfiguration();
     
     public List<Identifier> getAllClientIdentifiers();
     
