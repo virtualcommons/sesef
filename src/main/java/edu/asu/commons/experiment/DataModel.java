@@ -18,6 +18,8 @@ import edu.asu.commons.net.Identifier;
  */
 public interface DataModel<S extends ExperimentConfiguration<R>, R extends ExperimentRoundParameters<S>> extends Serializable {
 
+	public S getExperimentConfiguration();
+
     public R getRoundConfiguration();
     
     public List<Identifier> getAllClientIdentifiers();
