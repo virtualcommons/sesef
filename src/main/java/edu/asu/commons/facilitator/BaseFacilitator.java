@@ -1,6 +1,8 @@
 package edu.asu.commons.facilitator;
 
 
+import java.util.Locale;
+
 import edu.asu.commons.conf.ExperimentConfiguration;
 import edu.asu.commons.conf.ExperimentRoundParameters;
 import edu.asu.commons.event.Event;
@@ -41,6 +43,7 @@ public abstract class BaseFacilitator<E extends ExperimentConfiguration<R>, R ex
         this.serverConfiguration = serverConfiguration;
         this.channel = channel;
         this.dispatcher = dispatcher;
+        Locale.setDefault(serverConfiguration.getLocale());
     }
     
     public void transmit(Event event) {

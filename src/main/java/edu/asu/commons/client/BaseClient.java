@@ -1,5 +1,7 @@
 package edu.asu.commons.client;
 
+import java.util.Locale;
+
 import edu.asu.commons.conf.ExperimentConfiguration;
 import edu.asu.commons.conf.ExperimentRoundParameters;
 import edu.asu.commons.event.Event;
@@ -49,6 +51,8 @@ public abstract class BaseClient<E extends ExperimentConfiguration<R>, R extends
         this.serverConfiguration = configuration;
         this.channel = channel;
         this.dispatcher = dispatcher;
+        // FIXME: sun docs seem to warn against this, verify that this appropriate usage
+        Locale.setDefault(serverConfiguration.getLocale());
     }
     
     

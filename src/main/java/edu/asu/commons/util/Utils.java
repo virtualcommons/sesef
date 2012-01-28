@@ -13,13 +13,13 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * $Id: Utils.java 422 2010-01-05 08:04:55Z alllee $
+ * $Id$
  * 
  * A utility class to collect static methods that don't really belong anywhere
  * else in the code base.
  * 
- * @author Team
- * @version $Revision: 422 $
+ * @author Allen Lee
+ * @version $Revision$
  */
 
 public final class Utils {

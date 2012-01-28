@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.logging.Logger;
 
 import edu.asu.commons.command.Command;

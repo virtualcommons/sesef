@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Locale;
 import java.util.Map;
 
 import org.stringtemplate.v4.ST;
@@ -78,6 +79,8 @@ public interface ExperimentConfiguration<T extends ExperimentRoundParameters> ex
     
     public ServerDispatcher.Type getServerDispatcherType();
     public int getWorkerPoolSize();
+    
+    public Locale getLocale();
 
     public static abstract class Base<E extends ExperimentRoundParameters> implements ExperimentConfiguration<E> {
 
@@ -106,6 +109,7 @@ public interface ExperimentConfiguration<T extends ExperimentRoundParameters> ex
         protected final ConfigurationAssistant assistant;
         protected final List<E> allParameters = new ArrayList<E>();
         protected String configurationDirectory;
+        private Locale locale;
 
         public Base() {
             this(defaultConfigurationDirectory);
@@ -299,6 +303,12 @@ public interface ExperimentConfiguration<T extends ExperimentRoundParameters> ex
             return assistant.getIntProperty("worker-pool-size", 5);
         }
 
+        public Locale getLocale() {
+            if (locale == null) {
+                locale = new Locale(assistant.getProperty("language", "en"), assistant.getProperty("country", "US"));
+            }
+            return locale;
+        }
     }
 
 }
