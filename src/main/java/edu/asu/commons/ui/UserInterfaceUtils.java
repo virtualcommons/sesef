@@ -2,9 +2,12 @@ package edu.asu.commons.ui;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Frame;
 
 import javax.swing.JEditorPane;
+import javax.swing.JFrame;
 import javax.swing.UIManager;
+import javax.swing.WindowConstants;
 import javax.swing.text.html.HTMLDocument;
 
 
@@ -117,5 +120,12 @@ public final class UserInterfaceUtils {
         htmlPane.setBackground(Color.WHITE);
         UserInterfaceUtils.addStyles(htmlPane, 16);
         return htmlPane;
+    }
+    
+    public static void maximize(JFrame frame) {
+        frame.pack();
+        frame.setExtendedState(Frame.MAXIMIZED_BOTH);
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        frame.setVisible(true);
     }
 }

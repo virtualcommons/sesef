@@ -42,11 +42,6 @@ vim:sts=2:sw=2
       <name>dev.commons archiva repo</name>
       <url>http://dev.commons.asu.edu/archiva/repository/internal</url>
     </repository>
-    <repository>
-      <id>dev.tdar.org</id>
-      <name>tDAR archiva repo</name>
-      <url>http://dev.tdar.org/archiva/repository/internal</url>
-    </repository>
   </repositories>
   <dependencies>
     <dependency>
@@ -74,6 +69,12 @@ vim:sts=2:sw=2
     	<groupId>io.netty</groupId>
     	<artifactId>netty</artifactId>
     	<version>3.3.0.Final</version>
+    </dependency>
+    <dependency>
+      <groupId>javax.jnlp</groupId>
+      <artifactId>javaws</artifactId>
+      <version>1.6.0_30</version>
+      <scope>provided</scope>
     </dependency>
   </dependencies>
   <build>
