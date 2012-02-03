@@ -3,9 +3,11 @@ package edu.asu.commons.experiment;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import edu.asu.commons.command.Command;
@@ -53,6 +55,12 @@ public abstract class AbstractExperiment<C extends ExperimentConfiguration<R>, R
         		logger.info("Server is shutting down due to user input (e.g., Ctrl-C).");
         		System.out.println("Shutting down " + getClass().getName());
         	}
+        });
+        Thread.setDefaultUncaughtExceptionHandler(new UncaughtExceptionHandler() {
+            @Override
+            public void uncaughtException(Thread t, Throwable e) {
+                logger.log(Level.SEVERE, "Uncaught exception from thread " + t, e);
+            }
         });
     }
     
@@ -193,8 +201,8 @@ public abstract class AbstractExperiment<C extends ExperimentConfiguration<R>, R
                         getStateMachine().execute(dispatcher);
                     }
                     catch (Exception exception) {
-                        getLogger().severe("Attempting to recover from exception: " + exception);
-                        getLogger().throwing(getClass().getName(), "experimentServerThread.run()", exception);
+                        getLogger().log(Level.SEVERE, "Attempting to recover from exception.", exception);
+                        getLogger().throwing(getClass().getName(), "ExperimentServerThread.run()", exception);
                         exception.printStackTrace();
                         continue;
                     }
