@@ -1,6 +1,5 @@
 package edu.asu.commons.conf;
 
-import java.io.Serializable;
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -8,8 +7,6 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Locale;
 import java.util.Map;
-
-import org.stringtemplate.v4.ST;
 
 import edu.asu.commons.net.ServerDispatcher;
 
@@ -23,7 +20,7 @@ import edu.asu.commons.net.ServerDispatcher;
  * @version $Revision$
  */
 @SuppressWarnings("rawtypes")
-public interface ExperimentConfiguration<T extends ExperimentRoundParameters> extends Serializable, Iterable<T> {
+public interface ExperimentConfiguration<T extends ExperimentRoundParameters> extends Configuration, Iterable<T> {
 
     public List<T> getAllParameters();
 
@@ -82,7 +79,7 @@ public interface ExperimentConfiguration<T extends ExperimentRoundParameters> ex
     
     public Locale getLocale();
 
-    public static abstract class Base<E extends ExperimentRoundParameters> implements ExperimentConfiguration<E> {
+    public static abstract class Base<E extends ExperimentRoundParameters> extends Configuration.Base implements ExperimentConfiguration<E> {
 
         private final static long serialVersionUID = 8936075404166796486L;
         public static String defaultConfigurationDirectory;
@@ -106,7 +103,7 @@ public interface ExperimentConfiguration<T extends ExperimentRoundParameters> ex
         }
 
         private int currentRoundIndex = 0;
-        protected final ConfigurationAssistant assistant;
+//        protected final PropertiesConfiguration assistant;
         protected final List<E> allParameters = new ArrayList<E>();
         protected String configurationDirectory;
         private Locale locale;
@@ -125,7 +122,6 @@ public interface ExperimentConfiguration<T extends ExperimentRoundParameters> ex
                 }
             }
             this.configurationDirectory = configurationDirectory;
-            assistant = new ConfigurationAssistant();
             loadServerProperties();
         }
 
@@ -145,7 +141,7 @@ public interface ExperimentConfiguration<T extends ExperimentRoundParameters> ex
 
         private void loadServerProperties() {
             String configurationResource = getConfigurationDirectory() + getServerConfigurationFilename();
-            assistant.loadProperties(configurationResource);
+            loadProperties(configurationResource);
             loadParameters();
         }
 
@@ -168,31 +164,31 @@ public interface ExperimentConfiguration<T extends ExperimentRoundParameters> ex
         }
 
         public int getServerPort() {
-            return assistant.getIntProperty("port", 23732);
+            return getIntProperty("port", 23732);
         }
 
         public String getServerName() {
-            return assistant.getStringProperty("hostname", "localhost");
+            return getStringProperty("hostname", "localhost");
         }
 
         public void setServerName(String serverName) {
-            assistant.setProperty("hostname", serverName);
+            setProperty("hostname", serverName);
         }
 
         public void setServerPort(int serverPort) {
-            assistant.setProperty("port", String.valueOf(serverPort));
+            setProperty("port", String.valueOf(serverPort));
         }
 
         public String getRoundParametersFile(int roundNumber) {
-            return assistant.getStringProperty("round" + roundNumber);
+            return getStringProperty("round" + roundNumber);
         }
 
         public int getNumberOfRounds() {
-            return assistant.getIntProperty("number-of-rounds", 0);
+            return getIntProperty("number-of-rounds", 0);
         }
 
         public String getFacilitatorInstructions() {
-            return assistant.getStringProperty("facilitator-instructions", "No facilitator instructions available.");
+            return render(getStringProperty("facilitator-instructions", "No facilitator instructions available."));
         }
 
         public List<E> getAllParameters() {
@@ -222,7 +218,7 @@ public interface ExperimentConfiguration<T extends ExperimentRoundParameters> ex
         }
         
         public Map<String, Object> toMap() {
-        	return assistant.toMap(this);
+        	return toMap(this);
         }
         
         public Iterator<E> iterator() {
@@ -261,51 +257,25 @@ public interface ExperimentConfiguration<T extends ExperimentRoundParameters> ex
         }
 
         public String getPersistenceDirectory() {
-            return assistant.getStringProperty("save-dir", "experiment-data");
+            return getStringProperty("save-dir", "experiment-data");
         }
 
         public PersistenceType getPersistenceType() {
-            String persistenceType = assistant.getStringProperty("persistence-type", "ALL");
+            String persistenceType = getStringProperty("persistence-type", "ALL");
             return PersistenceType.valueOf(persistenceType);
         }
 
-        public String getProperty(String key) {
-            return assistant.getProperty(key);
-        }
-        
-        public String getProperty(String key, String defaultValue) {
-            return assistant.getProperty(key, defaultValue);
-        }
-        
-        public int getIntProperty(String key) {
-            return assistant.getIntProperty(key);
-        }
-        
-        public double getDoubleProperty(String key) {
-            return assistant.getDoubleProperty(key);
-        }
-        
-        public boolean getBooleanProperty(String key) {
-            return assistant.getBooleanProperty(key);
-        }
-        
-        public ST createStringTemplate(String template) {
-            ST st = assistant.createStringTemplate(template);
-            st.add("self", this);
-            return st;
-        }
-        
         public ServerDispatcher.Type getServerDispatcherType() {
-            return ServerDispatcher.Type.fromString(assistant.getProperty("server-dispatcher-type", "SOCKET"));
+            return ServerDispatcher.Type.fromString(getProperty("server-dispatcher-type", "SOCKET"));
         }
         
         public int getWorkerPoolSize() {
-            return assistant.getIntProperty("worker-pool-size", 5);
+            return getIntProperty("worker-pool-size", 5);
         }
 
         public Locale getLocale() {
             if (locale == null) {
-                locale = new Locale(assistant.getProperty("language", "en"), assistant.getProperty("country", "US"));
+                locale = new Locale(getProperty("language", "en"), getProperty("country", "US"));
             }
             return locale;
         }

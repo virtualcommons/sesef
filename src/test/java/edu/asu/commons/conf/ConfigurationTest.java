@@ -14,11 +14,11 @@ import static org.junit.Assert.*;
 
 public class ConfigurationTest {
 
-    private ConfigurationAssistant assistant;
+    private PropertiesConfiguration assistant;
     
     @Before
     public void setUp() {
-        assistant = new ConfigurationAssistant();
+        assistant = new PropertiesConfiguration();
     }
     
     @Test
@@ -64,15 +64,15 @@ public class ConfigurationTest {
         }
 
         public String getLogFileDestination() {
-            return assistant.getStringProperty("log");
+            return getStringProperty("log");
         }
 
         public String getPersistenceDirectory() {
-            return assistant.getStringProperty("save-dir", "data");
+            return getStringProperty("save-dir", "data");
         }
 
         public boolean shouldUpdateFacilitator() {
-            return assistant.getBooleanProperty("update-facilitator");
+            return getBooleanProperty("update-facilitator");
         }
 
         @Override
@@ -96,19 +96,19 @@ public class ConfigurationTest {
         }
 
         public boolean isUndisruptedFlowRequired(){
-            return assistant.getBooleanProperty("undisrupted-flow-required", false);
+            return getBooleanProperty("undisrupted-flow-required", false);
         }
 
         public String getUndisruptedFlowInstructions() {
-            return assistant.getProperty("undisrupted-flow-instructions", "");
+            return getProperty("undisrupted-flow-instructions", "");
         }
 
         public double getShowUpPayment() {
-            return assistant.getDoubleProperty("showup-payment", 5.0d);
+            return getDoubleProperty("showup-payment", 5.0d);
         }
 
         public String getInitialInstructions() {
-            String initialInstructions = assistant.getProperty("initial-instructions", "");
+            String initialInstructions = getProperty("initial-instructions", "");
             if (initialInstructions.contains("%d")) {
                 return String.format(initialInstructions, getChatDuration());
             }
@@ -116,11 +116,11 @@ public class ConfigurationTest {
         }
         
         public String getWelcomeInstructions() {
-            return assistant.getProperty("welcome-instructions");
+            return getProperty("welcome-instructions");
         }
 
         public Map<String, String> getQuizAnswers() {
-            Properties properties = assistant.getProperties();
+            Properties properties = getProperties();
             Map<String, String> answers = new HashMap<String, String>();
             for (int i = 1; properties.containsKey("q" + i); i++) {
                 String key = "q" + i;
@@ -136,35 +136,35 @@ public class ConfigurationTest {
         }
         
         public String getQuizQuestion(int pageNumber) {
-            return assistant.getProperty("general-instructionsq" + pageNumber);
+            return getProperty("general-instructionsq" + pageNumber);
         }
 
         public String getQuizPage(int pageNumber) {
-            return assistant.getProperty("quiz-page"+pageNumber); 
+            return getProperty("quiz-page"+pageNumber); 
         }
         
         public String getWaterCollectedToTokensTable() {
-            return assistant.getProperty("water-collected-to-tokens-table");
+            return getProperty("water-collected-to-tokens-table");
         }
 
         public String getFinalInstructions() {
-            return assistant.getProperty("final-instructions", "<b>The experiment is now over.  Thanks for participating!</b>");
+            return getProperty("final-instructions", "<b>The experiment is now over.  Thanks for participating!</b>");
         }
         
         public String getInvestmentInstructions() {
-            return assistant.getProperty("investment-instructions");
+            return getProperty("investment-instructions");
         }
         
         public int getNumberOfQuizPages() {
-            return assistant.getIntProperty("question-pages", 2);
+            return getIntProperty("question-pages", 2);
         }
         
         public int getChatDuration() {
-            return assistant.getIntProperty("chat-duration", 60);
+            return getIntProperty("chat-duration", 60);
         }
 
         public String getChatInstructions() {
-            String chatInstructions = assistant.getProperty("chat-instructions", "");
+            String chatInstructions = getProperty("chat-instructions", "");
             if (chatInstructions.contains("%d")) {
                 return String.format(chatInstructions, getChatDuration());
             }
@@ -172,7 +172,7 @@ public class ConfigurationTest {
         }
 
         public String getGameScreenshotInstructions() {
-            return assistant.getProperty("game-screenshot-instructions");
+            return getProperty("game-screenshot-instructions");
         }
 
         @Override

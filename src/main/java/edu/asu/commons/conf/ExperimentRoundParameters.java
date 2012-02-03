@@ -37,7 +37,7 @@ public interface ExperimentRoundParameters<T extends ExperimentConfiguration> ex
     
     public static abstract class Base<E extends ExperimentConfiguration> implements ExperimentRoundParameters<E> {
         private static final long serialVersionUID = -7904104481473406817L;
-        private final ConfigurationAssistant assistant = new ConfigurationAssistant();
+        private final PropertiesConfiguration assistant = new PropertiesConfiguration();
 
         private final String resource;
         private E parentConfiguration;
@@ -58,7 +58,7 @@ public interface ExperimentRoundParameters<T extends ExperimentConfiguration> ex
             return getParentConfiguration().getAllParameters().indexOf(this);
         }
         
-        protected ConfigurationAssistant getConfigurationAssistant() {
+        protected PropertiesConfiguration getConfigurationAssistant() {
             return assistant;
         }
         

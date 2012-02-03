@@ -29,19 +29,19 @@ import edu.asu.commons.util.ResourceLoader;
  * @author <a href='Allen.Lee@asu.edu'>Allen Lee</a>
  * @version $Revision$
  */
-public class ConfigurationAssistant implements Serializable {
+public class PropertiesConfiguration implements Serializable {
     
     private static final long serialVersionUID = -9093022080387404606L;
     
     private final Properties properties;
 
 	private final Map<String, Object> cachedPropertyMap = new HashMap<String, Object>();
-    
-    public ConfigurationAssistant() {
+
+    public PropertiesConfiguration() {
         this(new Properties());
     }
     
-    public ConfigurationAssistant(Properties properties) {
+    public PropertiesConfiguration(Properties properties) {
         this.properties = properties;
     }
     
@@ -142,11 +142,17 @@ public class ConfigurationAssistant implements Serializable {
      * @return
      */
     public ST createStringTemplate(String template) {
-        return new ST(template, '{', '}');
+        return createStringTemplate(template, '{', '}', this);
     }
     
-    public ST templatize(String template, char startDelimiter, char endDelimiter) {
-        return new ST(template, startDelimiter, endDelimiter);
+    public ST createStringTemplate(String template, char startDelimiter, char endDelimiter, Object templateModel) {
+        ST st = new ST(template, startDelimiter, endDelimiter);
+        st.add("self", templateModel);
+        return st;
+    }
+    
+    public String render(String template) {
+    	return createStringTemplate(template).render();
     }
 
 	public Map<String, Object> toMap(Object configuration) {

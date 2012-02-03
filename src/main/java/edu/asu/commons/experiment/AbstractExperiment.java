@@ -6,7 +6,6 @@ import java.io.InputStreamReader;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Locale;
 import java.util.logging.Logger;
 
 import edu.asu.commons.command.Command;
@@ -48,6 +47,13 @@ public abstract class AbstractExperiment<C extends ExperimentConfiguration<R>, R
     
     public AbstractExperiment(C configuration) {
         this(configuration, new EventTypeChannel());
+        Runtime.getRuntime().addShutdownHook(new Thread() {
+        	@Override
+        	public void run() {
+        		logger.info("Server is shutting down due to user input (e.g., Ctrl-C).");
+        		System.out.println("Shutting down " + getClass().getName());
+        	}
+        });
     }
     
     public AbstractExperiment(C configuration, EventChannel channel) {
