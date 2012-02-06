@@ -77,10 +77,12 @@ public interface ExperimentConfiguration<T extends ExperimentRoundParameters> ex
     public ServerDispatcher.Type getServerDispatcherType();
     public int getWorkerPoolSize();
     
+    public String getLogFileDestination();
     public Locale getLocale();
 
     public static abstract class Base<E extends ExperimentRoundParameters> extends Configuration.Base implements ExperimentConfiguration<E> {
 
+        private static final String DEFAULT_LOGFILE_DESTINATION = "experiment-server.log";
         private final static long serialVersionUID = 8936075404166796486L;
         public static String defaultConfigurationDirectory;
 
@@ -271,6 +273,18 @@ public interface ExperimentConfiguration<T extends ExperimentRoundParameters> ex
         
         public int getWorkerPoolSize() {
             return getIntProperty("worker-pool-size", 5);
+        }
+        
+        public String getLogFileDestination() {
+            return getStringProperty("log", getDefaultLogFileDestination());
+        }
+
+        /**
+         * The default log file destination for a particular class of experiments (e.g., foraging-server.log, irrigation-server.log)
+         * @return
+         */
+        protected String getDefaultLogFileDestination() {
+            return DEFAULT_LOGFILE_DESTINATION;
         }
 
         public Locale getLocale() {
