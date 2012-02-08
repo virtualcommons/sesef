@@ -4,7 +4,6 @@ import java.io.PrintStream;
 import java.io.Serializable;
 import java.text.NumberFormat;
 import java.util.Map;
-import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
 import edu.asu.commons.util.Duration;
@@ -107,10 +106,6 @@ public interface ExperimentRoundParameters<T extends ExperimentConfiguration> ex
 
         public int getIntProperty(String key) {
             return getIntProperty(key, parentConfiguration.getIntProperty(key));
-        }
-
-        public Properties getProperties() {
-            return getProperties();
         }
 
         public String getStringProperty(String key) {
