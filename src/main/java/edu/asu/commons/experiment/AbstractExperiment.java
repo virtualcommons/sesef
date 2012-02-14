@@ -13,6 +13,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
+import antlr.StringUtils;
+
 import edu.asu.commons.command.Command;
 import edu.asu.commons.conf.ExperimentConfiguration;
 import edu.asu.commons.conf.ExperimentRoundParameters;
@@ -20,8 +22,10 @@ import edu.asu.commons.event.Event;
 import edu.asu.commons.event.EventChannel;
 import edu.asu.commons.event.EventTypeChannel;
 import edu.asu.commons.event.EventTypeProcessor;
+import edu.asu.commons.event.FacilitatorMessageEvent;
 import edu.asu.commons.event.PersistableEvent;
 import edu.asu.commons.net.DispatcherFactory;
+import edu.asu.commons.net.Identifier;
 import edu.asu.commons.net.ServerDispatcher;
 
 /**
@@ -39,6 +43,8 @@ public abstract class AbstractExperiment<C extends ExperimentConfiguration<R>, R
     private final Logger logger = Logger.getLogger(getClass().getName());
     private final EventChannel channel;
     private final ServerDispatcher dispatcher;
+    
+    private Identifier facilitatorId;
 
     private final List<Command> commands = new LinkedList<Command>();
 
@@ -330,6 +336,32 @@ public abstract class AbstractExperiment<C extends ExperimentConfiguration<R>, R
         try {
             Thread.sleep(millis);
         } catch (InterruptedException ignored) {
+        }
+    }
+
+    public Identifier getFacilitatorId() {
+        return facilitatorId;
+    }
+
+    public void setFacilitatorId(Identifier facilitatorId) {
+        this.facilitatorId = facilitatorId;
+    }
+    
+    public void sendFacilitatorMessage(String message) {
+        getLogger().info(message);
+        transmitFacilitatorMessage(message);
+
+    }
+    
+    public void sendFacilitatorMessage(String message, Throwable t) {
+        t.printStackTrace();
+        getLogger().log(Level.SEVERE, message, t);
+        transmitFacilitatorMessage(message);
+    }
+    
+    public void transmitFacilitatorMessage(String message) {
+        if (facilitatorId != null && message != null && ! message.trim().isEmpty()) {
+            transmit(new FacilitatorMessageEvent(facilitatorId, message));
         }
     }
 
