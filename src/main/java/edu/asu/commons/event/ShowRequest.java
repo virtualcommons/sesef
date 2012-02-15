@@ -1,7 +1,5 @@
 package edu.asu.commons.event;
 
-import edu.asu.commons.event.FacilitatorRequest;
-import edu.asu.commons.net.Identifier;
 
 /**
  * $Id$
@@ -11,6 +9,5 @@ import edu.asu.commons.net.Identifier;
  * @author <a href='mailto:allen.lee@asu.edu'>Allen Lee</a>
  * @version $Rev$
  */
-public interface ShowRequest<T extends ShowRequest<T>> extends FacilitatorRequest {
-    public T copy(Identifier id);
+public interface ShowRequest<T extends ShowRequest<T>> extends FacilitatorRequest, ClonableEvent<T> {
 }

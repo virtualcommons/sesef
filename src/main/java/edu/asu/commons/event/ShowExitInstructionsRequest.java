@@ -28,7 +28,7 @@ public class ShowExitInstructionsRequest extends AbstractEvent implements ShowRe
 	}
 	
 	@Override
-	public ShowExitInstructionsRequest copy(Identifier id) {
+	public ShowExitInstructionsRequest clone(Identifier id) {
 	    return new ShowExitInstructionsRequest(id);
 	}
 

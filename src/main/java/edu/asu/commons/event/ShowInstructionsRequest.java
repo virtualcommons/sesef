@@ -20,7 +20,7 @@ public class ShowInstructionsRequest extends AbstractEvent implements ShowReques
     }
 	
 	@Override
-	public ShowInstructionsRequest copy(Identifier id) {
+	public ShowInstructionsRequest clone(Identifier id) {
 	    return new ShowInstructionsRequest(id);
 	}
 	
