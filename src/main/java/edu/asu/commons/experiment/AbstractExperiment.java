@@ -219,9 +219,7 @@ public abstract class AbstractExperiment<C extends ExperimentConfiguration<R>, R
                         getStateMachine().execute(dispatcher);
                     }
                     catch (Exception exception) {
-                        getLogger().log(Level.SEVERE, "Attempting to recover from exception.", exception);
-                        getLogger().throwing(getClass().getName(), "ExperimentServerThread.run()", exception);
-                        exception.printStackTrace();
+                        sendFacilitatorMessage("Unhandled exception " + exception.getMessage() + " - continuing.", exception);
                         continue;
                     }
                 }
