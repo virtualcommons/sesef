@@ -1,8 +1,5 @@
 package edu.asu.commons.event;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,11 +7,13 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.junit.Assert.*;
+
 /**
- * $Id: EventTypeChannelTest.java 1 2008-07-23 22:15:18Z alllee $
+ * $Id$
  * 
  * @author <a href='Allen.Lee@asu.edu'>Allen Lee</a>
- * @version $Revision: 1 $
+ * @version $Revision$
  */
 public class EventTypeChannelTest {
     

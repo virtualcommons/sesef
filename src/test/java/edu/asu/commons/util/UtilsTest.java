@@ -1,15 +1,12 @@
 package edu.asu.commons.util;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
 
 import edu.asu.commons.util.Utils.MapOp;
+import static org.junit.Assert.*;
 
 /**
  * $ Id: Exp $
@@ -17,7 +14,7 @@ import edu.asu.commons.util.Utils.MapOp;
  *  Exercises Utils class.
  *
  * @author <a href='mailto:Allen.Lee@asu.edu'>Allen Lee</a>
- * @version $Revision: 1 $
+ * @version $Revision$
  */
 public class UtilsTest {
 

@@ -1,6 +1,5 @@
 package edu.asu.commons.event;
 
-import edu.asu.commons.event.AbstractEvent;
 import edu.asu.commons.net.Identifier;
 
 /**

@@ -1,15 +1,14 @@
 package edu.asu.commons.experiment;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import java.io.PrintWriter;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.junit.Assert.*;
+
 /**
- * $Id: SaveFileProcessorTest.java 477 2010-02-24 18:15:30Z alllee $
+ * $Id$
  * 
  * @version $Rev: 477 $
  * @author <a href='mailto:allen.lee@asu.edu'>Allen Lee</a>
