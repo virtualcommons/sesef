@@ -7,14 +7,15 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * $Id$
  * Provides a generic event channel dispatching events to interested
  * subscribers.  Subscribers specify interest in a particular subset of Events
  * by passing in an additional EventConstraint to the subscribe() method.
  *
  * @author Allen Lee
- * @version $Revision: 454 $
+ * @version $Revision$
  */
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked", "rawtypes"})
 public final class EventConstraintChannel implements EventGenerator, EventChannel {
 
     private final static EventConstraintChannel INSTANCE = new EventConstraintChannel();
@@ -173,10 +174,9 @@ public final class EventConstraintChannel implements EventGenerator, EventChanne
     }
     
     /**
-     * $Id: EventConstraintChannel.java 454 2010-02-04 04:17:29Z alllee $
      * 
      * FIXME: this class should support automatic subscription/unsubscription with all methods that
-     * add/remove to this List.  Right now only the basic add/remove methods are supported.
+     * modify this List.  Right now only basic add/remove methods are supported.
      */
     private class EventProcessorList extends ArrayList<EventProcessor> {
         private static final long serialVersionUID = -4756601346604320046L;

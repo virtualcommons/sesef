@@ -66,7 +66,7 @@ public abstract class AbstractExperiment<C extends ExperimentConfiguration<R>, R
             @Override
             public void run() {
                 logger.info("Server is shutting down due to user input (e.g., Ctrl-C).");
-                System.out.println("Shutting down " + getClass().getName());
+                System.out.println("Shutting down " + AbstractExperiment.this.getClass().getName());
             }
         });
         Thread.setDefaultUncaughtExceptionHandler(new UncaughtExceptionHandler() {
