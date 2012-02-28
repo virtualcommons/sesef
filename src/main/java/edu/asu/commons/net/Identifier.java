@@ -125,4 +125,10 @@ public interface Identifier extends Serializable {
         }
 
     }
+    
+    public static class Mock extends Base<Mock> {
+
+		private static final long serialVersionUID = 4306532617547585781L;
+    	
+    }
 }
