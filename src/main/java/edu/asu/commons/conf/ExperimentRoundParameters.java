@@ -4,6 +4,7 @@ import java.io.PrintStream;
 import java.io.Serializable;
 import java.text.NumberFormat;
 import java.util.Map;
+import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
 import edu.asu.commons.util.Duration;
@@ -31,7 +32,7 @@ public interface ExperimentRoundParameters<T extends ExperimentConfiguration> ex
 
     public int getRoundNumber();
 
-    // public Properties getProperties();
+    public Properties getProperties();
 
     public static abstract class Base<E extends ExperimentConfiguration> extends Configuration.Base implements ExperimentRoundParameters<E> {
         private static final long serialVersionUID = -7904104481473406817L;
@@ -113,7 +114,7 @@ public interface ExperimentRoundParameters<T extends ExperimentConfiguration> ex
         }
 
         public void setProperty(String key, String value) {
-            setProperty(key, value);
+            super.setProperty(key, value);
         }
 
         public String getProperty(String key) {

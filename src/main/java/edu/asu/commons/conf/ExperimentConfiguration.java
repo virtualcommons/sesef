@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Properties;
 
 import edu.asu.commons.net.ServerDispatcher;
 
@@ -79,6 +80,8 @@ public interface ExperimentConfiguration<T extends ExperimentRoundParameters> ex
     
     public String getLogFileDestination();
     public Locale getLocale();
+    
+    public Properties getProperties();
 
     public static abstract class Base<E extends ExperimentRoundParameters> extends Configuration.Base implements ExperimentConfiguration<E> {
 
