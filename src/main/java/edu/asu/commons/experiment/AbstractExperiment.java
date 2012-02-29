@@ -21,6 +21,7 @@ import edu.asu.commons.event.EventChannel;
 import edu.asu.commons.event.EventTypeChannel;
 import edu.asu.commons.event.EventTypeProcessor;
 import edu.asu.commons.event.FacilitatorMessageEvent;
+import edu.asu.commons.event.FacilitatorRequest;
 import edu.asu.commons.event.PersistableEvent;
 import edu.asu.commons.net.DispatcherFactory;
 import edu.asu.commons.net.Identifier;
@@ -41,7 +42,7 @@ public abstract class AbstractExperiment<C extends ExperimentConfiguration<R>, R
     private final Logger logger = Logger.getLogger(getClass().getName());
     private final EventChannel channel;
     private final ServerDispatcher dispatcher;
-    
+
     private Identifier facilitatorId;
 
     private final List<Command> commands = new LinkedList<Command>();
@@ -342,21 +343,28 @@ public abstract class AbstractExperiment<C extends ExperimentConfiguration<R>, R
     public void setFacilitatorId(Identifier facilitatorId) {
         this.facilitatorId = facilitatorId;
     }
-    
+
+    public boolean isValidFacilitatorRequest(FacilitatorRequest request) {
+        if (facilitatorId == null || request == null) {
+            return false;
+        }
+        return facilitatorId.equals(request.getId());
+    }
+
     public void sendFacilitatorMessage(String message) {
         getLogger().info(message);
         transmitFacilitatorMessage(message);
 
     }
-    
+
     public void sendFacilitatorMessage(String message, Throwable t) {
         t.printStackTrace();
         getLogger().log(Level.SEVERE, message, t);
         transmitFacilitatorMessage(message);
     }
-    
+
     public void transmitFacilitatorMessage(String message) {
-        if (facilitatorId != null && message != null && ! message.trim().isEmpty()) {
+        if (facilitatorId != null && message != null && !message.trim().isEmpty()) {
             transmit(new FacilitatorMessageEvent(facilitatorId, message));
         }
     }
