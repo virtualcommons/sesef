@@ -39,11 +39,11 @@ import edu.asu.commons.event.RoundEndedMarkerEvent;
  * 
  * @author <a href='mailto:Allen.Lee@asu.edu'>Allen Lee</a>
  * @version $Revision$
- * @param <T>
+ * @param <C>
  * @param <R>
  */
 
-public abstract class Persister<T extends ExperimentConfiguration<R>, R extends ExperimentRoundParameters<T>> implements IPersister<T, R> {
+public abstract class Persister<C extends ExperimentConfiguration<C, R>, R extends ExperimentRoundParameters<C, R>> implements IPersister<C, R> {
 
     // FIXME: test on windows and mac to make sure that File.separator doesn't cause any bugs.
     private final static String ROUND_SAVE_DIRECTORY_FORMAT = "MM-dd-yyyy" + File.separator + "HH.mm.ss";
@@ -72,7 +72,7 @@ public abstract class Persister<T extends ExperimentConfiguration<R>, R extends 
 //    private boolean usingEventChannel;
 
     
-    public Persister(T experimentConfiguration) {
+    public Persister(C experimentConfiguration) {
         this.persistenceDirectory = experimentConfiguration.getPersistenceDirectory();
         // initialize persister with first round parameters
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(ROUND_SAVE_DIRECTORY_FORMAT);
@@ -87,7 +87,7 @@ public abstract class Persister<T extends ExperimentConfiguration<R>, R extends 
 //        return getDefaultSavePath() + File.separator + roundConfiguration.getRoundNumber() + ".save.xml";
     }
     
-    public Persister(EventChannel channel, T experimentConfiguration) {
+    public Persister(EventChannel channel, C experimentConfiguration) {
         this(experimentConfiguration);
         if (channel == null) {
             throw new NullPointerException("Cannot register persister with a null event channel");
@@ -291,7 +291,7 @@ public abstract class Persister<T extends ExperimentConfiguration<R>, R extends 
 	 * @see edu.asu.commons.experiment.IPersister#persist(E)
 	 */
     @Override
-	public final <E extends DataModel<T, R>> void persist(E serverDataModel) {
+	public final <E extends DataModel<C, R>> void persist(E serverDataModel) {
         // shouldn't need to synchronize but just to be sure / threadsafe
         synchronized (actions) {
             actions.add(new RoundEndedMarkerEvent());
@@ -299,7 +299,7 @@ public abstract class Persister<T extends ExperimentConfiguration<R>, R extends 
         save(serverDataModel);
     }
     
-    private final <E extends DataModel<T, R>> void save(E serverDataModel) {
+    private final <E extends DataModel<C, R>> void save(E serverDataModel) {
         try {
             saveRound(serverDataModel, persistenceDirectory);
         }
@@ -357,7 +357,7 @@ public abstract class Persister<T extends ExperimentConfiguration<R>, R extends 
         return DEFAULT_EXPERIMENT_CONFIGURATION_FILE;
     }
     
-    private void saveExperimentConfiguration(T experimentConfiguration) {
+    private void saveExperimentConfiguration(C experimentConfiguration) {
         try {
             doSaveExperimentConfiguration(experimentConfiguration, persistenceDirectory);
         }
@@ -379,7 +379,7 @@ public abstract class Persister<T extends ExperimentConfiguration<R>, R extends 
         }        
     }
     
-    private void doSaveExperimentConfiguration(T experimentConfiguration, String persistenceDirectory) throws IOException {
+    private void doSaveExperimentConfiguration(C experimentConfiguration, String persistenceDirectory) throws IOException {
         ObjectOutputStream objectOutputStream = null;
         String savePath = getSavePath(persistenceDirectory);
         try {
@@ -400,7 +400,7 @@ public abstract class Persister<T extends ExperimentConfiguration<R>, R extends 
         }
     }
 
-    private <E extends DataModel<T, R>> void saveRound(E serverDataModel, String persistenceDirectory) throws IOException {
+    private <E extends DataModel<C, R>> void saveRound(E serverDataModel, String persistenceDirectory) throws IOException {
         String saveDestination = getSavePath(persistenceDirectory);
         logger.info("saving to " + saveDestination);
         ObjectOutputStream oos = 

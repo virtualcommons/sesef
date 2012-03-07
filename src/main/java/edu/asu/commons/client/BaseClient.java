@@ -18,7 +18,7 @@ import edu.asu.commons.net.event.DisconnectionRequest;
  * @author <a href='mailto:Allen.Lee@asu.edu'>Allen Lee</a>
  * @version $Revision$
  */
-public abstract class BaseClient<E extends ExperimentConfiguration<R>, R extends ExperimentRoundParameters<E>> {
+public abstract class BaseClient<C extends ExperimentConfiguration<C, R>, R extends ExperimentRoundParameters<C, R>> {
     
     private final ClientDispatcher dispatcher;
     
@@ -26,17 +26,17 @@ public abstract class BaseClient<E extends ExperimentConfiguration<R>, R extends
     
     private Identifier id;
     
-    private E serverConfiguration;
+    private C serverConfiguration;
     
-    public BaseClient(E configuration) {
+    public BaseClient(C configuration) {
         this(configuration, EventChannelFactory.create());
     }
     
-    public BaseClient(E configuration, EventChannel channel) {
+    public BaseClient(C configuration, EventChannel channel) {
         this(configuration, channel, DispatcherFactory.getInstance().createClientDispatcher(channel, configuration));
     }
     
-    public BaseClient(E configuration, EventChannel channel, ClientDispatcher dispatcher) {
+    public BaseClient(C configuration, EventChannel channel, ClientDispatcher dispatcher) {
         if (configuration == null) {
             throw new NullPointerException("Null experiment configuration disallowed");
         }
@@ -49,18 +49,8 @@ public abstract class BaseClient<E extends ExperimentConfiguration<R>, R extends
         this.serverConfiguration = configuration;
         this.channel = channel;
         this.dispatcher = dispatcher;
-        // FIXME: sun docs seem to warn against this, verify that this appropriate usage
-//        Locale.setDefault(serverConfiguration.getLocale());
     }
-    
-    
-    // FIXME: figure out a better way to copy over the configuration for integrating multiple clients..
-    @Deprecated
-    public BaseClient(BaseClient<E, R> client) {
-        this(client.serverConfiguration, client.channel, client.dispatcher);
-        this.id = client.id;
-    }
-    
+
     protected void initializeEventProcessors() { }
     protected void postConnect() { }
     

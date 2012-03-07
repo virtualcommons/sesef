@@ -16,7 +16,7 @@ import edu.asu.commons.conf.ExperimentRoundParameters;
  * @version $Revision$
  */
 
-public interface Experiment<C extends ExperimentConfiguration<RC>, RC extends ExperimentRoundParameters<C>> {
+public interface Experiment<C extends ExperimentConfiguration<C, R>, R extends ExperimentRoundParameters<C, R>> {
 
     public Logger getLogger();
 
@@ -32,6 +32,6 @@ public interface Experiment<C extends ExperimentConfiguration<RC>, RC extends Ex
     
     public void schedule(Command command);
     
-    public IPersister<C, RC> getPersister();
+    public IPersister<C, R> getPersister();
     
 }

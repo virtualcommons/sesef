@@ -37,7 +37,7 @@ import edu.asu.commons.net.ServerDispatcher;
  * @author <a href='mailto:Allen.Lee@asu.edu'>Allen Lee</a>
  * @version $Revision$
  */
-public abstract class AbstractExperiment<C extends ExperimentConfiguration<R>, R extends ExperimentRoundParameters<C>> implements Experiment<C, R> {
+public abstract class AbstractExperiment<C extends ExperimentConfiguration<C, R>, R extends ExperimentRoundParameters<C, R>> implements Experiment<C, R> {
 
     private final Logger logger = Logger.getLogger(getClass().getName());
     private final EventChannel channel;

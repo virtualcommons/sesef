@@ -49,7 +49,7 @@ public class ConfigurationTest {
     }
 
     public static class MockServerConfiguration 
-    extends ExperimentConfiguration.Base<MockRoundConfiguration> {
+    extends ExperimentConfiguration.Base<MockServerConfiguration, MockRoundConfiguration> {
 
         private static final long serialVersionUID = 7867208205942476733L;
 
@@ -182,7 +182,7 @@ public class ConfigurationTest {
 
     }
     
-    public static class MockRoundConfiguration extends ExperimentRoundParameters.Base<MockServerConfiguration> {
+    public static class MockRoundConfiguration extends ExperimentRoundParameters.Base<MockServerConfiguration, MockRoundConfiguration> {
 
         private static final long serialVersionUID = -5053624886508752562L;
 

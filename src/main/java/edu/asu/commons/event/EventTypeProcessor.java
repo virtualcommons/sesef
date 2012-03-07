@@ -7,13 +7,13 @@ import edu.asu.commons.experiment.Experiment;
 
 
 /**
- * $Id: EventTypeProcessor.java 454 2010-02-04 04:17:29Z alllee $
+ * $Id$
  *
  * An EventTypeProcessor encapsulates both an EventHandler and an EventInstanceofConstraint
  * within the same class for convenience sake.  
  * 
  * @author <a href='mailto:Allen.Lee@asu.edu'>Allen Lee</a>
- * @version $Revision: 454 $
+ * @version $Revision$
  */
 
 public abstract class EventTypeProcessor<E extends Event> implements EventProcessor<E> {
@@ -87,7 +87,7 @@ public abstract class EventTypeProcessor<E extends Event> implements EventProces
         return acceptsSubtypes;
     }
 
-	public <C extends ExperimentConfiguration<R>, R extends ExperimentRoundParameters<C>, EX extends Experiment<C, R>> void setExperiment(EX experiment) {
+	public <C extends ExperimentConfiguration<C, R>, R extends ExperimentRoundParameters<C, R>, T extends Experiment<C, R>> void setExperiment(T experiment) {
 		this.experiment = experiment;
 	}
 }

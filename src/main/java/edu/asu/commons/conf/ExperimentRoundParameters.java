@@ -14,13 +14,12 @@ import edu.asu.commons.util.Duration;
  * 
  * Per-round experimental parameters for a given Experiment server instance.
  * 
- * FIXME: can we do mutually recursive generics properly here?
  * 
  * @author <a href='mailto:Allen.Lee@asu.edu'>Allen Lee</a>
  * @version $Revision$
  */
-@SuppressWarnings("rawtypes")
-public interface ExperimentRoundParameters<T extends ExperimentConfiguration> extends Serializable {
+public interface ExperimentRoundParameters<T extends ExperimentConfiguration<T, R>, R extends ExperimentRoundParameters<T, R>>
+        extends Serializable {
 
     public String getInstructions();
 
@@ -34,7 +33,10 @@ public interface ExperimentRoundParameters<T extends ExperimentConfiguration> ex
 
     public Properties getProperties();
 
-    public static abstract class Base<E extends ExperimentConfiguration> extends Configuration.Base implements ExperimentRoundParameters<E> {
+    public boolean isPracticeRound();
+
+    public static abstract class Base<E extends ExperimentConfiguration<E, P>, P extends ExperimentRoundParameters<E, P>>
+            extends Configuration.Base implements ExperimentRoundParameters<E, P> {
         private static final long serialVersionUID = -7904104481473406817L;
 
         private final String resource;
@@ -52,8 +54,9 @@ public interface ExperimentRoundParameters<T extends ExperimentConfiguration> ex
             loadProperties(resource);
         }
 
+        @SuppressWarnings("unchecked")
         public int getRoundNumber() {
-            return getParentConfiguration().getAllParameters().indexOf(this);
+            return parentConfiguration.getRoundNumber((P) this);
         }
 
         public void report() {
@@ -127,6 +130,10 @@ public interface ExperimentRoundParameters<T extends ExperimentConfiguration> ex
 
         public boolean isLastRound() {
             return parentConfiguration.isLastRound();
+        }
+
+        public boolean isPracticeRound() {
+            return getBooleanProperty("practice-round", false);
         }
 
         public long inMinutes(long seconds) {

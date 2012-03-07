@@ -6,14 +6,14 @@ import edu.asu.commons.experiment.Experiment;
 
 
 /**
- * $Id: EventProcessor.java 1 2008-07-23 22:15:18Z alllee $
+ * $Id$
  *
  * Support interface for processing events, encapsulating both an EventHandler and an EventConstraint
  * in the same class/type.  
  *   
  * 
  * @author <a href='mailto:Allen.Lee@asu.edu'>Allen Lee</a>
- * @version $Revision: 1 $
+ * @version $Revision$
  */
 
 public interface EventProcessor<E extends Event> extends EventHandler<E>, EventConstraint {
@@ -24,6 +24,6 @@ public interface EventProcessor<E extends Event> extends EventHandler<E>, EventC
     
     public void handleInExperimentThread(E event);
     
-    public <C extends ExperimentConfiguration<R>, R extends ExperimentRoundParameters<C>, EX extends Experiment<C, R>> void setExperiment(EX experiment);
+    public <C extends ExperimentConfiguration<C, R>, R extends ExperimentRoundParameters<C, R>, T extends Experiment<C, R>> void setExperiment(T experiment);
 
 }

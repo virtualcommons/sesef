@@ -5,24 +5,25 @@ import edu.asu.commons.conf.ExperimentRoundParameters;
 import edu.asu.commons.net.Identifier;
 
 /**
- * $Id: SetConfigurationEvent.java 1 2008-07-23 22:15:18Z alllee $
+ * $Id$
  * 
  * Notifies the client of the next round configuration to be used.
  *
  * @author Allen Lee
- * @version $Revision: 1 $
+ * @version $Revision$
  */
-public class SetConfigurationEvent<T extends ExperimentRoundParameters<? extends ExperimentConfiguration<T>>> extends AbstractEvent {
+public class SetConfigurationEvent<C extends ExperimentConfiguration<C, R>, R extends ExperimentRoundParameters<C, R>>
+extends AbstractEvent {
     
     private static final long serialVersionUID = 4221950887888018509L;
-    private final T parameters;
+    private final R parameters;
     
-    public SetConfigurationEvent(Identifier target, T parameters) {
+    public SetConfigurationEvent(Identifier target, R parameters) {
         super(target);
         this.parameters = parameters;
     }
     
-    public T getParameters() {
+    public R getParameters() {
         return parameters;
     }
     

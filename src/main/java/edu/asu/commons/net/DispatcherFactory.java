@@ -26,7 +26,7 @@ public class DispatcherFactory {
         return INSTANCE;
     }
     
-    public <E extends ExperimentConfiguration<R>, R extends ExperimentRoundParameters<E>> ClientDispatcher createClientDispatcher(EventChannel channel, E serverConfiguration) {
+    public <C extends ExperimentConfiguration<C, R>, R extends ExperimentRoundParameters<C, R>> ClientDispatcher createClientDispatcher(EventChannel channel, C serverConfiguration) {
         switch (serverConfiguration.getServerDispatcherType()) {
             case NIO:
                 return new NioDispatcher(channel, 1);
@@ -42,7 +42,7 @@ public class DispatcherFactory {
         return createServerDispatcher(channel, DEFAULT_WORKER_POOL_SIZE, ServerDispatcher.Type.SOCKET);
     }
     
-    public <E extends ExperimentConfiguration<R>, R extends ExperimentRoundParameters<E>> ServerDispatcher createServerDispatcher(EventChannel channel, E serverConfiguration) {
+    public <C extends ExperimentConfiguration<C, R>, R extends ExperimentRoundParameters<C, R>> ServerDispatcher createServerDispatcher(EventChannel channel, C serverConfiguration) {
         return createServerDispatcher(channel, serverConfiguration.getWorkerPoolSize(), serverConfiguration.getServerDispatcherType());
     }
           

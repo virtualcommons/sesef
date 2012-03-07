@@ -20,14 +20,14 @@ import edu.asu.commons.net.ServerDispatcher;
  * @author <a href='mailto:Allen.Lee@asu.edu'>Allen Lee</a>
  * @version $Revision$
  */
-@SuppressWarnings("rawtypes")
-public interface ExperimentConfiguration<T extends ExperimentRoundParameters> extends Configuration, Iterable<T> {
+public interface ExperimentConfiguration<C extends ExperimentConfiguration<C, R>, R extends ExperimentRoundParameters<C, R>> 
+extends Configuration, Iterable<R> {
 
-    public List<T> getAllParameters();
+    public List<R> getAllParameters();
 
-    public void setAllParameters(List<T> allParameters);
+    public void setAllParameters(List<R> allParameters);
 
-    public T getCurrentParameters();
+    public R getCurrentParameters();
 
     public int getNumberOfRounds();
 
@@ -35,18 +35,20 @@ public interface ExperimentConfiguration<T extends ExperimentRoundParameters> ex
      * Advances to the next round.
      * @return
      */
-    public T nextRound();
+    public R nextRound();
     
     /**
      * Returns the previous round's configuration without modification.
      */
-    public T getPreviousRoundConfiguration();
+    public R getPreviousRoundConfiguration();
     
     /**
      * Returns the next round configuration without modification.
      * @return
      */
-    public T getNextRoundConfiguration();
+    public R getNextRoundConfiguration();
+    
+    public int getRoundNumber(R roundParameters);
 
     public String getServerName();
 
@@ -83,7 +85,8 @@ public interface ExperimentConfiguration<T extends ExperimentRoundParameters> ex
     
     public Properties getProperties();
 
-    public static abstract class Base<E extends ExperimentRoundParameters> extends Configuration.Base implements ExperimentConfiguration<E> {
+    public static abstract class Base<C extends ExperimentConfiguration<C, E>, E extends ExperimentRoundParameters<C, E>> 
+    extends Configuration.Base implements ExperimentConfiguration<C, E> {
 
         private static final String DEFAULT_LOGFILE_DESTINATION = "experiment-server.log";
         private final static long serialVersionUID = 8936075404166796486L;
@@ -112,6 +115,7 @@ public interface ExperimentConfiguration<T extends ExperimentRoundParameters> ex
         protected final List<E> allParameters = new ArrayList<E>();
         protected String configurationDirectory;
         private Locale locale;
+        private int numberOfPracticeRounds;
 
         public Base() {
             this(defaultConfigurationDirectory);
@@ -159,7 +163,7 @@ public interface ExperimentConfiguration<T extends ExperimentRoundParameters> ex
                     continue;
                 }
                 E configuration = createRoundConfiguration(roundConfigurationResource);
-                configuration.setParentConfiguration(this);
+                configuration.setParentConfiguration((C) this);
                 allParameters.add(configuration);
             }
         }
@@ -191,13 +195,36 @@ public interface ExperimentConfiguration<T extends ExperimentRoundParameters> ex
         public int getNumberOfRounds() {
             return getIntProperty("number-of-rounds", 0);
         }
+        
+        /**
+         * Returns a 1-based round number for the given round configuration, ignoring practice rounds.
+         */
+        public int getRoundNumber(E roundParameter) {
+            return allParameters.indexOf(roundParameter) - getPracticeRoundOffset();
+        }
+        
+        public int getPracticeRoundOffset() {
+            return getNumberOfPracticeRounds() - 1;
+        }
+
+        public int getNumberOfPracticeRounds() {
+            if (numberOfPracticeRounds == -1) {
+                numberOfPracticeRounds = 0;
+                for (E roundParameter: allParameters) {
+                    if (roundParameter.isPracticeRound()) {
+                        numberOfPracticeRounds++;
+                    }
+                }
+            }
+            return numberOfPracticeRounds;
+        }
 
         public String getFacilitatorInstructions() {
             return render(getStringProperty("facilitator-instructions", "No facilitator instructions available."));
         }
 
         public List<E> getAllParameters() {
-            return allParameters;
+            return new ArrayList<E>(allParameters);
         }
 
         public void setAllParameters(List<E> incomingParameters) {

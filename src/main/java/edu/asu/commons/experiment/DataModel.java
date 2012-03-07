@@ -16,9 +16,9 @@ import edu.asu.commons.net.Identifier;
  * @author <a href='Allen.Lee@asu.edu'>Allen Lee</a>
  * @version $Revision$
  */
-public interface DataModel<S extends ExperimentConfiguration<R>, R extends ExperimentRoundParameters<S>> extends Serializable {
+public interface DataModel<C extends ExperimentConfiguration<C, R>, R extends ExperimentRoundParameters<C, R>> extends Serializable {
 
-	public S getExperimentConfiguration();
+	public C getExperimentConfiguration();
 
     public R getRoundConfiguration();
     

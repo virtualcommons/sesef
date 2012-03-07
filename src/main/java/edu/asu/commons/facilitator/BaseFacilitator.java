@@ -17,27 +17,27 @@ import edu.asu.commons.net.Identifier;
  * 
  * @author <a href='Allen.Lee@asu.edu'>Allen Lee</a>
  * @version $Revision$
- * @param <E> the concrete ExperimentConfiguration class
+ * @param <C> the concrete ExperimentConfiguration class
  */
-public abstract class BaseFacilitator<E extends ExperimentConfiguration<R>, R extends ExperimentRoundParameters<E>> {
+public abstract class BaseFacilitator<C extends ExperimentConfiguration<C, R>, R extends ExperimentRoundParameters<C, R>> {
 
     private final EventChannel channel;
     
     private final ClientDispatcher dispatcher;
     
-    private E serverConfiguration;
+    private C serverConfiguration;
     
     private Identifier id;
     
-    public BaseFacilitator(E serverConfiguration) {
+    public BaseFacilitator(C serverConfiguration) {
         this(serverConfiguration, EventChannelFactory.create());
     }
     
-    public BaseFacilitator(E serverConfiguration, EventChannel channel) {
+    public BaseFacilitator(C serverConfiguration, EventChannel channel) {
         this(serverConfiguration, channel, DispatcherFactory.getInstance().createClientDispatcher(channel, serverConfiguration));
     }
     
-    public BaseFacilitator(E serverConfiguration, EventChannel channel, ClientDispatcher dispatcher) {
+    public BaseFacilitator(C serverConfiguration, EventChannel channel, ClientDispatcher dispatcher) {
         this.serverConfiguration = serverConfiguration;
         this.channel = channel;
         this.dispatcher = dispatcher;
@@ -60,7 +60,7 @@ public abstract class BaseFacilitator<E extends ExperimentConfiguration<R>, R ex
         if (id != null) transmit(new FacilitatorRegistrationRequest(id));
     }
     
-    public void setServerConfiguration(E configuration) {
+    public void setServerConfiguration(C configuration) {
         if (configuration == null) {
             System.err.println("attempt to setConfiguration with null, ignoring");
             return;
@@ -73,7 +73,7 @@ public abstract class BaseFacilitator<E extends ExperimentConfiguration<R>, R ex
         return id;
     }
     
-    public E getServerConfiguration() {
+    public C getServerConfiguration() {
         return serverConfiguration;
     }
     
