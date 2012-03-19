@@ -115,7 +115,7 @@ extends Configuration, Iterable<R> {
         protected final List<E> allParameters = new ArrayList<E>();
         protected String configurationDirectory;
         private Locale locale;
-        private int numberOfPracticeRounds;
+        private int numberOfPracticeRounds = -1;
 
         public Base() {
             this(defaultConfigurationDirectory);

@@ -56,7 +56,15 @@ public interface ExperimentRoundParameters<T extends ExperimentConfiguration<T, 
 
         @SuppressWarnings("unchecked")
         public int getRoundNumber() {
+            if (isPracticeRound()) {
+                return 0;
+            }
             return parentConfiguration.getRoundNumber((P) this);
+        }
+        
+        @Override
+        public String getInstructions() {
+            return render(getProperty("instructions"));
         }
 
         public void report() {
