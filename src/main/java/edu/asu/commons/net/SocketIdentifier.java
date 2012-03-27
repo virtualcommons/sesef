@@ -11,9 +11,18 @@ import java.util.StringTokenizer;
  * IP addresses of a certain format to "station numbers".  In order of preference:  
  * 
  * <ol>
- * <li>ostrom-lab-12.dhcp.asu.edu will have a station number of 12 and emit a toString() of "Station 12"
+ * <li>use the client hostname, e.g., ostrom-lab-12.dhcp.asu.edu will have a station number of 12 and emit a toString() of "Station 12"
  * <li>if the hostname doesn't have any trailing numbers, it will try to use the last digits of the IP address to define the station number
  * </ol>
+ * A SocketIdentifier is semantically equal to another SocketIdentifier if
+ * the localAddress and remoteAddresses are the same.  
+ * We no longer attempt to maintain symmetrical equality between SocketIdentifiers
+ * generated on both endpoints (which would have the local socket address and remote socket
+ * addresses switched) due to the inherent difficulties of dealing with home routers and
+ * the like that utilize Network Address Translation to assign and route traffic to 
+ * a series of internally distributed IP addresses of the form 10.0.1.x.  Instead, 
+ * SocketIdentifiers are assigned by the client (which provide unique local handles) after 
+ * a handshake.        
  *  
  * @author <a href='Allen.Lee@asu.edu'>Allen Lee</a>
  * @version $Revision$
@@ -28,8 +37,6 @@ public class SocketIdentifier extends Identifier.Base<SocketIdentifier> {
 
     private Integer stationNumber;
 
-    private String remoteHostName;
-    
     private static final long serialVersionUID = 2371746759512286392L;
 
     public SocketIdentifier(Socket socket) {
@@ -100,17 +107,6 @@ public class SocketIdentifier extends Identifier.Base<SocketIdentifier> {
     public int hashCode() {
         return localSocketAddress.hashCode() ^ remoteSocketAddress.hashCode();
     }
-
-    /**
-     * A SocketIdentifier is semantically equal to another SocketIdentifier if
-     * the localAddress and remoteAddresses are the same.  
-     * XXX: no longer attempt to maintain symmetrical equality between SocketIdentifiers
-     * generated on both endpoints (which would have the local socket address and remote socket
-     * addresses switched) due to the inherent difficulties of dealing with home routers and
-     * the like that utilize Network Address Translation to assign and route traffic to 
-     * a series of internally distributed IP addresses of the form 10.0.1.x.  Instead, 
-     * SocketIdentifiers are only generated on the server side and assigned to the client.   
-     */
 
     public String toString() {
         int stationNumberInt = getStationNumber();

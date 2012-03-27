@@ -4,6 +4,9 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Frame;
 
+import javax.jnlp.ClipboardService;
+import javax.jnlp.ServiceManager;
+import javax.jnlp.UnavailableServiceException;
 import javax.swing.JEditorPane;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
@@ -96,7 +99,9 @@ public final class UserInterfaceUtils {
 
     /** A very light magenta color. */
     public static final Color VERY_LIGHT_MAGENTA = new Color(0xFF, 0x80, 0xFF);
- 
+    
+    private static final String JAVAX_JNLP_CLIPBOARD_SERVICE = "javax.jnlp.ClipboardService";
+    private static ClipboardService clipboardService;
 
     public static Font getDefaultFont() {
         return UIManager.getFont("Label.font");
@@ -127,5 +132,16 @@ public final class UserInterfaceUtils {
         frame.setExtendedState(Frame.MAXIMIZED_BOTH);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setVisible(true);
+    }
+    
+    public synchronized static ClipboardService getClipboardService() {
+        if (clipboardService == null) {
+            try {
+                clipboardService = (ClipboardService) ServiceManager.lookup(JAVAX_JNLP_CLIPBOARD_SERVICE);
+            } catch (UnavailableServiceException e) {
+                e.printStackTrace();
+            }
+        }
+        return clipboardService;
     }
 }
