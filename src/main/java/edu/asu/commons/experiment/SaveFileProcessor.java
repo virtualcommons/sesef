@@ -6,7 +6,7 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 
 /**
- * $Id: SaveFileProcessor.java 471 2010-02-12 22:44:32Z alllee $
+ * $Id$
  * 
  * Concrete implementations of this interface are used as callback hooks that contain whatever custom savefile processing code is
  * needed.
@@ -19,7 +19,7 @@ import java.io.PrintWriter;
  * </ol>
  * 
  * @author <a href='mailto:Allen.Lee@asu.edu'>Allen Lee</a>
- * @version $Revision: 471 $
+ * @version $Revision$
  */
 public interface SaveFileProcessor {
 

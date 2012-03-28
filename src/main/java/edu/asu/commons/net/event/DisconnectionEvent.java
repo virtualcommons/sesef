@@ -4,13 +4,13 @@ import edu.asu.commons.event.AbstractEvent;
 import edu.asu.commons.net.Identifier;
 
 /**
- * $Id: DisconnectionEvent.java 1 2008-07-23 22:15:18Z alllee $
+ * $Id$
  * 
  * Signifies that a disconnection happened for the given id.
  * 
  * 
  * @author Allen Lee
- * @version $Revision: 1 $
+ * @version $Revision$
  */
 public class DisconnectionEvent extends AbstractEvent {
 

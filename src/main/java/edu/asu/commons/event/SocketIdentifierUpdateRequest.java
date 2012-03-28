@@ -3,7 +3,7 @@ package edu.asu.commons.event;
 import edu.asu.commons.net.SocketIdentifier;
 
 /**
- * $Id: SocketIdentifierUpdateRequest.java 460 2010-02-05 00:06:44Z alllee $
+ * $Id$
  * <p>
  * Update from the client notifying the server that the given socket identifier should be updated. Necessary to get the appropriate station identification
  * information in the COOR / CARL lab.

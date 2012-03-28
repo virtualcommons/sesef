@@ -1,12 +1,12 @@
 package edu.asu.commons.event;
 
 /**
- * $Id: EventHandler.java 304 2009-10-19 21:03:43Z alllee $
+ * $Id$
  * 
  * An EventHandler is any object capable of handling Events.
  * 
  * @author alllee
- * @version $Revision: 304 $
+ * @version $Revision$
  */
 public interface EventHandler<E extends Event> {
 

@@ -3,14 +3,14 @@ package edu.asu.commons.net;
 import java.net.InetSocketAddress;
 
 /**
- * $Id: ClientDispatcher.java 1 2008-07-23 22:15:18Z alllee $
+ * $Id$
  * 
  * Client dispatchers provide the ability to connect to a given
  * InetSocketAddress.
  * 
  * 
  * @author Allen Lee
- * @version $Revision: 1 $
+ * @version $Revision$
  */
 public interface ClientDispatcher extends Dispatcher {
 

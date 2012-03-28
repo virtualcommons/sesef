@@ -15,7 +15,7 @@ import edu.asu.commons.event.EventHandler;
  * network locally (these locally-bound Events would be read from the Socket).
  * 
  * @author Allen Lee
- * @version $Revision: 1 $
+ * @version $Revision$
  */
 public interface Dispatcher {
 

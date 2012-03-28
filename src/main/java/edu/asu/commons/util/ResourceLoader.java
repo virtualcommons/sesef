@@ -13,10 +13,10 @@ import java.net.URL;
 import java.security.AccessControlException;
 
 /**
- * $Id: ResourceLoader.java 72 2009-01-28 21:09:57Z alllee $
+ * $Id$
  * 
  * @author <a href='mailto:Allen.Lee@asu.edu'>Allen Lee</a>
- * @version $Revision: 72 $
+ * @version $Revision$
  */
 public class ResourceLoader {
 

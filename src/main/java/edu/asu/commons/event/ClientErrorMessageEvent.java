@@ -3,13 +3,13 @@ package edu.asu.commons.event;
 import edu.asu.commons.net.Identifier;
 
 /**
- * $Id: ClientErrorMessageEvent.java 1 2008-07-23 22:15:18Z alllee $
+ * $Id$
  * 
  * A message from the server to the client indicating some kind of error occurred.
  * There does not always need to be a wrapped Exception.
  * 
  * @author <a href='mailto:Allen.Lee@asu.edu'>Allen Lee</a>
- * @version $Revision: 1 $
+ * @version $Revision$
  */
 
 public class ClientErrorMessageEvent extends AbstractEvent {

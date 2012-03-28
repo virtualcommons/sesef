@@ -4,14 +4,14 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * $Id: OrEventConstraint.java 1 2008-07-23 22:15:18Z alllee $
+ * $Id$
  * 
  * This class composes two event constraints using the logical OR operator.
  * It accepts all Events satisfying either the first event constraint or the
  * second, in that order and is short-circuiting.
  * 
  * @author <a href='mailto:alllee@cs.indiana.edu'>Allen Lee</a>
- * @version $Revision: 1 $
+ * @version $Revision$
  */
 
 public class OrEventConstraint implements EventConstraint {

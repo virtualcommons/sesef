@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.TreeSet;
 
 /**
- * $Id: WorkerPool.java 1 2008-07-23 22:15:18Z alllee $
+ * $Id$
  * 
  * Very basic pooled implementation for worker threads. The WorkerPool is a composite of
  * the Worker.
@@ -14,7 +14,7 @@ import java.util.TreeSet;
  * FIXME: replace with Java 1.5 thread pools, i.e., ThreadPoolExecutor
  * 
  * @author <a href='mailto:alllee@cs.indiana.edu'>Allen Lee</a>
- * @version $Revision: 1 $
+ * @version $Revision$
  */
 
 public class WorkerPool<T> implements Worker<T> {

@@ -4,12 +4,12 @@ import java.io.Serializable;
 import java.util.concurrent.TimeUnit;
 
 /**
- * $Id: Duration.java 450 2010-02-02 20:49:58Z alllee $
+ * $Id$
  * 
  * Inspired/derived from the timeandmoney.sf.net project's API.
  * 
  * @author <a href='allen.lee@asu.edu'>Allen Lee</a>
- * @version $Revision: 450 $
+ * @version $Revision$
  */
 public class Duration implements Serializable {
 

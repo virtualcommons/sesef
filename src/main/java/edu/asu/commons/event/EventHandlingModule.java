@@ -8,7 +8,7 @@ import java.util.Collection;
  * Interface marking a bundle of event processors.
  * 
  * @author <a href='mailto:Allen.Lee@asu.edu'>Allen Lee</a>
- * @version $Revision: 454 $
+ * @version $Revision$
  */
 public interface EventHandlingModule {
 

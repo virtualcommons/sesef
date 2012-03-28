@@ -4,12 +4,12 @@ import edu.asu.commons.event.AbstractEvent;
 import edu.asu.commons.net.Identifier;
 
 /**
- * $Id: ConnectionEvent.java 1 2008-07-23 22:15:18Z alllee $
+ * $Id$
  * 
  * Used to signify that a successful connection was made.
  * 
  * @author Allen Lee
- * @version $Revision: 1 $
+ * @version $Revision$
  */
 
 public class ConnectionEvent extends AbstractEvent {

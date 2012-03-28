@@ -3,13 +3,13 @@ package edu.asu.commons.event;
 import edu.asu.commons.net.Identifier;
 
 /**
- * $Id: AbstractPersistableEvent.java 417 2009-12-28 07:16:34Z alllee $
+ * $Id$
  * 
  * Base class that provides uniqueness with respect to the time-ordered stream
  * of Events originating from a single place.
  * 
  * @author <a href='mailto:Allen.Lee@asu.edu'>Allen Lee</a>
- * @version $Revision: 417 $
+ * @version $Revision$
  */
 public abstract class AbstractPersistableEvent extends AbstractEvent
         implements PersistableEvent, Comparable<AbstractPersistableEvent> {

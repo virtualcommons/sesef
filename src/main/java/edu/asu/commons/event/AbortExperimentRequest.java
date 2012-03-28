@@ -3,14 +3,14 @@ package edu.asu.commons.event;
 import edu.asu.commons.net.Identifier;
 
 /**
- * $Id: AbortExperimentRequest.java 1 2008-07-23 22:15:18Z alllee $
+ * $Id$
  * 
  * Request used to signal the server that the game should be aborted. Should
  * employ some intelligent something or other on the server
  * side to prevent evul h4x0rs from aborting the game over and over.
  * 
  * @author Allen Lee
- * @version $Revision: 1 $
+ * @version $Revision$
  */
 
 public class AbortExperimentRequest extends AbstractEvent {

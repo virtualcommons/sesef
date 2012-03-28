@@ -3,7 +3,7 @@ package edu.asu.commons.event;
 import edu.asu.commons.net.Identifier;
 
 /**
- * $Id: RoundStartedMarkerEvent.java 462 2010-02-05 04:50:21Z alllee $
+ * $Id$
  * 
  * Used to mark the start of a round in the save files.
  * 

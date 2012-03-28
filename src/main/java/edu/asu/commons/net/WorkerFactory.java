@@ -1,11 +1,11 @@
 package edu.asu.commons.net;
 
 /**
- * $Id: WorkerFactory.java 1 2008-07-23 22:15:18Z alllee $
+ * $Id$
  * 
  * @author alllee
  * 
- * @version $Revision: 1 $
+ * @version $Revision$
  */
 public interface WorkerFactory<T> {
 

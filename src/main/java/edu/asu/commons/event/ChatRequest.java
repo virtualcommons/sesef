@@ -3,12 +3,12 @@ package edu.asu.commons.event;
 import edu.asu.commons.net.Identifier;
 
 /**
- * $Id: ChatRequest.java 524 2010-08-06 00:53:30Z alllee $
+ * $Id$
  * 
  * Sent from a client to the server signaling that the client wants to talk to a different client identified by getTarget().
  * 
  * @author <a href='Allen.Lee@asu.edu'>Allen Lee</a>
- * @version $Revision: 524 $
+ * @version $Revision$
  */
 
 public class ChatRequest extends AbstractPersistableEvent implements ClientRequest {

@@ -3,13 +3,13 @@ package edu.asu.commons.event;
 import edu.asu.commons.net.Identifier;
 
 /**
- * $Id: ChatEvent.java 49 2008-09-04 16:57:40Z alllee $
+ * $Id$
  * 
  * Sent from the server to a client target (with Identifier getId()) from the client identified by getSource().
  * Essentially the same as a ChatRequest, but with permuted Identifier parameters.
  * 
  * @author <a href='Allen.Lee@asu.edu'>Allen Lee</a>
- * @version $Revision: 49 $
+ * @version $Revision$
  */
 
 public class ChatEvent extends AbstractEvent {

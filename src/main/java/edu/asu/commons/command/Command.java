@@ -1,7 +1,7 @@
 package edu.asu.commons.command;
 
 /**
- * $Id: Command.java 1 2008-07-23 22:15:18Z alllee $
+ * $Id$
  * 
  * A serializable command. Intended for use with an AbstractExperiment that wants easier synchronization.
  * 

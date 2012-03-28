@@ -5,7 +5,7 @@ package edu.asu.commons.event;
  * the constructor is the same as or a superinterface/superclass of the <code>Class</code> of a defendant <code>Event</code>.
  * 
  * @author <a href='alllee@cs.indiana.edu'>Allen Lee</a>
- * @version $Revision: 1 $
+ * @version $Revision$
  */
 public class EventInstanceofConstraint implements EventConstraint {
     /**

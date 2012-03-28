@@ -1,13 +1,13 @@
 package edu.asu.commons.event;
 
 /**
- * $Id: EventGenerator.java 1 2008-07-23 22:15:18Z alllee $
+ * $Id$
  * 
  * Marks all classes capable of generating Events and dispatching them to
  * interested subscribers.
  * 
  * @author alllee
- * @version $Revision: 1 $
+ * @version $Revision$
  */
 public interface EventGenerator {
     /**

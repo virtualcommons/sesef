@@ -3,13 +3,13 @@ package edu.asu.commons.event;
 import edu.asu.commons.net.Identifier;
 
 /**
- * $Id: AbstractEvent.java 524 2010-08-06 00:53:30Z alllee $
+ * $Id$
  * 
  * Abstract base class providing convenience methods for accessing the creation
  * time and Identifier for an Event.
  * 
  * @author <a href='mailto:alllee@cs.indiana.edu'>Allen Lee</a>
- * @version $Revision: 524 $
+ * @version $Revision$
  */
 
 public abstract class AbstractEvent implements Event {

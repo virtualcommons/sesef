@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * $Id: EventTypeChannel.java 454 2010-02-04 04:17:29Z alllee $
+ * $Id$
  * <p>
  * Provides an event channel that only handles subscription via event type.
  * 

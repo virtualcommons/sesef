@@ -1,14 +1,14 @@
 package edu.asu.commons.event;
 
 /**
- * $Id: AndEventConstraint.java 1 2008-07-23 22:15:18Z alllee $
+ * $Id$
  * 
  * This class composes two event constraints using the logical AND operator.
  * It accepts all Events satisfying both the first event constraint and the
  * second, in that order and is short-circuiting.
  * 
  * @author <a href='mailto:alllee@cs.indiana.edu'>Allen Lee</a>
- * @version $Revision: 1 $
+ * @version $Revision$
  */
 
 public class AndEventConstraint implements EventConstraint {

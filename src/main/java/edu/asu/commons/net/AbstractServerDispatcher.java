@@ -11,13 +11,13 @@ import edu.asu.commons.event.EventTypeProcessor;
 import edu.asu.commons.net.event.DisconnectionRequest;
 
 /**
- * $Id: AbstractServerDispatcher.java 302 2009-10-19 19:56:28Z alllee $
+ * $Id$
  * 
  * Abstract base class for ServerDispatchers.
  * 
  * 
  * @author Allen Lee
- * @version $Revision: 302 $
+ * @version $Revision$
  */
 
 public abstract class AbstractServerDispatcher extends AbstractDispatcher

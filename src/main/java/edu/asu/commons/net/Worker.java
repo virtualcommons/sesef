@@ -3,14 +3,14 @@ package edu.asu.commons.net;
 // import java.nio.channels.SocketChannel;
 
 /**
- * $Id: Worker.java 1 2008-07-23 22:15:18Z alllee $
+ * $Id$
  * 
  * @author alllee
  * 
  *         Interface for worker threads specific to subscribing NIO socket
  *         channels.
  * 
- * @version $Revision: 1 $
+ * @version $Revision$
  */
 public interface Worker<T> extends Runnable, Comparable<Worker<T>> {
     public Identifier process(T object);

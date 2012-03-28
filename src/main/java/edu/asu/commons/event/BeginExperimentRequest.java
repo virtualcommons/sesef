@@ -3,14 +3,14 @@ package edu.asu.commons.event;
 import edu.asu.commons.net.Identifier;
 
 /**
- * $Id: BeginExperimentRequest.java 1 2008-07-23 22:15:18Z alllee $
+ * $Id$
  * 
  * Used by the facilitator to signal that we are done collecting clients and
  * ready to start the next experiment.
  * 
  * 
  * @author Allen Lee
- * @version $Revision: 1 $
+ * @version $Revision$
  */
 
 public class BeginExperimentRequest extends AbstractEvent {

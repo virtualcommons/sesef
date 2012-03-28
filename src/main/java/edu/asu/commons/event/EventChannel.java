@@ -1,11 +1,11 @@
 package edu.asu.commons.event;
 
 /**
- * $Id: EventChannel.java 1 2008-07-23 22:15:18Z alllee $
+ * $Id$
  * 
  * 
  * @author <a href='mailto:Allen.Lee@asu.edu'>Allen Lee</a>
- * @version $Revision: 1 $
+ * @version $Revision$
  */
 
 public interface EventChannel extends EventHandler<Event> {

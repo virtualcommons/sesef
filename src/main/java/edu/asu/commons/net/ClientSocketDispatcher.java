@@ -11,13 +11,13 @@ import edu.asu.commons.net.event.ConnectionEvent;
 import edu.asu.commons.net.event.DisconnectionRequest;
 
 /**
- * $Id: ClientSocketDispatcher.java 296 2009-10-13 17:09:51Z alllee $
+ * $Id$
  * 
  * The client dispatcher only implements the connecting part of the network business.
  * 
  * 
  * @author Allen Lee
- * @version $Revision: 296 $
+ * @version $Revision$
  */
 public class ClientSocketDispatcher extends AbstractDispatcher implements ClientDispatcher {
 
