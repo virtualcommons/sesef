@@ -39,7 +39,7 @@ import edu.asu.commons.net.ServerDispatcher;
  */
 public abstract class AbstractExperiment<C extends ExperimentConfiguration<C, R>, R extends ExperimentRoundParameters<C, R>> implements Experiment<C, R> {
 
-    private final Logger logger = Logger.getLogger(getClass().getName());
+    private final Logger logger = Logger.getLogger(Experiment.class.getName());
     private final EventChannel channel;
     private final ServerDispatcher dispatcher;
 

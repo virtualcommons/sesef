@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 
 import edu.asu.commons.event.EventChannel;
 import edu.asu.commons.event.EventTypeProcessor;
+import edu.asu.commons.experiment.Experiment;
 import edu.asu.commons.net.event.DisconnectionRequest;
 
 /**
@@ -26,7 +27,7 @@ public abstract class AbstractServerDispatcher extends AbstractDispatcher
     private int listeningPort;
     private Thread dispatcherThread;
     private final List<Identifier> disconnectedClients = new ArrayList<Identifier>();
-    private Logger logger = Logger.getLogger(getClass().getName());
+    private Logger logger = Logger.getLogger(Experiment.class.getName());
 
     private boolean listening;
 

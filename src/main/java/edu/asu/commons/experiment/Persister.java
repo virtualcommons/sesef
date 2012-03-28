@@ -45,13 +45,11 @@ import edu.asu.commons.event.RoundEndedMarkerEvent;
 
 public abstract class Persister<C extends ExperimentConfiguration<C, R>, R extends ExperimentRoundParameters<C, R>> implements IPersister<C, R> {
 
-    // FIXME: test on windows and mac to make sure that File.separator doesn't cause any bugs.
     private final static String ROUND_SAVE_DIRECTORY_FORMAT = "MM-dd-yyyy" + File.separator + "HH.mm.ss";
     private final static String DEFAULT_EXPERIMENT_CONFIGURATION_FILE = "experiment-configuration.save";
     private final static String DEFAULT_CHAT_LOG_FILE_NAME = "chat.log";
 
-    // FIXME: set up some kind of application logging for the server side classes.
-    private final static Logger logger = Logger.getLogger(Persister.class.getName());
+    private final static Logger logger = Logger.getLogger(Experiment.class.getName());
 
     private final Logger chatLogger = Logger.getLogger("chat.logger");
     private FileHandler chatLogFileHandler;
