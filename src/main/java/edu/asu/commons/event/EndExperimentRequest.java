@@ -4,9 +4,9 @@ import edu.asu.commons.net.Identifier;
 
 /**
  * $Id: EndExperimentRequest.java 1 2008-07-23 22:15:18Z alllee $
- *
+ * 
  * Used by the facilitator to signal that we want to reset the experiment to its initial state.
- *
+ * 
  * @author Allen Lee
  * @version $Revision: 1 $
  */

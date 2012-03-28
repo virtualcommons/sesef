@@ -9,20 +9,20 @@ import edu.asu.commons.event.PersistableEvent;
 
 public interface IPersister<C extends ExperimentConfiguration<C, R>, R extends ExperimentRoundParameters<C, R>> {
 
-	public void stop();
+    public void stop();
 
-	public SortedSet<PersistableEvent> getActions();
+    public SortedSet<PersistableEvent> getActions();
 
-	public void store(PersistableEvent event);
-	
-	public void store(ChatRequest request);
+    public void store(PersistableEvent event);
 
-	public void clearChatData();
+    public void store(ChatRequest request);
 
-	public void initialize(R roundConfiguration);
+    public void clearChatData();
 
-	public <E extends DataModel<C, R>> void persist(E serverDataModel);
+    public void initialize(R roundConfiguration);
 
-	public void clear();
+    public <E extends DataModel<C, R>> void persist(E serverDataModel);
+
+    public void clear();
 
 }

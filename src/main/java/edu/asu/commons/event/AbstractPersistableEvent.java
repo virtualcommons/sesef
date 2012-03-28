@@ -2,35 +2,35 @@ package edu.asu.commons.event;
 
 import edu.asu.commons.net.Identifier;
 
-
 /**
  * $Id: AbstractPersistableEvent.java 417 2009-12-28 07:16:34Z alllee $
- *
+ * 
  * Base class that provides uniqueness with respect to the time-ordered stream
  * of Events originating from a single place.
  * 
  * @author <a href='mailto:Allen.Lee@asu.edu'>Allen Lee</a>
  * @version $Revision: 417 $
  */
-public abstract class AbstractPersistableEvent extends AbstractEvent 
-implements PersistableEvent, Comparable<AbstractPersistableEvent> {
+public abstract class AbstractPersistableEvent extends AbstractEvent
+        implements PersistableEvent, Comparable<AbstractPersistableEvent> {
 
     private static final long serialVersionUID = -8335415577272927846L;
 
     private volatile static long classCounter = 0;
-    
+
     private final long ordinal;
-    
+
     public AbstractPersistableEvent(Identifier id) {
         this(id, null);
     }
-    
+
     public AbstractPersistableEvent(Identifier id, String message) {
         super(id, message);
         synchronized (AbstractPersistableEvent.class) {
             ordinal = classCounter++;
         }
     }
+
     /**
      * This method is used to establish a total ordering as per the Comparable
      * interface.
@@ -47,13 +47,13 @@ implements PersistableEvent, Comparable<AbstractPersistableEvent> {
             return compare(ordinal, e.ordinal);
         }
         return comparison;
-    
+
     }
 
     private int compare(long a, long b) {
         return (a > b) ? 1 : (a == b) ? 0 : -1;
     }
-    
+
     public final void timestamp() {
         super.creationTime = System.nanoTime();
     }

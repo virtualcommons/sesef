@@ -6,27 +6,28 @@ import edu.asu.commons.event.EventChannel;
 import edu.asu.commons.netty.ClientNettyDispatcher;
 import edu.asu.commons.netty.NettyDispatcher;
 
-
 /**
  * $Id$
  * Factory for constructing the appropriate dispatcher.
  * 
  * @author Allen Lee
  * @version $Revision$
- *
+ * 
  */
 public class DispatcherFactory {
-    
+
     public final static DispatcherFactory INSTANCE = new DispatcherFactory();
     public final static int DEFAULT_WORKER_POOL_SIZE = 3;
-    
-    private DispatcherFactory() {}
-    
+
+    private DispatcherFactory() {
+    }
+
     public static DispatcherFactory getInstance() {
         return INSTANCE;
     }
-    
-    public <C extends ExperimentConfiguration<C, R>, R extends ExperimentRoundParameters<C, R>> ClientDispatcher createClientDispatcher(EventChannel channel, C serverConfiguration) {
+
+    public <C extends ExperimentConfiguration<C, R>, R extends ExperimentRoundParameters<C, R>> ClientDispatcher createClientDispatcher(EventChannel channel,
+            C serverConfiguration) {
         switch (serverConfiguration.getServerDispatcherType()) {
             case NIO:
                 return new NioDispatcher(channel, 1);
@@ -37,22 +38,23 @@ public class DispatcherFactory {
                 return new ClientSocketDispatcher(channel);
         }
     }
-    
+
     public ServerDispatcher createServerDispatcher(EventChannel channel) {
         return createServerDispatcher(channel, DEFAULT_WORKER_POOL_SIZE, ServerDispatcher.Type.SOCKET);
     }
-    
-    public <C extends ExperimentConfiguration<C, R>, R extends ExperimentRoundParameters<C, R>> ServerDispatcher createServerDispatcher(EventChannel channel, C serverConfiguration) {
+
+    public <C extends ExperimentConfiguration<C, R>, R extends ExperimentRoundParameters<C, R>> ServerDispatcher createServerDispatcher(EventChannel channel,
+            C serverConfiguration) {
         return createServerDispatcher(channel, serverConfiguration.getWorkerPoolSize(), serverConfiguration.getServerDispatcherType());
     }
-          
+
     public ServerDispatcher createServerDispatcher(EventChannel channel, int workerPoolSize, ServerDispatcher.Type serverDispatcherType) {
         switch (serverDispatcherType) {
             case NIO:
                 return new NioDispatcher(channel, workerPoolSize);
             case NETTY_NIO:
                 return new NettyDispatcher(channel);
-                // default fall through is a socket dispatcher (safer) 
+                // default fall through is a socket dispatcher (safer)
             case SOCKET:
             default:
                 return new ServerSocketDispatcher(channel, workerPoolSize);

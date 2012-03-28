@@ -11,16 +11,16 @@ import edu.asu.commons.net.Identifier;
  * @version $Rev$
  */
 public class ShowInstructionsRequest extends AbstractEvent implements ShowRequest<ShowInstructionsRequest> {
-	
-	private static final long serialVersionUID = 3774308614796618926L;
 
-	public ShowInstructionsRequest(Identifier id) {
+    private static final long serialVersionUID = 3774308614796618926L;
+
+    public ShowInstructionsRequest(Identifier id) {
         super(id);
     }
-	
-	@Override
-	public ShowInstructionsRequest clone(Identifier id) {
-	    return new ShowInstructionsRequest(id);
-	}
-	
+
+    @Override
+    public ShowInstructionsRequest clone(Identifier id) {
+        return new ShowInstructionsRequest(id);
+    }
+
 }

@@ -19,44 +19,41 @@ import java.security.AccessControlException;
  * @version $Revision: 72 $
  */
 public class ResourceLoader {
-	
-	public static String getString(String path) {
-		String content = "";
+
+    public static String getString(String path) {
+        String content = "";
         BufferedReader reader = ResourceLoader.getBufferedReader(path);
         char[] buf = new char[1024];
         int numRead = 0;
-        
+
         try {
-	        while((numRead=reader.read(buf)) != -1){
-	            String readData = String.valueOf(buf, 0, numRead);
-	            content += readData;
-	            buf = new char[1024];
-	        }
-	        reader.close();
-        }
-        catch (IOException ioe) {
-        	ioe.printStackTrace();
-        	throw new RuntimeException("Couldn't load resource: " + path);
+            while ((numRead = reader.read(buf)) != -1) {
+                String readData = String.valueOf(buf, 0, numRead);
+                content += readData;
+                buf = new char[1024];
+            }
+            reader.close();
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+            throw new RuntimeException("Couldn't load resource: " + path);
         }
         return content;
-	}
+    }
 
     public static BufferedReader getBufferedReader(String path) {
         BufferedReader reader = null;
         try {
             reader = new BufferedReader(new FileReader(path));
-        }
-        catch (AccessControlException e) {
-            InputStream stream = toInputStream(path); 
+        } catch (AccessControlException e) {
+            InputStream stream = toInputStream(path);
             reader = new BufferedReader(new InputStreamReader(stream));
-        }
-        catch (FileNotFoundException e) {
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
         return reader;
     }
-    
+
     public static InputStream toInputStream(String path) {
         // first try to read it as a file
         InputStream stream = null;
@@ -68,18 +65,16 @@ public class ResourceLoader {
             else {
                 stream = getResourceAsStream(path);
             }
-        }
-        catch (AccessControlException e) {
+        } catch (AccessControlException e) {
             stream = getResourceAsStream(path);
-        }
-        catch (FileNotFoundException e) {
+        } catch (FileNotFoundException e) {
             stream = getResourceAsStream(path);
         }
         return stream;
     }
-    
+
     public static InputStream getResourceAsStream(String path) {
-        InputStream stream = ResourceLoader.class.getResourceAsStream(path); 
+        InputStream stream = ResourceLoader.class.getResourceAsStream(path);
         if (stream == null) {
             stream = Thread.currentThread().getContextClassLoader().getResourceAsStream(path);
         }
@@ -100,12 +95,11 @@ public class ResourceLoader {
                 byteStream.write(stream.read());
             }
             return byteStream;
-        }
-        finally {
+        } finally {
             stream.close();
         }
     }
-    
+
     public static URL getResourceAsUrl(String resource) {
         URL url = ResourceLoader.class.getResource(resource);
         if (url == null) {
@@ -116,5 +110,5 @@ public class ResourceLoader {
         }
         return url;
     }
-    
+
 }

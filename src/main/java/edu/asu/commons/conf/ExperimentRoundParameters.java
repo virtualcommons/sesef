@@ -61,7 +61,7 @@ public interface ExperimentRoundParameters<T extends ExperimentConfiguration<T, 
             }
             return parentConfiguration.getRoundNumber((P) this);
         }
-        
+
         @Override
         public String getInstructions() {
             return render(getProperty("instructions"));

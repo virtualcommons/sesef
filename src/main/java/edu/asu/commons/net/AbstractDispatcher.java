@@ -5,12 +5,9 @@ import edu.asu.commons.event.EventChannel;
 import edu.asu.commons.event.EventHandler;
 import edu.asu.commons.net.event.DisconnectionRequest;
 
-
-
-
 /**
  * $Id$
- *
+ * 
  * Abstract base class for Dispatchers.
  * 
  * @author Allen Lee
@@ -18,9 +15,9 @@ import edu.asu.commons.net.event.DisconnectionRequest;
  */
 
 public abstract class AbstractDispatcher implements Dispatcher {
-    
+
     private final EventChannel channel;
-    
+
     public AbstractDispatcher(EventChannel channel) {
         if (channel == null) {
             throw new IllegalArgumentException(
@@ -28,15 +25,15 @@ public abstract class AbstractDispatcher implements Dispatcher {
         }
         this.channel = channel;
     }
-    
+
     public EventHandler<Event> getLocalEventHandler() {
         return channel;
     }
-    
+
     public EventChannel getLocalEventChannel() {
         return channel;
     }
-    
+
     protected void requestDisconnection(Identifier id, Throwable cause) {
         getLocalEventHandler().handle(new DisconnectionRequest(id, cause));
     }

@@ -1,6 +1,5 @@
 package edu.asu.commons.event;
 
-
 /**
  * $Id$
  * 

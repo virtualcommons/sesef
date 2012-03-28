@@ -14,15 +14,16 @@ import edu.asu.commons.net.Identifier;
 public class ChatRequest extends AbstractPersistableEvent implements ClientRequest {
 
     private static final long serialVersionUID = 475300882222383637L;
-    
+
     private final Identifier target;
-    
+
     public ChatRequest(Identifier source, String message) {
         this(source, message, Identifier.ALL);
     }
-    
+
     /**
      * A communication event with a target of Identifier.ALL is broadcast to all group participants.
+     * 
      * @param source
      * @param message
      */
@@ -30,20 +31,20 @@ public class ChatRequest extends AbstractPersistableEvent implements ClientReque
         super(source, message);
         this.target = target;
     }
-    
+
     // copy constructor for server-side timestamping
     public ChatRequest(ChatRequest request) {
         this(request.getId(), request.toString(), request.getTarget());
     }
-    
+
     public Identifier getSource() {
         return id;
     }
-    
+
     public Identifier getTarget() {
-    	return target;
+        return target;
     }
-    
+
     public String toString() {
         return message;
     }

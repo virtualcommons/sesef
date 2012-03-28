@@ -13,7 +13,6 @@ import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 import javax.swing.text.html.HTMLDocument;
 
-
 /**
  * $Id$
  * 
@@ -24,11 +23,11 @@ import javax.swing.text.html.HTMLDocument;
  * @version $Rev$
  */
 public final class UserInterfaceUtils {
-    
+
     public static final Font DEFAULT_PLAIN_FONT = new Font(getDefaultFont().getFamily(), Font.PLAIN, 16);
     public static final Font DEFAULT_BOLD_FONT = new Font(getDefaultFont().getFamily(), Font.BOLD, 16);
 
-       /** A very dark red color. */
+    /** A very dark red color. */
     public static final Color VERY_DARK_RED = new Color(0x80, 0x00, 0x00);
 
     /** A dark red color. */
@@ -99,25 +98,25 @@ public final class UserInterfaceUtils {
 
     /** A very light magenta color. */
     public static final Color VERY_LIGHT_MAGENTA = new Color(0xFF, 0x80, 0xFF);
-    
+
     private static final String JAVAX_JNLP_CLIPBOARD_SERVICE = "javax.jnlp.ClipboardService";
     private static ClipboardService clipboardService;
 
     public static Font getDefaultFont() {
         return UIManager.getFont("Label.font");
     }
-    
+
     public static void addStyles(JEditorPane editorPane, int fontSize) {
         editorPane.setContentType("text/html");
         Font font = getDefaultFont();
         String bodyRule = String.format("body { font-family: %s; font-size: %s pt; }", font.getFamily(), fontSize);
-        ((HTMLDocument) editorPane.getDocument()).getStyleSheet().addRule(bodyRule); 
+        ((HTMLDocument) editorPane.getDocument()).getStyleSheet().addRule(bodyRule);
     }
-    
+
     public static HtmlEditorPane createInstructionsEditorPane() {
         return createInstructionsEditorPane(false);
     }
-    
+
     public static HtmlEditorPane createInstructionsEditorPane(boolean editable) {
         final HtmlEditorPane htmlPane = new HtmlEditorPane();
         htmlPane.setEditable(editable);
@@ -126,14 +125,14 @@ public final class UserInterfaceUtils {
         UserInterfaceUtils.addStyles(htmlPane, 16);
         return htmlPane;
     }
-    
+
     public static void maximize(JFrame frame) {
         frame.pack();
         frame.setExtendedState(Frame.MAXIMIZED_BOTH);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setVisible(true);
     }
-    
+
     public synchronized static ClipboardService getClipboardService() {
         if (clipboardService == null) {
             try {

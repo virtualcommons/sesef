@@ -1,11 +1,12 @@
 package edu.asu.commons.experiment;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import java.io.PrintWriter;
 
 import org.junit.Before;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 /**
  * $Id$
@@ -43,7 +44,7 @@ public class SaveFileProcessorTest {
         }
         assertTrue("interval of 60 seconds should return true for isIntervalElapsed(60)", processor.isIntervalElapsed(60));
         assertFalse("should now return false for 60 seconds", processor.isIntervalElapsed(60));
-        for (long i = 0; i < secondsPerInterval*2; i++) {
+        for (long i = 0; i < secondsPerInterval * 2; i++) {
             assertFalse("interval of 60 seconds should return false for isIntervalElapsed from 0-119", processor.isIntervalElapsed(i));
         }
         assertTrue("interval of 60 seconds should return true for isIntervalElapsed(120)", processor.isIntervalElapsed(120));

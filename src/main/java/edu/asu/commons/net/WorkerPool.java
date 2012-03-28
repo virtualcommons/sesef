@@ -7,12 +7,12 @@ import java.util.TreeSet;
 
 /**
  * $Id: WorkerPool.java 1 2008-07-23 22:15:18Z alllee $
- *
- * Very basic pooled implementation for worker threads.  The WorkerPool is a composite of
- * the Worker.  
+ * 
+ * Very basic pooled implementation for worker threads. The WorkerPool is a composite of
+ * the Worker.
  * 
  * FIXME: replace with Java 1.5 thread pools, i.e., ThreadPoolExecutor
- *
+ * 
  * @author <a href='mailto:alllee@cs.indiana.edu'>Allen Lee</a>
  * @version $Revision: 1 $
  */
@@ -27,8 +27,8 @@ public class WorkerPool<T> implements Worker<T> {
     // jobs are in the front of the Set.
     private final TreeSet<Worker<T>> workers = new TreeSet<Worker<T>>();
 
-    private final Map<T, Worker<T>> objectToWorkerMap = 
-        new HashMap<T, Worker<T>>();
+    private final Map<T, Worker<T>> objectToWorkerMap =
+            new HashMap<T, Worker<T>>();
 
     private final boolean growable;
 
@@ -58,11 +58,11 @@ public class WorkerPool<T> implements Worker<T> {
         worker.remove(job);
     }
 
-    // FIXME: mayhap this should be non-public.  Also, figure out what to do
+    // FIXME: mayhap this should be non-public. Also, figure out what to do
     // here.
     public synchronized void shutdown() {
         objectToWorkerMap.clear();
-        for (Iterator<Worker<T>> iterator = workers.iterator(); iterator.hasNext(); ) {
+        for (Iterator<Worker<T>> iterator = workers.iterator(); iterator.hasNext();) {
             Worker<T> worker = iterator.next();
             // assumes that each worker has the ability to kill itself?
             worker.shutdown();
@@ -98,7 +98,7 @@ public class WorkerPool<T> implements Worker<T> {
     }
 
     public void run() {
-        for (Worker<T> worker: workers) {
+        for (Worker<T> worker : workers) {
             new Thread(worker).start();
         }
     }

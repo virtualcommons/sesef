@@ -9,26 +9,26 @@ import java.util.Map;
 /**
  * $Id: EventTypeChannel.java 454 2010-02-04 04:17:29Z alllee $
  * <p>
- * Provides an event channel that only handles subscription via event type.  
+ * Provides an event channel that only handles subscription via event type.
  * 
- *
+ * 
  * @author <a href='mailto:Allen.Lee@asu.edu'>Allen Lee</a>
  * @version $Rev: 454 $
  */
-@SuppressWarnings(value={"unchecked", "rawtypes"})
+@SuppressWarnings(value = { "unchecked", "rawtypes" })
 public class EventTypeChannel implements EventChannel {
 
-    private final Map<Class, List<EventProcessor>> equalTypesEventProcessorMap = 
-        new HashMap< Class, List<EventProcessor>>();
+    private final Map<Class, List<EventProcessor>> equalTypesEventProcessorMap =
+            new HashMap<Class, List<EventProcessor>>();
 
     private final List<EventProcessor> acceptsSubtypesEventProcessors =
-        new LinkedList<EventProcessor>();
+            new LinkedList<EventProcessor>();
 
-    private final Map<Object, List<EventProcessor>> owners = 
-        new HashMap<Object, List<EventProcessor>>();
+    private final Map<Object, List<EventProcessor>> owners =
+            new HashMap<Object, List<EventProcessor>>();
 
     private final EventDispatcher defaultDispatcher;
-    
+
     private final ThreadedDispatcher threadedDispatcher = new ThreadedDispatcher();
     private final SequentialDispatcher sequentialDispatcher = new SequentialDispatcher();
 
@@ -50,7 +50,7 @@ public class EventTypeChannel implements EventChannel {
             defaultDispatcher = sequentialDispatcher;
         }
     }
-    
+
     public <E extends Event> void add(EventProcessor<E> eventProcessor) {
         if (eventProcessor.acceptsSubtypes()) {
             synchronized (acceptsSubtypesEventProcessors) {
@@ -84,12 +84,12 @@ public class EventTypeChannel implements EventChannel {
     public <E extends Event> void subscribe(EventProcessor<E> handler) {
         add(handler);
     }
-    
+
     public <E extends Event> boolean unsubscribe(EventProcessor<E> handler) {
         return remove(handler);
     }
 
-    public <E extends Event> boolean remove(EventProcessor<E>  handler) {
+    public <E extends Event> boolean remove(EventProcessor<E> handler) {
         synchronized (acceptsSubtypesEventProcessors) {
             if (acceptsSubtypesEventProcessors.contains(handler)) {
                 return acceptsSubtypesEventProcessors.remove(handler);
@@ -97,7 +97,7 @@ public class EventTypeChannel implements EventChannel {
         }
         synchronized (equalTypesEventProcessorMap) {
             if (equalTypesEventProcessorMap.containsKey(handler.getEventClass())) {
-                return equalTypesEventProcessorMap.get(handler.getEventClass()).remove(handler);            
+                return equalTypesEventProcessorMap.get(handler.getEventClass()).remove(handler);
             }
         }
         return false;
@@ -107,7 +107,7 @@ public class EventTypeChannel implements EventChannel {
         synchronized (owners) {
             if (owners.containsKey(owner)) {
                 List<EventProcessor> processors = owners.get(owner);
-                for (EventProcessor processor: processors) {
+                for (EventProcessor processor : processors) {
                     remove(processor);
                 }
                 owners.remove(owner);
@@ -121,7 +121,7 @@ public class EventTypeChannel implements EventChannel {
 
     int getNumberOfRegisteredProcessors() {
         int numberOfProcessors = 0;
-        for (List<EventProcessor> processors: equalTypesEventProcessorMap.values()) {
+        for (List<EventProcessor> processors : equalTypesEventProcessorMap.values()) {
             numberOfProcessors += processors.size();
         }
         numberOfProcessors += acceptsSubtypesEventProcessors.size();
@@ -129,12 +129,14 @@ public class EventTypeChannel implements EventChannel {
     }
 
     public void handle(Event event) {
-        if (event == null) return;
+        if (event == null)
+            return;
         defaultDispatcher.dispatch(event);
     }
 
     public void handleWithNewThread(Event event) {
-        if (event == null) return;
+        if (event == null)
+            return;
         threadedDispatcher.dispatch(event);
     }
 
@@ -153,14 +155,14 @@ public class EventTypeChannel implements EventChannel {
             synchronized (equalTypesEventProcessorMap) {
                 List<EventProcessor> handlers = equalTypesEventProcessorMap.get(eventClass);
                 if (handlers != null) {
-                    for (final EventProcessor<Event> handler: handlers) {
+                    for (final EventProcessor<Event> handler : handlers) {
                         handler.handle(event);
                     }
                 }
             }
             // next, check to see if this event should be processed by the subtype processors.
             synchronized (acceptsSubtypesEventProcessors) {
-                for (final EventProcessor<Event> handler: acceptsSubtypesEventProcessors) {
+                for (final EventProcessor<Event> handler : acceptsSubtypesEventProcessors) {
                     if (handler.getEventClass().isInstance(event)) {
                         handler.handle(event);
                     }
@@ -176,10 +178,10 @@ public class EventTypeChannel implements EventChannel {
             synchronized (equalTypesEventProcessorMap) {
                 List<EventProcessor> handlers = equalTypesEventProcessorMap.get(eventClass);
                 if (handlers != null) {
-                    for (final EventProcessor<Event> handler: handlers) {
+                    for (final EventProcessor<Event> handler : handlers) {
                         new Thread() {
                             public void run() {
-                                handler.handle(event);                                
+                                handler.handle(event);
                             }
                         }.start();
                     }
@@ -187,11 +189,11 @@ public class EventTypeChannel implements EventChannel {
             }
             // next, check to see if this event should be processed by the subtype processors.
             synchronized (acceptsSubtypesEventProcessors) {
-                for (final EventProcessor<Event> handler: acceptsSubtypesEventProcessors) {
+                for (final EventProcessor<Event> handler : acceptsSubtypesEventProcessors) {
                     if (handler.getEventClass().isInstance(event)) {
                         new Thread() {
                             public void run() {
-                                handler.handle(event);                                
+                                handler.handle(event);
                             }
                         }.start();
                     }

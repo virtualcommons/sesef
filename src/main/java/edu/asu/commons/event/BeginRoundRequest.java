@@ -4,11 +4,11 @@ import edu.asu.commons.net.Identifier;
 
 /**
  * $Id: BeginRoundRequest.java 1 2008-07-23 22:15:18Z alllee $
- *
- * Used by the facilitator to signal that we are done collecting clients and 
+ * 
+ * Used by the facilitator to signal that we are done collecting clients and
  * ready to start the next experiment.
- *
- *
+ * 
+ * 
  * @author Allen Lee
  * @version $Revision: 1 $
  */

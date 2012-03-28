@@ -20,8 +20,8 @@ import edu.asu.commons.net.ServerDispatcher;
  * @author <a href='mailto:Allen.Lee@asu.edu'>Allen Lee</a>
  * @version $Revision$
  */
-public interface ExperimentConfiguration<C extends ExperimentConfiguration<C, R>, R extends ExperimentRoundParameters<C, R>> 
-extends Configuration, Iterable<R> {
+public interface ExperimentConfiguration<C extends ExperimentConfiguration<C, R>, R extends ExperimentRoundParameters<C, R>>
+        extends Configuration, Iterable<R> {
 
     public List<R> getAllParameters();
 
@@ -33,21 +33,23 @@ extends Configuration, Iterable<R> {
 
     /**
      * Advances to the next round.
+     * 
      * @return
      */
     public R nextRound();
-    
+
     /**
      * Returns the previous round's configuration without modification.
      */
     public R getPreviousRoundConfiguration();
-    
+
     /**
      * Returns the next round configuration without modification.
+     * 
      * @return
      */
     public R getNextRoundConfiguration();
-    
+
     public int getRoundNumber(R roundParameters);
 
     public String getServerName();
@@ -63,30 +65,35 @@ extends Configuration, Iterable<R> {
     public InetSocketAddress getServerAddress();
 
     public String getPersistenceDirectory();
-    
+
     public String getProperty(String key);
+
     public String getProperty(String key, String defaultValue);
-    
+
     public int getIntProperty(String key);
+
     public double getDoubleProperty(String key);
-    public boolean getBooleanProperty(String key); 
+
+    public boolean getBooleanProperty(String key);
 
     public PersistenceType getPersistenceType();
 
     public boolean isFirstRound();
 
     public boolean isLastRound();
-    
+
     public ServerDispatcher.Type getServerDispatcherType();
+
     public int getWorkerPoolSize();
-    
+
     public String getLogFileDestination();
+
     public Locale getLocale();
-    
+
     public Properties getProperties();
 
-    public static abstract class Base<C extends ExperimentConfiguration<C, E>, E extends ExperimentRoundParameters<C, E>> 
-    extends Configuration.Base implements ExperimentConfiguration<C, E> {
+    public static abstract class Base<C extends ExperimentConfiguration<C, E>, E extends ExperimentRoundParameters<C, E>>
+            extends Configuration.Base implements ExperimentConfiguration<C, E> {
 
         private static final String DEFAULT_LOGFILE_DESTINATION = "experiment-server.log";
         private final static long serialVersionUID = 8936075404166796486L;
@@ -111,7 +118,7 @@ extends Configuration, Iterable<R> {
         }
 
         private int currentRoundIndex = 0;
-//        protected final PropertiesConfiguration assistant;
+        // protected final PropertiesConfiguration assistant;
         protected final List<E> allParameters = new ArrayList<E>();
         protected String configurationDirectory;
         private Locale locale;
@@ -195,14 +202,14 @@ extends Configuration, Iterable<R> {
         public int getNumberOfRounds() {
             return getIntProperty("number-of-rounds", 0);
         }
-        
+
         /**
          * Returns a 1-based round number for the given round configuration, ignoring practice rounds.
          */
         public int getRoundNumber(E roundParameter) {
             return allParameters.indexOf(roundParameter) - getPracticeRoundOffset();
         }
-        
+
         public int getPracticeRoundOffset() {
             return getNumberOfPracticeRounds() - 1;
         }
@@ -210,7 +217,7 @@ extends Configuration, Iterable<R> {
         public int getNumberOfPracticeRounds() {
             if (numberOfPracticeRounds == -1) {
                 numberOfPracticeRounds = 0;
-                for (E roundParameter: allParameters) {
+                for (E roundParameter : allParameters) {
                     if (roundParameter.isPracticeRound()) {
                         numberOfPracticeRounds++;
                     }
@@ -248,23 +255,23 @@ extends Configuration, Iterable<R> {
         public boolean isLastRound() {
             return currentRoundIndex == (getNumberOfRounds() - 1);
         }
-        
+
         public Map<String, Object> toMap() {
-        	return toMap(this);
+            return toMap(this);
         }
-        
+
         public Iterator<E> iterator() {
             return allParameters.iterator();
         }
-        
+
         public ListIterator<E> listIterator() {
             return allParameters.listIterator();
         }
-        
+
         public E getPreviousRoundConfiguration() {
             return allParameters.get(Math.max(0, currentRoundIndex - 1));
         }
-        
+
         public E getNextRoundConfiguration() {
             if (isLastRound()) {
                 return getCurrentParameters();
@@ -300,17 +307,18 @@ extends Configuration, Iterable<R> {
         public ServerDispatcher.Type getServerDispatcherType() {
             return ServerDispatcher.Type.fromString(getProperty("server-dispatcher-type", "SOCKET"));
         }
-        
+
         public int getWorkerPoolSize() {
             return getIntProperty("worker-pool-size", 5);
         }
-        
+
         public String getLogFileDestination() {
             return getStringProperty("log", getDefaultLogFileDestination());
         }
 
         /**
          * The default log file destination for a particular class of experiments (e.g., foraging-server.log, irrigation-server.log)
+         * 
          * @return
          */
         protected String getDefaultLogFileDestination() {

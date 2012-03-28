@@ -14,35 +14,35 @@ import edu.asu.commons.net.event.DisconnectionEvent;
 /**
  * $Id$
  * 
- * This class uses traditional blocking I/O via java.net.Socket-S to implement 
+ * This class uses traditional blocking I/O via java.net.Socket-S to implement
  * the Dispatcher interface.
- *
+ * 
  * @author <a href='mailto:Allen.Lee@asu.edu'>Allen Lee</a>
  * @version $Revision$
  */
 
 public class ServerSocketDispatcher extends AbstractServerDispatcher {
-    
+
     private ServerSocket serverSocket;
-    
+
     // Map<Identifier, SocketDispatcherWorker>
     private Map<Identifier, SocketDispatcherWorker> workers = new HashMap<Identifier, SocketDispatcherWorker>();
-    
+
     // thread pooling currently unimplemented (should use 1.5 concurrent package anyways)
     ServerSocketDispatcher(EventChannel channel, int workerPoolSize) {
         super(channel);
     }
-    
+
     public boolean isConnected(Identifier id) {
         Socket socket = getConnection(id);
-        return socket != null 
-            && socket.isBound() 
-            && socket.isConnected() 
-            && !socket.isClosed() 
-            && ! socket.isInputShutdown() 
-            && ! socket.isOutputShutdown();
-    }   
-    
+        return socket != null
+                && socket.isBound()
+                && socket.isConnected()
+                && !socket.isClosed()
+                && !socket.isInputShutdown()
+                && !socket.isOutputShutdown();
+    }
+
     public void disconnect(Identifier id) {
         getLogger().info(String.format("disconnecting id [%s]", id.toString()));
         SocketDispatcherWorker worker = workers.remove(id);
@@ -51,16 +51,16 @@ public class ServerSocketDispatcher extends AbstractServerDispatcher {
             return;
         }
         worker.stop();
-        // notify anyone that the given Identifier has been disconnected. 
+        // notify anyone that the given Identifier has been disconnected.
         getLocalEventHandler().handle(new DisconnectionEvent(id));
     }
-    
+
     public void transmit(Event event) {
         Identifier id = event.getId();
         if (id == null || id == Identifier.NULL) {
             // transmit to all connected clients if the target identifier is
             // not specified.
-            for (SocketDispatcherWorker worker: workers.values()) {
+            for (SocketDispatcherWorker worker : workers.values()) {
                 worker.write(event);
             }
         }
@@ -72,16 +72,16 @@ public class ServerSocketDispatcher extends AbstractServerDispatcher {
     private Socket getConnection(Identifier id) {
         return getWorker(id).getSocket();
     }
-    
+
     private SocketDispatcherWorker getWorker(Identifier id) {
         return workers.get(id);
     }
-    
+
     @Override
     protected void bind(int port) throws IOException {
         serverSocket = new ServerSocket(port);
     }
-    
+
     @Override
     protected void processIncomingConnections() throws IOException {
         Socket incoming = serverSocket.accept();
@@ -96,7 +96,7 @@ public class ServerSocketDispatcher extends AbstractServerDispatcher {
         worker.start();
         getLocalEventHandler().handle(event);
     }
-    
+
     @Override
     protected void cleanup() {
         try {
@@ -104,8 +104,7 @@ public class ServerSocketDispatcher extends AbstractServerDispatcher {
                 serverSocket.close();
                 serverSocket = null;
             }
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

@@ -1,21 +1,23 @@
 package edu.asu.commons.conf;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
 public class ConfigurationTest {
 
     private PropertiesConfiguration assistant;
-    
+
     @Before
     public void setUp() {
         assistant = new PropertiesConfiguration();
     }
-    
+
     @Test
     public void testPropertiesConfiguration() {
         assertEquals(0.0d, assistant.getDoubleProperty("unbound", 0.0d), 0.0d);
@@ -24,17 +26,17 @@ public class ConfigurationTest {
         assertEquals("snowflake", assistant.getStringProperty("unbound", "snowflake"));
         assertEquals(10271, assistant.getIntProperty("unbound", 10271));
     }
-    
+
     @Test
     public void testAsBeanPropertyMap() {
-    	MockServerConfiguration configuration = new MockServerConfiguration();
-    	MockRoundConfiguration roundConfiguration = configuration.getCurrentParameters();
-    	Map<String, Object> roundConfigAsMap = roundConfiguration.toMap();
-    	assertEquals(roundConfiguration.getDuration(), roundConfigAsMap.get("duration"));
-    	assertEquals(roundConfiguration.getClientsPerGroup(), roundConfigAsMap.get("clientsPerGroup"));
-    	assertEquals(roundConfiguration.getInstructions(), roundConfigAsMap.get("instructions"));
+        MockServerConfiguration configuration = new MockServerConfiguration();
+        MockRoundConfiguration roundConfiguration = configuration.getCurrentParameters();
+        Map<String, Object> roundConfigAsMap = roundConfiguration.toMap();
+        assertEquals(roundConfiguration.getDuration(), roundConfigAsMap.get("duration"));
+        assertEquals(roundConfiguration.getClientsPerGroup(), roundConfigAsMap.get("clientsPerGroup"));
+        assertEquals(roundConfiguration.getInstructions(), roundConfigAsMap.get("instructions"));
     }
-    
+
     @Test
     public void testRoundNumbering() {
         MockServerConfiguration serverConfiguration = new MockServerConfiguration();
@@ -45,7 +47,7 @@ public class ConfigurationTest {
         assertEquals(1, roundConfiguration.getRoundNumber());
         assertFalse(roundConfiguration.isPracticeRound());
     }
-    
+
     @Test
     public void testMultiplePracticeRounds() {
         MockServerConfiguration serverConfiguration = new MockServerConfiguration();
@@ -59,11 +61,11 @@ public class ConfigurationTest {
         roundConfiguration = serverConfiguration.nextRound();
         assertEquals(1, roundConfiguration.getRoundNumber());
         assertFalse(roundConfiguration.isPracticeRound());
-        
+
     }
 
-    public static class MockServerConfiguration 
-    extends ExperimentConfiguration.Base<MockServerConfiguration, MockRoundConfiguration> {
+    public static class MockServerConfiguration
+            extends ExperimentConfiguration.Base<MockServerConfiguration, MockRoundConfiguration> {
 
         private static final long serialVersionUID = 7867208205942476733L;
 
@@ -98,23 +100,23 @@ public class ConfigurationTest {
         protected String getServerConfigurationFilename() {
             return CONFIGURATION_FILE_NAME;
         }
-        
+
         public double getShowUpPayment() {
             return getDoubleProperty("showup-payment", 5.0d);
         }
 
     }
-    
+
     public static class MockRoundConfiguration extends ExperimentRoundParameters.Base<MockServerConfiguration, MockRoundConfiguration> {
 
         private static final long serialVersionUID = -5053624886508752562L;
-        
+
         private boolean practiceRound;
-        
+
         public MockRoundConfiguration(String filename) {
             super(filename);
         }
-        
+
         @Override
         public boolean isPracticeRound() {
             return super.isPracticeRound() || practiceRound;
@@ -124,19 +126,19 @@ public class ConfigurationTest {
         public String getInstructions() {
             return "Mock round instructions";
         }
-        
+
         public int getClientsPerGroup() {
             return 5;
         }
 
         /**
-         * @param practiceRound the practiceRound to set
+         * @param practiceRound
+         *            the practiceRound to set
          */
         public void setPracticeRound(boolean practiceRound) {
             this.practiceRound = practiceRound;
         }
-        
-    }
 
+    }
 
 }

@@ -18,11 +18,11 @@ import edu.asu.commons.net.Identifier;
  */
 public interface DataModel<C extends ExperimentConfiguration<C, R>, R extends ExperimentRoundParameters<C, R>> extends Serializable {
 
-	public C getExperimentConfiguration();
+    public C getExperimentConfiguration();
 
     public R getRoundConfiguration();
-    
+
     public List<Identifier> getAllClientIdentifiers();
-    
+
     public EventChannel getEventChannel();
 }

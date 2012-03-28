@@ -13,29 +13,29 @@ import edu.asu.commons.net.event.DisconnectionRequest;
 
 /**
  * $Id$
- *  
- *
+ * 
+ * 
  * @author <a href='mailto:Allen.Lee@asu.edu'>Allen Lee</a>
  * @version $Revision$
  */
 public abstract class BaseClient<C extends ExperimentConfiguration<C, R>, R extends ExperimentRoundParameters<C, R>> {
-    
+
     private final ClientDispatcher dispatcher;
-    
+
     private final EventChannel channel;
-    
+
     private Identifier id;
-    
+
     private C serverConfiguration;
-    
+
     public BaseClient(C configuration) {
         this(configuration, EventChannelFactory.create());
     }
-    
+
     public BaseClient(C configuration, EventChannel channel) {
         this(configuration, channel, DispatcherFactory.getInstance().createClientDispatcher(channel, configuration));
     }
-    
+
     public BaseClient(C configuration, EventChannel channel, ClientDispatcher dispatcher) {
         if (configuration == null) {
             throw new NullPointerException("Null experiment configuration disallowed");
@@ -51,9 +51,12 @@ public abstract class BaseClient<C extends ExperimentConfiguration<C, R>, R exte
         this.dispatcher = dispatcher;
     }
 
-    protected void initializeEventProcessors() { }
-    protected void postConnect() { }
-    
+    protected void initializeEventProcessors() {
+    }
+
+    protected void postConnect() {
+    }
+
     public void connect() {
         initializeEventProcessors();
         this.id = dispatcher.connect(serverConfiguration.getServerAddress());
@@ -64,32 +67,32 @@ public abstract class BaseClient<C extends ExperimentConfiguration<C, R>, R exte
         }
         postConnect();
     }
-    
+
     public void transmit(Event event) {
         dispatcher.transmit(event);
     }
-    
+
     public void disconnect() {
         transmit(new DisconnectionRequest(id));
         channel.remove(this);
     }
-    
+
     public ClientDispatcher getDispatcher() {
         return dispatcher;
     }
-    
+
     public Identifier getId() {
         return id;
     }
-    
+
     public EventChannel getEventChannel() {
         return channel;
     }
-    
+
     protected void setId(Identifier id) {
         this.id = id;
     }
-    
+
     protected void addEventProcessor(EventProcessor<? extends Event> processor) {
         channel.add(this, processor);
     }

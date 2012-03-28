@@ -1,12 +1,13 @@
 package edu.asu.commons.event;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 /**
  * $Id$
@@ -15,11 +16,11 @@ import static org.junit.Assert.*;
  * @version $Revision$
  */
 public class EventConstraintChannelTest {
-    
+
     private EventConstraintChannel eventChannelSingleton;
     private int numberOfEvents = 50;
     private List<Event> events;
-    
+
     @Before
     public void setUp() {
         eventChannelSingleton = EventConstraintChannel.getInstance();
@@ -28,8 +29,7 @@ public class EventConstraintChannelTest {
             events.add(new MockEvent());
         }
     }
-    
-    
+
     @Test
     public void testSingleton() {
         eventChannelSingleton = EventConstraintChannel.getInstance();
@@ -37,7 +37,7 @@ public class EventConstraintChannelTest {
             assertEquals(EventConstraintChannel.getInstance(), eventChannelSingleton);
         }
     }
-    
+
     @Test
     public void testSubscription() {
         final List<Event> handledEvents = new ArrayList<Event>();
@@ -46,17 +46,17 @@ public class EventConstraintChannelTest {
                 handledEvents.add(event);
             }
         });
-        for (Event event: events) {
+        for (Event event : events) {
             eventChannelSingleton.handleAndWait(event);
         }
         assertTrue(handledEvents.containsAll(events));
 
     }
-    
+
     private static class MockEvent extends AbstractEvent {
 
         private static final long serialVersionUID = -625434701751262383L;
-        
+
     }
 
 }

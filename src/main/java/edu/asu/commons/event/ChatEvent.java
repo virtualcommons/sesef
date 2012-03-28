@@ -2,13 +2,11 @@ package edu.asu.commons.event;
 
 import edu.asu.commons.net.Identifier;
 
-
-
 /**
  * $Id: ChatEvent.java 49 2008-09-04 16:57:40Z alllee $
  * 
  * Sent from the server to a client target (with Identifier getId()) from the client identified by getSource().
- * Essentially the same as a ChatRequest, but with permuted Identifier parameters. 
+ * Essentially the same as a ChatRequest, but with permuted Identifier parameters.
  * 
  * @author <a href='Allen.Lee@asu.edu'>Allen Lee</a>
  * @version $Revision: 49 $
@@ -17,36 +15,36 @@ import edu.asu.commons.net.Identifier;
 public class ChatEvent extends AbstractEvent {
 
     private static final long serialVersionUID = 475300882222383637L;
-    
+
     private final String message;
-    
+
     private Identifier source;
-    
+
     private boolean addressedToAll;
-    
+
     public ChatEvent(Identifier target, String message, Identifier source) {
         super(target);
         this.message = message;
         this.source = source;
     }
-    
+
     public ChatEvent(Identifier target, String message, Identifier source, boolean addressedToAll) {
         super(target);
         this.message = message;
         this.source = source;
         this.addressedToAll = addressedToAll;
     }
-    
+
     public Identifier getSource() {
         return source;
     }
-    
+
     public Identifier getTarget() {
         return isAddressedToAll() ? Identifier.ALL : super.id;
     }
-    
+
     public String toString() {
-    	return message;
+        return message;
     }
 
     public boolean isAddressedToAll() {

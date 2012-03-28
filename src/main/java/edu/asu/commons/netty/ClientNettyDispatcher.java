@@ -29,7 +29,7 @@ import edu.asu.commons.net.SocketIdentifier;
 import edu.asu.commons.net.event.DisconnectionRequest;
 
 public class ClientNettyDispatcher extends AbstractDispatcher implements ClientDispatcher {
-    
+
     private Identifier id;
     private Channel channel;
 
@@ -77,20 +77,20 @@ public class ClientNettyDispatcher extends AbstractDispatcher implements ClientD
         id = new SocketIdentifier(remoteAddress, localAddress);
         return id;
     }
-    
+
     private class ClientEventChannelHandler extends SimpleChannelHandler {
         @Override
         public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) {
             Event event = (Event) e.getMessage();
             getLocalEventHandler().handle(event);
         }
-        
+
         @Override
         public void channelConnected(ChannelHandlerContext ctx, ChannelStateEvent e) {
             channel = e.getChannel();
             id = new SocketIdentifier((InetSocketAddress) channel.getLocalAddress(), (InetSocketAddress) channel.getRemoteAddress());
         }
-        
+
         @Override
         public void exceptionCaught(ChannelHandlerContext ctx, ExceptionEvent e) {
             e.getCause().printStackTrace();

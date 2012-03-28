@@ -4,13 +4,12 @@ import edu.asu.commons.conf.ExperimentConfiguration;
 import edu.asu.commons.conf.ExperimentRoundParameters;
 import edu.asu.commons.experiment.Experiment;
 
-
 /**
  * $Id$
- *
+ * 
  * Support interface for processing events, encapsulating both an EventHandler and an EventConstraint
- * in the same class/type.  
- *   
+ * in the same class/type.
+ * 
  * 
  * @author <a href='mailto:Allen.Lee@asu.edu'>Allen Lee</a>
  * @version $Revision$
@@ -21,9 +20,9 @@ public interface EventProcessor<E extends Event> extends EventHandler<E>, EventC
     public boolean acceptsSubtypes();
 
     public Class<E> getEventClass();
-    
+
     public void handleInExperimentThread(E event);
-    
+
     public <C extends ExperimentConfiguration<C, R>, R extends ExperimentRoundParameters<C, R>, T extends Experiment<C, R>> void setExperiment(T experiment);
 
 }

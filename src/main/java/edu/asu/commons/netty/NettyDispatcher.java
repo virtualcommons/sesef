@@ -32,7 +32,7 @@ import edu.asu.commons.net.Identifier;
 import edu.asu.commons.net.SocketIdentifier;
 
 public class NettyDispatcher extends AbstractServerDispatcher {
-    
+
     private Logger logger = Logger.getLogger(NettyDispatcher.class.getName());
 
     // a mapping between Netty's channel ids to our Identifiers
@@ -93,14 +93,14 @@ public class NettyDispatcher extends AbstractServerDispatcher {
         // TODO Auto-generated method stub
 
     }
-    
+
     private class ServerEventChannelHandler extends SimpleChannelHandler {
         @Override
         public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) {
             Event event = (Event) e.getMessage();
             getLocalEventHandler().handle(event);
         }
-        
+
         @Override
         public void channelConnected(ChannelHandlerContext ctx, ChannelStateEvent e) {
             Channel channel = e.getChannel();
@@ -108,7 +108,7 @@ public class NettyDispatcher extends AbstractServerDispatcher {
             channelIdentifiers.put(channel.getId(), id);
             channels.put(id, channel);
         }
-        
+
         @Override
         public void exceptionCaught(ChannelHandlerContext ctx, ExceptionEvent e) {
             e.getCause().printStackTrace();
