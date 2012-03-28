@@ -22,8 +22,9 @@ public interface Identifier extends Serializable {
     public String getSurveyId();
     public void setSurveyId(String surveyId);
     public String getStationId();
+    public Integer getStationNumber();
 
-	public static final Identifier NULL = new SystemIdentifier() {
+    public static final Identifier NULL = new SystemIdentifier() {
         private static final long serialVersionUID = 3451864583823314294L;
     };
     
@@ -55,6 +56,9 @@ public interface Identifier extends Serializable {
         }
         public String getStationId() {
             return toString();
+        }
+        public Integer getStationNumber() {
+            return -1;
         }
         public String toString() {
             return "system identifier";
@@ -107,6 +111,10 @@ public interface Identifier extends Serializable {
         public String getStationId() {
             return toString();
         }
+
+        public Integer getStationNumber() {
+            return hash;
+        }
         
         public String getChatHandle() {
             return chatHandle;
@@ -127,8 +135,6 @@ public interface Identifier extends Serializable {
     }
     
     public static class Mock extends Base<Mock> {
-
-		private static final long serialVersionUID = 4306532617547585781L;
-    	
+        private static final long serialVersionUID = 4306532617547585781L;
     }
 }
