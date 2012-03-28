@@ -404,7 +404,7 @@ public abstract class Persister<C extends ExperimentConfiguration<C, R>, R exten
         String saveDestination = getSavePath(persistenceDirectory);
         logger.info("saving to " + saveDestination);
         ObjectOutputStream oos =
-                new ObjectOutputStream(new FileOutputStream(getRoundSaveFilePath(saveDestination, roundConfiguration.getRoundNumber())));
+                new ObjectOutputStream(new FileOutputStream(getRoundSaveFilePath(saveDestination, roundConfiguration.getRoundIndex())));
         try {
             oos.writeObject(roundConfiguration);
             oos.writeObject(serverDataModel);
