@@ -78,7 +78,7 @@ public abstract class Persister<C extends ExperimentConfiguration<C, R>, R exten
     }
 
     private String getXmlSaveFilePath() {
-        return String.format("%s%s%d-round-save.xml", getDefaultSavePath(), File.separator, roundConfiguration.getRoundNumber());
+        return String.format("%s%s%d-round-save.xml", getDefaultSavePath(), File.separator, roundConfiguration.getRoundIndex());
         // return getDefaultSavePath() + File.separator + roundConfiguration.getRoundNumber() + ".save.xml";
     }
 

@@ -29,8 +29,19 @@ public interface ExperimentRoundParameters<T extends ExperimentConfiguration<T, 
 
     public Duration getRoundDuration();
 
+    /**
+     * Returns the displayable round number for this set of round parameters.
+     * FIXME: what to do about practice rounds?
+     * @return
+     */
     public int getRoundNumber();
-
+    
+    /**
+     * Returns the internal index for the given round.
+     * @return
+     */
+    public int getRoundIndex();
+    
     public Properties getProperties();
 
     public boolean isPracticeRound();
@@ -60,6 +71,11 @@ public interface ExperimentRoundParameters<T extends ExperimentConfiguration<T, 
                 return 0;
             }
             return parentConfiguration.getRoundNumber((P) this);
+        }
+        
+        @SuppressWarnings("unchecked")
+        public int getRoundIndex() {
+            return parentConfiguration.getRoundIndex((P) this);
         }
 
         @Override

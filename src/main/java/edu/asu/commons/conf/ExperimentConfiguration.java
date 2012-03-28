@@ -30,6 +30,8 @@ public interface ExperimentConfiguration<C extends ExperimentConfiguration<C, R>
     public R getCurrentParameters();
 
     public int getNumberOfRounds();
+    
+    public int getCurrentRoundIndex();
 
     /**
      * Advances to the next round.
@@ -50,7 +52,9 @@ public interface ExperimentConfiguration<C extends ExperimentConfiguration<C, R>
      */
     public R getNextRoundConfiguration();
 
-    public int getRoundNumber(R roundParameters);
+    public int getRoundNumber(R roundConfiguration);
+    
+    public int getRoundIndex(R roundConfiguration);
 
     public String getServerName();
 
@@ -209,6 +213,10 @@ public interface ExperimentConfiguration<C extends ExperimentConfiguration<C, R>
         public int getRoundNumber(E roundParameter) {
             return allParameters.indexOf(roundParameter) - getPracticeRoundOffset();
         }
+        
+        public int getRoundIndex(E roundParameter) {
+            return allParameters.indexOf(roundParameter);
+        }
 
         public int getPracticeRoundOffset() {
             return getNumberOfPracticeRounds() - 1;
@@ -240,7 +248,7 @@ public interface ExperimentConfiguration<C extends ExperimentConfiguration<C, R>
             currentRoundIndex = 0;
         }
 
-        public int getCurrentRoundNumber() {
+        public int getCurrentRoundIndex() {
             return currentRoundIndex;
         }
 
