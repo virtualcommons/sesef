@@ -251,6 +251,11 @@ public interface ExperimentConfiguration<C extends ExperimentConfiguration<C, R>
         public int getCurrentRoundIndex() {
             return currentRoundIndex;
         }
+        
+        @Deprecated
+        public int getCurrentRoundNumber() {
+            return currentRoundIndex;
+        }
 
         public E getCurrentParameters() {
             return allParameters.get(currentRoundIndex);
