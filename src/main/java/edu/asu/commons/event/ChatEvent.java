@@ -12,24 +12,21 @@ import edu.asu.commons.net.Identifier;
  * @version $Revision$
  */
 
-public class ChatEvent extends AbstractEvent {
+public class ChatEvent extends AbstractPersistableEvent {
 
     private static final long serialVersionUID = 475300882222383637L;
-
-    private final String message;
 
     private Identifier source;
 
     private boolean addressedToAll;
 
     public ChatEvent(Identifier target, String message, Identifier source) {
-        super(target);
-        this.message = message;
+        super(target, message);
         this.source = source;
     }
 
     public ChatEvent(Identifier target, String message, Identifier source, boolean addressedToAll) {
-        super(target);
+        super(target, message);
         this.message = message;
         this.source = source;
         this.addressedToAll = addressedToAll;

@@ -11,8 +11,7 @@ import edu.asu.commons.net.Identifier;
  * @author <a href='mailto:Allen.Lee@asu.edu'>Allen Lee</a>
  * @version $Revision$
  */
-public abstract class AbstractPersistableEvent extends AbstractEvent
-        implements PersistableEvent, Comparable<AbstractPersistableEvent> {
+public abstract class AbstractPersistableEvent extends AbstractEvent implements PersistableEvent, Comparable<AbstractPersistableEvent> {
 
     private static final long serialVersionUID = -8335415577272927846L;
 
