@@ -1,12 +1,12 @@
 package edu.asu.commons.experiment;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
+import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 /**
  * $Id$
@@ -53,6 +53,16 @@ public class SaveFileProcessorTest {
         for (long i = 0; i < secondsPerInterval; i++) {
             assertFalse("after reset, interval of 60 seconds should return false for isIntervalElapsed from 0-60", processor.isIntervalElapsed(i));
         }
+    }
+    
+    @Test
+    public void testPrintln() {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        PrintWriter writer = new PrintWriter(out);
+        processor.println(writer, "hey", "there", 1, 2, 3);
+        writer.flush();
+        String line = new String(out.toByteArray());
+        assertEquals("hey,there,1,2,3\n", line);
     }
 
 }

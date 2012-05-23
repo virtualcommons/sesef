@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 
+import edu.asu.commons.util.Utils;
+
 /**
  * $Id$
  * 
@@ -110,6 +112,10 @@ public interface SaveFileProcessor {
                     }
                 }
             }
+        }
+        
+        public void println(PrintWriter writer, Object ... args) {
+            writer.println(Utils.join(',', args));
         }
 
         public abstract void process(SavedRoundData savedRoundData, PrintWriter writer);
