@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
  * $Id$
@@ -20,9 +22,16 @@ public class EventTypeChannel implements EventChannel {
 
     private final Map<Class, List<EventProcessor>> equalTypesEventProcessorMap =
             new HashMap<Class, List<EventProcessor>>();
-
     private final List<EventProcessor> acceptsSubtypesEventProcessors =
             new LinkedList<EventProcessor>();
+
+    // ReadWriteLocks for the two collections above, so we can allow any number
+    // of concurrent reads, but give exclusive access to the thread that has
+    // obtained the write lock.
+    private final ReentrantReadWriteLock equalTypesEventProcessorMapLock =
+            new ReentrantReadWriteLock();
+    private final ReentrantReadWriteLock acceptsSubtypesEventProcessorsLock =
+            new ReentrantReadWriteLock();
 
     private final Map<Object, List<EventProcessor>> owners =
             new HashMap<Object, List<EventProcessor>>();
@@ -52,20 +61,32 @@ public class EventTypeChannel implements EventChannel {
     }
 
     public <E extends Event> void add(EventProcessor<E> eventProcessor) {
+        Lock lock;
+
         if (eventProcessor.acceptsSubtypes()) {
-            synchronized (acceptsSubtypesEventProcessors) {
+            lock = acceptsSubtypesEventProcessorsLock.writeLock();
+            lock.lock();
+            try {
                 acceptsSubtypesEventProcessors.add(eventProcessor);
+            } finally {
+                lock.unlock();
             }
             return;
         }
+
         Class<E> eventClass = eventProcessor.getEventClass();
-        synchronized (equalTypesEventProcessorMap) {
+
+        lock = equalTypesEventProcessorMapLock.writeLock();
+        lock.lock();
+        try {
             List<EventProcessor> handlers = equalTypesEventProcessorMap.get(eventClass);
             if (handlers == null) {
                 handlers = new ArrayList<EventProcessor>();
                 equalTypesEventProcessorMap.put(eventClass, handlers);
             }
             handlers.add(eventProcessor);
+        } finally {
+            lock.unlock();
         }
     }
 
@@ -90,16 +111,28 @@ public class EventTypeChannel implements EventChannel {
     }
 
     public <E extends Event> boolean remove(EventProcessor<E> handler) {
-        synchronized (acceptsSubtypesEventProcessors) {
+        Lock lock;
+
+        lock = acceptsSubtypesEventProcessorsLock.writeLock();
+        lock.lock();
+        try {
             if (acceptsSubtypesEventProcessors.contains(handler)) {
                 return acceptsSubtypesEventProcessors.remove(handler);
             }
+        } finally {
+            lock.unlock();
         }
-        synchronized (equalTypesEventProcessorMap) {
+
+        lock = equalTypesEventProcessorMapLock.writeLock();
+        lock.lock();
+        try {
             if (equalTypesEventProcessorMap.containsKey(handler.getEventClass())) {
                 return equalTypesEventProcessorMap.get(handler.getEventClass()).remove(handler);
             }
+        } finally {
+            lock.unlock();
         }
+
         return false;
     }
 
@@ -151,31 +184,47 @@ public class EventTypeChannel implements EventChannel {
     private class SequentialDispatcher implements EventDispatcher {
         public void dispatch(Event event) {
             final Class<? extends Event> eventClass = event.getClass();
+            Lock lock;
+
             // first check handlers that want this and only this event type.
-            synchronized (equalTypesEventProcessorMap) {
+            lock = equalTypesEventProcessorMapLock.readLock();
+            lock.lock();
+            try {
                 List<EventProcessor> handlers = equalTypesEventProcessorMap.get(eventClass);
                 if (handlers != null) {
                     for (final EventProcessor<Event> handler : handlers) {
                         handler.handle(event);
                     }
                 }
+            } finally {
+                lock.unlock();
             }
+
             // next, check to see if this event should be processed by the subtype processors.
-            synchronized (acceptsSubtypesEventProcessors) {
+            lock = acceptsSubtypesEventProcessorsLock.readLock();
+            lock.lock();
+            try {
                 for (final EventProcessor<Event> handler : acceptsSubtypesEventProcessors) {
                     if (handler.getEventClass().isInstance(event)) {
                         handler.handle(event);
                     }
                 }
+            } finally {
+                lock.unlock();
             }
+
         }
     }
 
     private class ThreadedDispatcher implements EventDispatcher {
         public void dispatch(final Event event) {
             final Class<? extends Event> eventClass = event.getClass();
+            Lock lock;
+
             // first check handlers that want this and only this event type.
-            synchronized (equalTypesEventProcessorMap) {
+            lock = equalTypesEventProcessorMapLock.readLock();
+            lock.lock();
+            try {
                 List<EventProcessor> handlers = equalTypesEventProcessorMap.get(eventClass);
                 if (handlers != null) {
                     for (final EventProcessor<Event> handler : handlers) {
@@ -186,9 +235,14 @@ public class EventTypeChannel implements EventChannel {
                         }.start();
                     }
                 }
+            } finally {
+                lock.unlock();
             }
+
             // next, check to see if this event should be processed by the subtype processors.
-            synchronized (acceptsSubtypesEventProcessors) {
+            lock = acceptsSubtypesEventProcessorsLock.readLock();
+            lock.lock();
+            try {
                 for (final EventProcessor<Event> handler : acceptsSubtypesEventProcessors) {
                     if (handler.getEventClass().isInstance(event)) {
                         new Thread() {
@@ -198,8 +252,9 @@ public class EventTypeChannel implements EventChannel {
                         }.start();
                     }
                 }
+            } finally {
+                lock.unlock();
             }
-
         }
     }
 }
