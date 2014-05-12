@@ -123,7 +123,7 @@ public interface Identifier extends Serializable {
             if (this == other) {
                 return 0;
             }
-            return Integer.valueOf(hash).compareTo(other.hash);
+            return Integer.valueOf(index()).compareTo(other.index());
         }
 
         public String getStationId() {

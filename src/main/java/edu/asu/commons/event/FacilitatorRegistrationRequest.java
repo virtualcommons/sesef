@@ -4,12 +4,12 @@ import edu.asu.commons.net.Identifier;
 import edu.asu.commons.net.SocketIdentifier;
 
 /**
- * $Id: FacilitatorRegistrationRequest.java 462 2010-02-05 04:50:21Z alllee $
+ * $Id$
  * 
  * Signal sent from a facilitator to the server.
  * 
  * @author <a href='anonymouslee@gmail.com'>Allen Lee</a>, Deepali
- * @version $Revision: 462 $
+ * @version $Revision$
  */
 
 public class FacilitatorRegistrationRequest extends AbstractEvent implements FacilitatorRequest {

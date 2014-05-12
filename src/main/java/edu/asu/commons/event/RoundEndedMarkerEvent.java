@@ -3,7 +3,7 @@ package edu.asu.commons.event;
 import edu.asu.commons.net.Identifier;
 
 /**
- * $Id: RoundEndedMarkerEvent.java 524 2010-08-06 00:53:30Z alllee $
+ * $Id$
  * 
  * Used to mark the end of a round in the save files.
  * 
