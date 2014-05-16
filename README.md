@@ -10,7 +10,7 @@ The framework was extracted from several years of experience developing interact
 There are many areas of improvement including:
 
 1. integration with http://netty.io for more robust networking support
-2. web-based deployment
+2. web-based deployment via Play, dropwizard, or sparkjava
 3. data export tools
 4. better persistence mechanisms (currently XStream and standard Java serialization of PersistableEvents in a time ordered stream).
 5. P2P network synchronization to handle larger scale experiments
