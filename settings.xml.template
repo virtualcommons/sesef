@@ -1,12 +1,12 @@
 <settings>
     <servers>
         <server>
-            <id>archiva.internal</id>
+            <id>virtualcommons.internal</id>
             <username>mavendeploy</username>
             <password>an archiva password</password>
         </server>
         <server>
-            <id>archiva.snapshots</id>
+            <id>virtualcommons.snapshots</id>
             <username>mavendeploy</username>
             <password>an archiva password</password>
         </server>
