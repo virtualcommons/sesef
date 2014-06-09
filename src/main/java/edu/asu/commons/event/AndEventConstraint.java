@@ -7,7 +7,7 @@ package edu.asu.commons.event;
  * It accepts all Events satisfying both the first event constraint and the
  * second, in that order and is short-circuiting.
  * 
- * @author <a href='mailto:alllee@cs.indiana.edu'>Allen Lee</a>
+ * @author <a href='mailto:allen.lee@asu.edu'>Allen Lee</a>
  * @version $Revision$
  */
 
@@ -27,19 +27,4 @@ public class AndEventConstraint implements EventConstraint {
         return first.accepts(event) && second.accepts(event);
     }
 
-    // public AndEventConstraint(List<EventConstraint> constraints) {
-    // if (constraints == null) {
-    // throw new IllegalArgumentException("constraints shouldn't be null");
-    // }
-    // this.constraints = constraints;
-    // }
-    //
-    // public boolean accepts(Event event) {
-    // for (EventConstraint constraint : constraints) {
-    // if (! constraint.accepts(event)) {
-    // return false;
-    // }
-    // }
-    // return true;
-    // }
 }

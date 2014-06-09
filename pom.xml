@@ -5,12 +5,12 @@ vim:sts=2:sw=2
 -->
   <modelVersion>4.0.0</modelVersion>
   <groupId>edu.asu.commons</groupId>
-  <artifactId>sesefe</artifactId>
+  <artifactId>sesef</artifactId>
   <packaging>jar</packaging>
   <version>0.7-SNAPSHOT</version>
-  <name>sesefe</name>
-  <url>http://commons.asu.edu/software/sesefe</url>
-  <description>The sesefe experimental framework is a Java library providing useful abstractions for experiments that study social ecological systems. It has been used to implement the foraging and irrigation experiments developed by the Virtual Commons.</description>
+  <name>sesef</name>
+  <url>http://bitbucket.org/virtualcommons/sesef</url>
+  <description>The Social Ecological Systems Experiment Framework (SESEF) is a Java library providing useful abstractions for experiments that study social ecological systems. It has been used to implement the foraging and irrigation experiments developed by the Virtual Commons.</description>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <dropwizard.version>0.7.0</dropwizard.version>
@@ -26,7 +26,7 @@ vim:sts=2:sw=2
     </license>
   </licenses>
   <scm>
-    <url>https://bitbucket.org/virtualcommons/sesefe</url>
+    <url>https://bitbucket.org/virtualcommons/sesef</url>
   </scm>
   <distributionManagement>
     <repository>
@@ -95,7 +95,7 @@ vim:sts=2:sw=2
     </dependency>
   </dependencies>
   <build>
-    <finalName>sesefe</finalName>
+    <finalName>sesef</finalName>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>

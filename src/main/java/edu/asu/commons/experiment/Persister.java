@@ -85,7 +85,7 @@ public abstract class Persister<C extends ExperimentConfiguration<C, R>, R exten
     public Persister(EventChannel channel, C experimentConfiguration) {
         this(experimentConfiguration);
         if (channel == null) {
-            throw new NullPointerException("Cannot register persister with a null event channel");
+            throw new IllegalArgumentException("Cannot register persister with a null event channel");
         }
         this.channel = channel;
         // usingEventChannel = true;
@@ -118,10 +118,8 @@ public abstract class Persister<C extends ExperimentConfiguration<C, R>, R exten
         }
     }
 
-    /*
-     * (non-Javadoc)
+    /**
      * 
-     * @see edu.asu.commons.experiment.IPersister#stop()
      */
     @Override
     public void stop() {
@@ -130,10 +128,8 @@ public abstract class Persister<C extends ExperimentConfiguration<C, R>, R exten
         chatLogFileHandler.close();
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see edu.asu.commons.experiment.IPersister#getActions()
+    /**
+     * Returns an immutable sorted set of this Persister's event stream.  
      */
     @Override
     public SortedSet<PersistableEvent> getActions() {
@@ -381,31 +377,23 @@ public abstract class Persister<C extends ExperimentConfiguration<C, R>, R exten
     }
 
     private void doSaveExperimentConfiguration(C experimentConfiguration, String persistenceDirectory) throws IOException {
-        ObjectOutputStream objectOutputStream = null;
         String savePath = getSavePath(persistenceDirectory);
-        try {
-            createDirectoryIfNeeded(savePath);
-            String configurationSavePath = savePath + File.separator + getExperimentConfigurationSaveFileName();
-            objectOutputStream = new ObjectOutputStream(new FileOutputStream(configurationSavePath));
-            objectOutputStream.writeObject(experimentConfiguration);
-            objectOutputStream.flush();
-            // save a copy as XML as well
-            objectOutputStream = xstream.createObjectOutputStream(new FileOutputStream(configurationSavePath + ".xml"));
-            objectOutputStream.writeObject(experimentConfiguration);
-            objectOutputStream.flush();
-        } finally {
-            if (objectOutputStream != null) {
-                objectOutputStream.close();
-            }
+        createDirectoryIfNeeded(savePath);
+        String configurationSavePath = savePath + File.separator + getExperimentConfigurationSaveFileName();
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(configurationSavePath))) {
+            out.writeObject(experimentConfiguration);
+            out.flush();
+        }
+        try (ObjectOutputStream out = xstream.createObjectOutputStream(new FileOutputStream(configurationSavePath + ".xml"))) {
+            out.writeObject(experimentConfiguration);
+            out.flush();
         }
     }
 
     private <E extends DataModel<C, R>> void saveRound(E serverDataModel, String persistenceDirectory) throws IOException {
         String saveDestination = getSavePath(persistenceDirectory);
         logger.info("saving to " + saveDestination);
-        ObjectOutputStream oos =
-                new ObjectOutputStream(new FileOutputStream(getRoundSaveFilePath(saveDestination, roundConfiguration.getRoundIndex())));
-        try {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(getRoundSaveFilePath(saveDestination, roundConfiguration.getRoundIndex())))) {
             oos.writeObject(roundConfiguration);
             oos.writeObject(serverDataModel);
             synchronized (actions) {
@@ -415,13 +403,9 @@ public abstract class Persister<C extends ExperimentConfiguration<C, R>, R exten
                 oos.writeObject(chatRequests);
             }
             oos.flush();
-        } finally {
-            if (oos != null)
-                oos.close();
         }
-        try {
-            if (xmlEnabled) {
-                oos = xstream.createObjectOutputStream(new FileOutputStream(getXmlSaveFilePath()));
+        if (xmlEnabled) {
+        	try (ObjectOutputStream oos = xstream.createObjectOutputStream(new FileOutputStream(getXmlSaveFilePath()))) {
                 oos.writeObject(roundConfiguration);
                 oos.writeObject(serverDataModel);
                 synchronized (actions) {
@@ -432,9 +416,6 @@ public abstract class Persister<C extends ExperimentConfiguration<C, R>, R exten
                 }
                 oos.flush();
             }
-        } finally {
-            if (oos != null)
-                oos.close();
         }
     }
 

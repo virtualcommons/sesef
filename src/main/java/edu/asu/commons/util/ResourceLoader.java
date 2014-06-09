@@ -1,16 +1,17 @@
 package edu.asu.commons.util;
 
-import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.URL;
+import java.net.URLClassLoader;
 import java.security.AccessControlException;
+import java.util.HashSet;
+import java.util.Properties;
+import java.util.Set;
 
 /**
  * $Id$
@@ -19,42 +20,38 @@ import java.security.AccessControlException;
  * @version $Revision$
  */
 public class ResourceLoader {
+	
+	public static Properties getBuildProperties() throws IOException {
+		Properties properties = new Properties();
+		properties.load(toInputStream("build.properties"));
+		return properties;
+	}
+	
+	public static Set<String> getClasspathJars() {
+		URLClassLoader cl = (URLClassLoader) ClassLoader.getSystemClassLoader();
+		HashSet<String> filenames = new HashSet<>();
+		for (URL url: cl.getURLs()) {
+			String filename = url.getFile();
+			if (filename.endsWith(".jar")) {
+				filenames.add(filename.substring(filename.lastIndexOf('/') + 1));	
+			}
+		}
+		cl = (URLClassLoader) Thread.currentThread().getContextClassLoader();
+		for (URL url: cl.getURLs()) {
+			String filename = url.getFile();
+			if (filename.endsWith(".jar")) {
+				filenames.add(filename.substring(filename.lastIndexOf('/') + 1));	
+			}
+		}
+		return filenames;
+	}
 
-    public static String getString(String path) {
-        String content = "";
-        BufferedReader reader = ResourceLoader.getBufferedReader(path);
-        char[] buf = new char[1024];
-        int numRead = 0;
-
-        try {
-            while ((numRead = reader.read(buf)) != -1) {
-                String readData = String.valueOf(buf, 0, numRead);
-                content += readData;
-                buf = new char[1024];
-            }
-            reader.close();
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-            throw new RuntimeException("Couldn't load resource: " + path);
-        }
-        return content;
-    }
-
-    public static BufferedReader getBufferedReader(String path) {
-        BufferedReader reader = null;
-        try {
-            reader = new BufferedReader(new FileReader(path));
-        } catch (AccessControlException e) {
-            InputStream stream = toInputStream(path);
-            reader = new BufferedReader(new InputStreamReader(stream));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
-        return reader;
-    }
-
-    public static InputStream toInputStream(String path) {
+	/**
+	 * Returns an InputStream for the given path by searching the filesystem and the classpath, in that order.
+	 * The caller must close the returned InputStream after it is read. 
+	 */
+    @SuppressWarnings("resource")
+	public static InputStream toInputStream(String path) {
         // first try to read it as a file
         InputStream stream = null;
         try {
@@ -82,7 +79,7 @@ public class ResourceLoader {
             stream = ClassLoader.getSystemResourceAsStream(path);
         }
         if (stream == null) {
-            throw new RuntimeException("Oh no - couldn't load resource: " + path);
+            throw new RuntimeException("Couldn't load resource: " + path);
         }
         return stream;
     }
