@@ -1,6 +1,7 @@
-### sesefe
-_sesefe_ is a Java framework providing networking, persistence, and configuration support for real-time interactive
-collective action experiments. For concrete examples, see the [foraging](https://bitbucket.org/virtualcommons/foraging)
+### sesef
+The Social Ecological Systems Experiment Framework (_sesef_) is a Java framework providing networking, persistence, and
+configuration support for real-time interactive collective action experiments. For concrete examples, see the
+[foraging](https://bitbucket.org/virtualcommons/foraging)
 and [irrigation](https://bitbucket.org/virtualcommons/irrigation) experiments. 
 
 ### features
@@ -26,7 +27,7 @@ There are many areas of improvement including:
 6. better UI support and scaffolding
 
 ### current status
-Not under active development - current development efforts are focused on [web-based collective action experiments](https://bitbucket.org/virtualcommons/vcweb). If you'd like to use sesefe to develop new experiments or are interested in customizing any of our existing experiments, please [let us know](http://vcweb.asu.edu/contact). 
-We are also working on [developer documentation](https://bitbucket.org/virtualcommons/sesefe/wiki/Home) that describe how to implement new experiments.
+Current development is focused on [web-based collective action experiments](https://bitbucket.org/virtualcommons/vcweb). If you'd like to use sesef to develop new experiments or are interested in customizing any of our existing experiments, please [let us know](http://vcweb.asu.edu/contact). 
+We are also working on [developer documentation](https://bitbucket.org/virtualcommons/sesef/wiki/Home) that describe how to implement new experiments.
 
 Development supported by the [Center for the Study of Institutional Diversity](http://csid.asu.edu) and the [National Science Foundation](http://nsf.gov).
