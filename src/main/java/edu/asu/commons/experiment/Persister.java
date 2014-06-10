@@ -49,7 +49,7 @@ public abstract class Persister<C extends ExperimentConfiguration<C, R>, R exten
     private final static String DEFAULT_EXPERIMENT_CONFIGURATION_FILE = "experiment-configuration.save";
     private final static String DEFAULT_CHAT_LOG_FILE_NAME = "chat.log";
 
-    private final static Logger logger = Logger.getLogger(Experiment.class.getName());
+    private final static Logger logger = Logger.getLogger(Persister.class.getName());
 
     private final Logger chatLogger = Logger.getLogger("chat.logger");
     private FileHandler chatLogFileHandler;
@@ -129,7 +129,7 @@ public abstract class Persister<C extends ExperimentConfiguration<C, R>, R exten
     }
 
     /**
-     * Returns an immutable sorted set of this Persister's event stream.  
+     * Returns an immutable sorted set of this Persister's event stream.
      */
     @Override
     public SortedSet<PersistableEvent> getActions() {
@@ -405,7 +405,7 @@ public abstract class Persister<C extends ExperimentConfiguration<C, R>, R exten
             oos.flush();
         }
         if (xmlEnabled) {
-        	try (ObjectOutputStream oos = xstream.createObjectOutputStream(new FileOutputStream(getXmlSaveFilePath()))) {
+            try (ObjectOutputStream oos = xstream.createObjectOutputStream(new FileOutputStream(getXmlSaveFilePath()))) {
                 oos.writeObject(roundConfiguration);
                 oos.writeObject(serverDataModel);
                 synchronized (actions) {

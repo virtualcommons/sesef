@@ -24,181 +24,166 @@ import java.util.List;
 
 public final class Utils {
 
-	// private final static Logger logger =
-	// Logger.getLogger(Utils.class.getName());
+    // prevent instantiation
+    private Utils() {
+    }
 
-	// cannot be instantiated or subclassed.
-	private Utils() {
-	}
+    public static void waitOn(final Object lock) {
+        synchronized (lock) {
+            try {
+                lock.wait();
+            } catch (InterruptedException ignored) {
+            }
+        }
+    }
 
-	public static void waitOn(final Object lock) {
-		synchronized (lock) {
-			try {
-				lock.wait();
-			} catch (InterruptedException ignored) {
-			}
-		}
-	}
+    public static void notify(final Object lock) {
+        synchronized (lock) {
+            lock.notify();
+        }
+    }
 
-	public static void notify(final Object lock) {
-		synchronized (lock) {
-			lock.notify();
-		}
-	}
+    public static void sleep(long millis) {
+        try {
+            Thread.sleep(millis);
+        } catch (InterruptedException ignored) {
+        }
+    }
 
-	public static void sleep(long millis) {
-		try {
-			Thread.sleep(millis);
-		} catch (InterruptedException ignored) {
-		}
-	}
+    public static int getNumberOfBytes(Object object) {
+        int numberOfBytes = 0;
+        try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                ObjectOutputStream oos = new ObjectOutputStream(baos);) {
+            oos.writeObject(object);
+            oos.flush();
+            byte[] byteArray = baos.toByteArray();
+            numberOfBytes = byteArray.length;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return numberOfBytes;
+    }
 
-	public static int getNumberOfBytes(Object object) {
-		int numberOfBytes = 0;
-		try {
-			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			ObjectOutputStream oos = new ObjectOutputStream(baos);
-			oos.writeObject(object);
-			oos.flush();
-			byte[] byteArray = baos.toByteArray();
-			numberOfBytes = byteArray.length;
-			oos.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return numberOfBytes;
-	}
+    public static StringBuilder getTextResource(String resource) throws IOException {
+        InputStream stream = ResourceLoader.toInputStream(resource);
+        return getTextResource(stream);
+    }
 
-	public static StringBuilder getTextResource(String resource)
-			throws IOException {
-		InputStream stream = ResourceLoader.toInputStream(resource);
-		return getTextResource(stream);
-	}
+    private static StringBuilder getTextResource(InputStream stream) throws IOException {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+        StringBuilder builder = new StringBuilder();
+        while (reader.ready()) {
+            builder.append(reader.readLine());
+        }
+        return builder;
+    }
 
-	private static StringBuilder getTextResource(InputStream stream)
-			throws IOException {
-		BufferedReader reader = new BufferedReader(
-				new InputStreamReader(stream));
-		StringBuilder builder = new StringBuilder();
-		while (reader.ready()) {
-			builder.append(reader.readLine());
-		}
-		return builder;
-	}
+    public static String basename(String filename) {
+        if (isNullOrEmpty(filename)) {
+            return "";
+        }
+        return filename.substring(filename.lastIndexOf(File.separatorChar) + 1);
+        // could also do
+        // return new File(filename).getName();
+    }
 
-	public static String basename(String filename) {
-		if (filename == null || "".equals(filename)) {
-			return "";
-		}
-		return filename.substring(filename.lastIndexOf(File.separatorChar) + 1);
-		// could also do
-		// return new File(filename).getName();
-	}
+    public static String join(char delimiter, Collection<?> objects) {
+        return join(false, delimiter, objects);
+    }
 
-	public static String join(char delimiter, Collection<?> objects) {
-		return join(false, delimiter, objects);
-	}
+    /**
+     * FIXME: replace with commons-lang StringUtils
+     * 
+     * NOTE: If the delimiter also occurs in the list of objects waiting to be
+     * toString()-ed, this method does not escape them
+     */
+    @SafeVarargs
+    public static <T> String join(char delimiter, T... objects) {
+        return join(false, delimiter, objects);
+    }
 
-	/*
-	 * It is unfortunate that the 'clean' way of doing this using
-	 * Iterators/for-each is inefficient.
-	 * 
-	 * If the delimiter also occurs in the list of objects waiting to be
-	 * toString()-ed, this method does not make sure it escapes them.
-	 */
-	@SafeVarargs
-	public static <T> String join(char delimiter, T... objects) {
-		return join(false, delimiter, objects);
-	}
+    /**
+     * FIXME: replace with commons-lang StringUtils
+     * If the delimiter also occurs in the list of objects waiting to be
+     * toString()-ed, this method does not escape them.
+     */
+    @SafeVarargs
+    public static <T> String join(boolean shouldQuote, char delimiter, T... objects) {
+        StringBuilder builder = new StringBuilder();
+        for (T object : objects) {
+            if (builder.length() != 0) {
+                builder.append(delimiter);
+            }
+            addString(builder, String.valueOf(object).trim(), shouldQuote);
+        }
+        return builder.toString();
+    }
 
-	/*
-	 * It is unfortunate that the 'clean' way of doing this using
-	 * Iterators/for-each is inefficient.
-	 * 
-	 * If the delimiter also occurs in the list of objects waiting to be
-	 * toString()-ed, this method does not make sure it escapes them.
-	 */
-	@SafeVarargs
-	public static <T> String join(boolean shouldQuote, char delimiter,
-			T... objects) {
-		StringBuilder builder = new StringBuilder();
-		for (int i = 0; i < objects.length; i++) {
-			addString(builder, String.valueOf(objects[i]).trim(), shouldQuote);
+    public static String join(char delimiter, int[] ints) {
+        StringBuilder builder = new StringBuilder(ints.length * 2);
+        for (int i = 0; i < ints.length; i++) {
+            builder.append(String.valueOf(ints[i]));
+            if (i < ints.length - 1) {
+                builder.append(delimiter);
+            }
+        }
+        return builder.toString();
 
-			// append the delimiter until we reach the last element.
-			if (i < objects.length - 1) {
-				builder.append(delimiter);
-			}
-		}
-		return builder.toString();
-	}
+    }
 
-	public static String join(char delimiter, int[] ints) {
-		StringBuilder builder = new StringBuilder(ints.length * 2);
-		for (int i = 0; i < ints.length; i++) {
-			builder.append(String.valueOf(ints[i]));
-			if (i < ints.length - 1) {
-				builder.append(delimiter);
-			}
-		}
-		return builder.toString();
+    private static void addString(StringBuilder builder, String string, boolean shouldQuote) {
+        if (shouldQuote) {
+            if (string.contains("'")) {
+                string = string.replaceAll("'", "\\'");
+            }
+            builder.append('\'').append(string).append('\'');
+        } else {
+            builder.append(string);
+        }
+    }
 
-	}
+    /*
+     * Returns a single String with everything in the List delimited by the
+     * specified delimiter and ending in the newline.
+     */
+    public static String join(boolean shouldQuote, char delimiter,
+            Collection<?> objects) {
+        StringBuilder builder = new StringBuilder();
+        for (Iterator<?> iter = objects.iterator(); iter.hasNext();) {
+            String data = iter.next().toString();
+            addString(builder, data, shouldQuote);
+            if (iter.hasNext()) {
+                builder.append(delimiter);
+            }
+        }
+        return builder.toString();
+    }
 
-	private static void addString(StringBuilder builder, String string,
-			boolean shouldQuote) {
-		if (shouldQuote) {
-			if (string.contains("'")) {
-				string = string.replaceAll("'", "\\'");
-			}
-			builder.append('\'').append(string).append('\'');
-		} else {
-			builder.append(string);
-		}
-	}
+    public static List<Integer> iota(int end) {
+        return iota(0, end);
+    }
 
-	/*
-	 * Returns a single String with everything in the List delimited by the
-	 * specified delimiter and ending in the newline.
-	 */
-	public static String join(boolean shouldQuote, char delimiter,
-			Collection<?> objects) {
-		StringBuilder builder = new StringBuilder();
-		for (Iterator<?> iter = objects.iterator(); iter.hasNext();) {
-			String data = iter.next().toString();
-			addString(builder, data, shouldQuote);
-			if (iter.hasNext()) {
-				builder.append(delimiter);
-			}
-		}
-		return builder.toString();
-	}
+    public static List<Integer> iota(int start, int end) {
+        List<Integer> list = new ArrayList<Integer>();
+        for (int i = start; i < end; i++) {
+            list.add(Integer.valueOf(i));
+        }
+        return list;
+    }
 
-	public static List<Integer> iota(int end) {
-		return iota(0, end);
-	}
+    public static boolean isNullOrEmpty(String string) {
+        return (string == null) || string.isEmpty();
+    }
 
-	public static List<Integer> iota(int start, int end) {
-		List<Integer> list = new ArrayList<Integer>();
-		for (int i = start; i < end; i++) {
-			list.add(Integer.valueOf(i));
-		}
-		return list;
-	}
+    public static <T, R> List<R> map(Collection<T> in, MapOp<T, R> op) {
+        List<R> out = new ArrayList<R>(in.size());
+        for (T t : in) {
+            out.add(op.apply(t));
+        }
+        return out;
+    }
 
-	public static boolean isNullOrEmpty(String string) {
-		return (string == null) || string.isEmpty();
-	}
-
-	public static <T, R> List<R> map(Collection<T> in, MapOp<T, R> op) {
-		List<R> out = new ArrayList<R>(in.size());
-		for (T t : in) {
-			out.add(op.apply(t));
-		}
-		return out;
-	}
-
-	public interface MapOp<T, R> {
-		public R apply(T t);
-	}
+    public interface MapOp<T, R> {
+        public R apply(T t);
+    }
 }
