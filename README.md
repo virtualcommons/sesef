@@ -4,23 +4,22 @@ configuration support for real-time interactive collective action experiments. F
 [foraging](https://bitbucket.org/virtualcommons/foraging)
 and [irrigation](https://bitbucket.org/virtualcommons/irrigation) experiments. 
 
-### features
+### features and motivation
 The framework was developed from several years of experience developing interactive collective action experiments with
-10-30 participants in a controlled system / computer lab. 
+10-30 participants in a controlled system / computer lab. A common core was extracted with support for:
 
-- support for experiment-wide and round-specific parameterizations via [Java properties files](http://docs.oracle.com/javase/7/docs/api/java/util/Properties.html)
-- abstractions and scaffolding for clients, servers, and facilitators
+- experiment-wide and round-specific parameterizations via [Java properties files](http://docs.oracle.com/javase/7/docs/api/java/util/Properties.html)
+- networking, threading, data model, configuration, and user interface scaffolding for clients, facilitators, and
+  servers
 - event channel abstraction that decouples messaging between different system components (persistence, resource
   generation, client and server side data models and the user interface)
 - scaffolding for automatic binary and XML based persistence of user events
 
-### motivation
-
 ### how to contribute
-There are many areas of improvement including:
+There are many areas of improvement remaining:
 
-1. integrate with http://netty.io, finish implementing client and server NettyDispatcherS
-2. web-based deployment (perhaps Play or dropwizard?)
+1. integration with http://netty.io for better networking support, finish implementing client and server NettyDispatchers
+2. easier web-based deployment (perhaps Play or dropwizard?) and a facilitator / experiment webapp
 3. standardized data export tools
 4. improved persistence mechanisms (currently XStream and standard Java serialization of PersistableEvents in a time ordered stream, brittle with class changes).
 5. P2P network synchronization to handle larger scale experiments
