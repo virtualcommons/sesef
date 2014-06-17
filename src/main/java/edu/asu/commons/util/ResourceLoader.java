@@ -1,11 +1,13 @@
 package edu.asu.commons.util;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.security.AccessControlException;
@@ -69,6 +71,22 @@ public class ResourceLoader {
         }
         return stream;
     }
+    
+    public static String getResourceAsString(String path) throws IOException {
+        try (InputStream stream = toInputStream(path)) {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+            StringBuilder builder = new StringBuilder();
+            String newline = System.lineSeparator();
+            String line = reader.readLine();
+            while (line != null) {
+                builder.append(line).append(newline);
+                line = reader.readLine();
+            }
+            return builder.toString();
+        }
+    }
+    
+    
 
     public static InputStream getResourceAsStream(String path) {
         InputStream stream = ResourceLoader.class.getResourceAsStream(path);
@@ -84,16 +102,13 @@ public class ResourceLoader {
         return stream;
     }
 
-    public static ByteArrayOutputStream getByteArrayOutputStream(String fileName) throws IOException {
-        InputStream stream = ResourceLoader.toInputStream(fileName);
-        ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
-        try {
+    public static ByteArrayOutputStream getByteArrayOutputStream(String path) throws IOException {
+        try (InputStream stream = ResourceLoader.toInputStream(path)){
+            ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
             while (stream.available() > 0) {
                 byteStream.write(stream.read());
             }
             return byteStream;
-        } finally {
-            stream.close();
         }
     }
 
