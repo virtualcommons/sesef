@@ -97,8 +97,10 @@ vim:sts=2:sw=2
       <groupId>javax.jnlp</groupId>
       <artifactId>jnlp-api</artifactId>
       <version>7.0</version>
+      <!--
       <scope>system</scope>
       <systemPath>${java.home}/lib/javaws.jar</systemPath>
+      -->
     </dependency>
     <dependency>
     	<groupId>io.netty</groupId>
