@@ -60,7 +60,7 @@ public class SesefExperimentHandler extends AbstractHandler {
         response.setContentType("text/html;charset=utf-8");
         response.setStatus(HttpServletResponse.SC_OK);
         baseRequest.setHandled(true);
-        String path = baseRequest.getUri().getPath();
+        String path = baseRequest.getRequestURI();
         logger.info(path);
         ST template = (path.contains("facilitator")) ? handleFacilitatorRequest(response) : handleClientRequest(response);
         logger.info("generating template response " + template);

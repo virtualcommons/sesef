@@ -16,7 +16,8 @@ vim:sts=2:sw=2
     <spark.version>2.0.0</spark.version>
     <stringtemplate.version>4.0.8</stringtemplate.version>
     <xstream.version>1.4.7</xstream.version>
-    <jetty.version>9.2.1.v20140609</jetty.version>
+    <jetty.version>9.3.0.M1</jetty.version>
+    <netty.version>4.0.24.Final</netty.version>
     <sesef.keypass>sesef_keypass</sesef.keypass>
     <sesef.storepass>sesef_storepass</sesef.storepass>
   </properties>
@@ -102,11 +103,13 @@ vim:sts=2:sw=2
       <systemPath>${java.home}/lib/javaws.jar</systemPath>
       -->
     </dependency>
+    <!--
     <dependency>
     	<groupId>io.netty</groupId>
     	<artifactId>netty-all</artifactId>
-    	<version>4.0.20.Final</version>
+        <version>${netty.version}</version>
     </dependency>
+    -->
     <dependency>
       <groupId>org.eclipse.jetty</groupId>
       <artifactId>jetty-maven-plugin</artifactId>
