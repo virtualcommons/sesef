@@ -1,8 +1,8 @@
 ### sesef
 The Social Ecological Systems Experiment Framework (_sesef_) is a Java framework providing networking, persistence, and
 configuration support for real-time interactive collective action experiments. For concrete examples, see the
-[foraging](https://bitbucket.org/virtualcommons/foraging)
-and [irrigation](https://bitbucket.org/virtualcommons/irrigation) experiments. 
+[foraging](https://github.com/virtualcommons/foraging)
+and [irrigation](https://github.com/virtualcommons/irrigation) experiments. 
 
 ### features and motivation
 The framework was developed from several years of experience developing interactive collective action experiments with
@@ -26,7 +26,7 @@ There are many areas of improvement remaining:
 6. better UI support and scaffolding
 
 ### current status
-Current development is focused on [web-based collective action experiments](https://bitbucket.org/virtualcommons/vcweb). If you'd like to use sesef to develop new experiments or are interested in customizing any of our existing experiments, please [let us know](http://vcweb.asu.edu/contact). 
-We are also working on [developer documentation](https://bitbucket.org/virtualcommons/sesef/wiki/Home) that describe how to implement new experiments.
+Current development is focused on [web-based collective action experiments](https://github.com/virtualcommons/vcweb). If you'd like to use sesef to develop new experiments or are interested in customizing any of our existing experiments, please [let us know](http://vcweb.asu.edu/contact). 
+We are also working on [developer documentation](https://github.com/virtualcommons/sesef/wiki/Home) that describe how to implement new experiments.
 
-Development supported by the [Center for the Study of Institutional Diversity](http://csid.asu.edu) and the [National Science Foundation](http://nsf.gov).
+Development supported by the [Center for Behavior, Institutions, and the Environment](http://cbie.asu.edu) and the [National Science Foundation](http://nsf.gov).
