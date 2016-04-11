@@ -2,6 +2,7 @@ package edu.asu.commons.util;
 
 import java.io.Serializable;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
 /**
  * $Id$
@@ -84,10 +85,6 @@ public class Duration implements Serializable {
         return this;
     }
 
-    public void expire() {
-        stop();
-    }
-
     public void stop() {
         endTime = currentTime();
     }
@@ -96,6 +93,30 @@ public class Duration implements Serializable {
         startCount++;
         initStartEndTime();
         return this;
+    }
+    
+    public boolean restartIfExpired() {
+        if (isExpired()) {
+            restart();
+            return true;
+        }
+        return false;
+    }
+    
+    public boolean executeOnRestart(Consumer<Duration> consumer) {
+        boolean expired = isExpired();
+        if (expired) {
+            consumer.accept(this);
+        }
+        return expired;
+    }
+    
+    public boolean hasExpired() {
+        return isExpired();
+    }
+
+    public boolean isExpired() {
+        return (currentTime() > endTime);
     }
 
     public long getStartCount() {
@@ -139,10 +160,6 @@ public class Duration implements Serializable {
 
     public String toString() {
         return String.format("Duration: %d, Time left: %d", delta, getTimeLeft());
-    }
-
-    public boolean hasExpired() {
-        return (currentTime() > endTime);
     }
 
     // FIXME: replace with nanoTime() at some point..?
