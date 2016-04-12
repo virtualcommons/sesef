@@ -103,10 +103,11 @@ public class Duration implements Serializable {
         return false;
     }
     
-    public boolean executeOnRestart(Consumer<Duration> consumer) {
+    public boolean onTick(Consumer<Duration> consumer) {
         boolean expired = isExpired();
         if (expired) {
             consumer.accept(this);
+            restart();
         }
         return expired;
     }
