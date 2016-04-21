@@ -115,6 +115,13 @@ public interface Identifier extends Serializable {
         public int hashCode() {
             return id.hashCode();
         }
+        
+        public boolean equals(Object other) {
+            if (other instanceof Identifier.Base) {
+                return id.equals(((Identifier.Base<T>) other).id);
+            }
+            return false;
+        }
 
         public int compareTo(T other) {
             if (other == null) {

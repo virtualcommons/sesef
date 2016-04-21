@@ -54,6 +54,8 @@ public abstract class AbstractPersistableEvent extends AbstractEvent implements 
     }
 
     public final void timestamp() {
-        super.creationTime = System.nanoTime();
+        if (creationTime == 0L) {
+            creationTime = System.currentTimeMillis();
+        }
     }
 }

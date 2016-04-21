@@ -5,14 +5,11 @@ import edu.asu.commons.conf.ExperimentRoundParameters;
 import edu.asu.commons.experiment.Experiment;
 
 /**
- * $Id$
- * 
  * Support interface for processing events, encapsulating both an EventHandler and an EventConstraint
  * in the same class/type.
  * 
  * 
  * @author <a href='mailto:Allen.Lee@asu.edu'>Allen Lee</a>
- * @version $Revision$
  */
 
 public interface EventProcessor<E extends Event> extends EventHandler<E>, EventConstraint {

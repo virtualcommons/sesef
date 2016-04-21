@@ -18,6 +18,7 @@ public abstract class AbstractEvent implements Event {
 
     protected Identifier id;
     protected long creationTime;
+    protected long creationTimeNanos = System.nanoTime();
     protected String message;
 
     public AbstractEvent() {

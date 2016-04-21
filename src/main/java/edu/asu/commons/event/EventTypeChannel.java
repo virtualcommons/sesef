@@ -9,32 +9,24 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
- * $Id$
- * <p>
  * Provides an event channel that only handles subscription via event type.
  * 
  * 
  * @author <a href='mailto:Allen.Lee@asu.edu'>Allen Lee</a>
- * @version $Rev: 454 $
  */
 @SuppressWarnings(value = { "unchecked", "rawtypes" })
 public class EventTypeChannel implements EventChannel {
 
-    private final Map<Class, List<EventProcessor>> equalTypesEventProcessorMap =
-            new HashMap<Class, List<EventProcessor>>();
-    private final List<EventProcessor> acceptsSubtypesEventProcessors =
-            new LinkedList<EventProcessor>();
+    private final Map<Class, List<EventProcessor>> equalTypesEventProcessorMap = new HashMap<Class, List<EventProcessor>>();
+    private final List<EventProcessor> acceptsSubtypesEventProcessors = new LinkedList<EventProcessor>();
 
     // ReadWriteLocks for the two collections above, so we can allow any number
     // of concurrent reads, but give exclusive access to the thread that has
     // obtained the write lock.
-    private final ReentrantReadWriteLock equalTypesEventProcessorMapLock =
-            new ReentrantReadWriteLock();
-    private final ReentrantReadWriteLock acceptsSubtypesEventProcessorsLock =
-            new ReentrantReadWriteLock();
+    private final ReentrantReadWriteLock equalTypesEventProcessorMapLock = new ReentrantReadWriteLock();
+    private final ReentrantReadWriteLock acceptsSubtypesEventProcessorsLock = new ReentrantReadWriteLock();
 
-    private final Map<Object, List<EventProcessor>> owners =
-            new HashMap<Object, List<EventProcessor>>();
+    private final Map<Object, List<EventProcessor>> owners = new HashMap<Object, List<EventProcessor>>();
 
     private final EventDispatcher defaultDispatcher;
 
@@ -54,8 +46,7 @@ public class EventTypeChannel implements EventChannel {
     public EventTypeChannel(boolean shouldThread) {
         if (shouldThread) {
             defaultDispatcher = threadedDispatcher;
-        }
-        else {
+        } else {
             defaultDispatcher = sequentialDispatcher;
         }
     }
@@ -95,7 +86,7 @@ public class EventTypeChannel implements EventChannel {
         synchronized (owners) {
             List<EventProcessor> processors = owners.get(owner);
             if (processors == null) {
-                processors = new ArrayList<EventProcessor>();
+                processors = new ArrayList<>();
                 owners.put(owner, processors);
             }
             processors.add(eventProcessor);
@@ -111,9 +102,7 @@ public class EventTypeChannel implements EventChannel {
     }
 
     public <E extends Event> boolean remove(EventProcessor<E> handler) {
-        Lock lock;
-
-        lock = acceptsSubtypesEventProcessorsLock.writeLock();
+        Lock lock = acceptsSubtypesEventProcessorsLock.writeLock();
         lock.lock();
         try {
             if (acceptsSubtypesEventProcessors.contains(handler)) {
