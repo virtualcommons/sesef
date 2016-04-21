@@ -103,6 +103,10 @@ public class Duration implements Serializable {
         return false;
     }
     
+    public boolean isModulo(int mod) {
+        return startCount % mod == 0;
+    }
+    
     public boolean onTick(Consumer<Duration> consumer) {
         boolean expired = isExpired();
         if (expired) {
