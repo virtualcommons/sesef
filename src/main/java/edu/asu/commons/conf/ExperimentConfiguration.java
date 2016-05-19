@@ -86,6 +86,8 @@ public interface ExperimentConfiguration<C extends ExperimentConfiguration<C, R>
 
     public boolean isLastRound();
 
+    public int getCurrentRepeatedRoundIndex();
+
     public ServerDispatcher.Type getServerDispatcherType();
 
     public int getWorkerPoolSize();
@@ -95,6 +97,8 @@ public interface ExperimentConfiguration<C extends ExperimentConfiguration<C, R>
     public Locale getLocale();
 
     public Properties getProperties();
+
+    public int getDefaultRoundDuration();
 
     public static abstract class Base<C extends ExperimentConfiguration<C, E>, E extends ExperimentRoundParameters<C, E>>
             extends Configuration.Base implements ExperimentConfiguration<C, E> {
@@ -121,6 +125,7 @@ public interface ExperimentConfiguration<C extends ExperimentConfiguration<C, R>
             }
         }
 
+        private int currentRepeatedRoundIndex = 0;
         private int currentRoundIndex = 0;
         // protected final PropertiesConfiguration assistant;
         protected final List<E> allParameters = new ArrayList<E>();
@@ -204,7 +209,11 @@ public interface ExperimentConfiguration<C extends ExperimentConfiguration<C, R>
         }
 
         public int getNumberOfRounds() {
-            return getIntProperty("number-of-rounds", 0);
+            int numberOfRounds = getIntProperty("number-of-rounds", 0);
+            for (E roundParameter: allParameters) {
+                numberOfRounds += roundParameter.getRepeat();
+            }
+            return numberOfRounds;
         }
 
         /**
@@ -228,6 +237,9 @@ public interface ExperimentConfiguration<C extends ExperimentConfiguration<C, R>
                 for (E roundParameter : allParameters) {
                     if (roundParameter.isPracticeRound()) {
                         numberOfPracticeRounds++;
+                        if (roundParameter.isRepeatingRound()) {
+                            numberOfPracticeRounds += roundParameter.getRepeat();
+                        }
                     }
                 }
             }
@@ -286,21 +298,39 @@ public interface ExperimentConfiguration<C extends ExperimentConfiguration<C, R>
         }
 
         public E getNextRoundConfiguration() {
+            E currentParameters = getCurrentParameters();
+            if (currentParameters.isRepeatingRound()) {
+                if (currentRepeatedRoundIndex < currentParameters.getRepeat()) {
+                    return currentParameters;
+                }
+            }
             if (isLastRound()) {
-                return getCurrentParameters();
+                return currentParameters;
             }
             return allParameters.get(currentRoundIndex + 1);
+        }
+
+        public int getCurrentRepeatedRoundIndex() {
+            return currentRepeatedRoundIndex;
         }
 
         /**
          * Returns the next round configuration.
          * If we're at the last round, returns the last round configuration.
          */
-        public E nextRound() {
+        public synchronized E nextRound() {
+            E currentParameters = getCurrentParameters();
+            if (currentParameters.isRepeatingRound()) {
+                if (currentRepeatedRoundIndex < currentParameters.getRepeat()) {
+                    currentRepeatedRoundIndex++;
+                    return currentParameters;
+                }
+            }
             if (isLastRound()) {
-                return getCurrentParameters();
+                return currentParameters;
             }
             currentRoundIndex++;
+            currentRepeatedRoundIndex = 0;
             return allParameters.get(currentRoundIndex);
         }
 
@@ -323,6 +353,10 @@ public interface ExperimentConfiguration<C extends ExperimentConfiguration<C, R>
 
         public int getWorkerPoolSize() {
             return getIntProperty("worker-pool-size", 5);
+        }
+
+        public int getDefaultRoundDuration() {
+            return getIntProperty("default-round-duration", 240);
         }
 
         public String getLogFileDestination() {

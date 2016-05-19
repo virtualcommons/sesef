@@ -61,7 +61,53 @@ public class ConfigurationTest {
         roundConfiguration = serverConfiguration.nextRound();
         assertEquals(1, roundConfiguration.getRoundNumber());
         assertFalse(roundConfiguration.isPracticeRound());
+    }
 
+    @Test
+    public void testRepeatingRounds() {
+        MockServerConfiguration serverConfiguration = new MockServerConfiguration();
+        MockRoundConfiguration firstRoundConfiguration = serverConfiguration.getCurrentParameters();
+        // do this before setting the repeats, otherwise we will be getting the same round configuration until
+        // repeat has expired
+        firstRoundConfiguration.setPracticeRound(false);
+        // check number of rounds before setting repeat
+        assertEquals(7, serverConfiguration.getNumberOfRounds());
+        MockRoundConfiguration secondRoundConfiguration = serverConfiguration.getNextRoundConfiguration();
+        int numberOfRepeats = 10;
+        firstRoundConfiguration.setRepeat(numberOfRepeats);
+        secondRoundConfiguration.setRepeat(numberOfRepeats);
+        // after setting repeats, check number of rounds should be 7 + 10 + 10
+        assertEquals(27, serverConfiguration.getNumberOfRounds());
+        assertTrue(firstRoundConfiguration.isRepeatingRound());
+        assertEquals(0, serverConfiguration.getCurrentRepeatedRoundIndex());
+        assertEquals(0, serverConfiguration.getCurrentRoundIndex());
+        for (int idx = 0; idx < numberOfRepeats; idx++) {
+            MockRoundConfiguration next = serverConfiguration.nextRound();
+            assertEquals(idx + 1, serverConfiguration.getCurrentRepeatedRoundIndex());
+            assertEquals(0, serverConfiguration.getCurrentRoundIndex());
+            assertEquals(next, firstRoundConfiguration);
+            assertEquals("Round 1." + (idx + 1), next.getRoundNumberLabel());
+        }
+        assertEquals(10, serverConfiguration.getCurrentRepeatedRoundIndex());
+        assertEquals(0, serverConfiguration.getCurrentRoundIndex());
+        assertEquals(firstRoundConfiguration, serverConfiguration.getCurrentParameters());
+
+        MockRoundConfiguration nextRound = serverConfiguration.nextRound();
+        assertEquals(0, serverConfiguration.getCurrentRepeatedRoundIndex());
+        assertEquals(1, serverConfiguration.getCurrentRoundIndex());
+        assertEquals(secondRoundConfiguration, nextRound);
+        // should be at second round now
+        for (int idx = 0; idx < numberOfRepeats; idx++) {
+            MockRoundConfiguration next = serverConfiguration.nextRound();
+            assertEquals(idx + 1, serverConfiguration.getCurrentRepeatedRoundIndex());
+            assertEquals(1, serverConfiguration.getCurrentRoundIndex());
+            assertEquals(next, secondRoundConfiguration);
+            assertEquals("Round 2." + (idx + 1), next.getRoundNumberLabel());
+        }
+        nextRound = serverConfiguration.nextRound();
+        assertFalse(nextRound.isRepeatingRound());
+        assertEquals(0, nextRound.getRepeat());
+        assertFalse(nextRound.equals(serverConfiguration.getNextRoundConfiguration()));
     }
 
     public static class MockServerConfiguration
@@ -111,7 +157,9 @@ public class ConfigurationTest {
 
         private static final long serialVersionUID = -5053624886508752562L;
 
-        private boolean practiceRound;
+        private Boolean practiceRound;
+
+        private int repeat;
 
         public MockRoundConfiguration(String filename) {
             super(filename);
@@ -119,7 +167,10 @@ public class ConfigurationTest {
 
         @Override
         public boolean isPracticeRound() {
-            return super.isPracticeRound() || practiceRound;
+            if (practiceRound == null) {
+                return super.isPracticeRound();
+            }
+            return practiceRound.booleanValue();
         }
 
         @Override
@@ -127,16 +178,21 @@ public class ConfigurationTest {
             return "Mock round instructions";
         }
 
+        @Override
+        public int getRepeat() {
+            return repeat;
+        }
+
         public int getClientsPerGroup() {
             return 5;
         }
 
-        /**
-         * @param practiceRound
-         *            the practiceRound to set
-         */
         public void setPracticeRound(boolean practiceRound) {
             this.practiceRound = practiceRound;
+        }
+
+        public void setRepeat(int repeat) {
+            this.repeat = repeat;
         }
 
     }

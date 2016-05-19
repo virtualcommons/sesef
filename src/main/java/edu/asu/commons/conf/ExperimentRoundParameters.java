@@ -35,12 +35,18 @@ public interface ExperimentRoundParameters<T extends ExperimentConfiguration<T, 
      * @return
      */
     public int getRoundNumber();
+
+    public String getRoundNumberLabel();
     
     /**
      * Returns the internal index for the given round.
      * @return
      */
     public int getRoundIndex();
+
+    public int getRepeat();
+
+    public boolean isRepeatingRound();
     
     public Properties getProperties();
 
@@ -72,6 +78,18 @@ public interface ExperimentRoundParameters<T extends ExperimentConfiguration<T, 
             }
             return parentConfiguration.getRoundNumber((P) this);
         }
+
+        public String getRoundNumberLabel() {
+            if (isPracticeRound()) {
+                return "Practice Round " + getRoundIndex();
+            }
+            else if (isRepeatingRound()) {
+                return String.format("Round %d.%d", getRoundNumber(), parentConfiguration.getCurrentRepeatedRoundIndex());
+            }
+            else {
+                return "Round " + getRoundNumber();
+            }
+        }
         
         @SuppressWarnings("unchecked")
         public int getRoundIndex() {
@@ -100,7 +118,15 @@ public interface ExperimentRoundParameters<T extends ExperimentConfiguration<T, 
         }
 
         public int getDuration() {
-            return getIntProperty("duration", getDefaultRoundDuration());
+            return getIntProperty("duration", getParentConfiguration().getDefaultRoundDuration());
+        }
+
+        public boolean isRepeatingRound() {
+            return getRepeat() > 0;
+        }
+
+        public int getRepeat() {
+            return getIntProperty("repeat", 0);
         }
 
         public Duration getRoundDuration() {
@@ -109,15 +135,6 @@ public interface ExperimentRoundParameters<T extends ExperimentConfiguration<T, 
 
         public Map<String, Object> toMap() {
             return toMap(this);
-        }
-
-        /**
-         * Override to set up a different default round duration.
-         * 
-         * @return
-         */
-        protected int getDefaultRoundDuration() {
-            return 240;
         }
 
         public void setParentConfiguration(E parentConfiguration) {
