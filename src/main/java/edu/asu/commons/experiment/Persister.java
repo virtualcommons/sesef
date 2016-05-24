@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InvalidClassException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Date;
@@ -78,7 +79,7 @@ public abstract class Persister<C extends ExperimentConfiguration<C, R>, R exten
     }
 
     private String getXmlSaveFilePath() {
-        return String.format("%s%s%d-round-save.xml", getDefaultSavePath(), File.separator, roundConfiguration.getRoundIndexLabel());
+        return Paths.get(getDefaultSavePath(), String.format("%s-round-save.xml", roundConfiguration.getRoundIndexLabel())).toString();
         // return getDefaultSavePath() + File.separator + roundConfiguration.getRoundNumber() + ".save.xml";
     }
 
@@ -334,8 +335,12 @@ public abstract class Persister<C extends ExperimentConfiguration<C, R>, R exten
     }
 
     public static String getRoundSaveFilePath(String directory, int roundNumber) {
-        return String.format("%s%sround-%d.save", directory, File.separator, roundNumber);
+        return getRoundSaveFilePath(directory, String.valueOf(roundNumber));
         // return String.format("%s%s%d-round-save.xml", directory, File.separator, roundNumber);
+    }
+
+    public static String getRoundSaveFilePath(String directory, String roundIndexLabel) {
+        return Paths.get(directory, String.format("round-%s.save", roundIndexLabel)).toString();
     }
 
     public static SavedRoundData restoreSavedRoundData(File directory, int roundNumber) {
@@ -345,9 +350,12 @@ public abstract class Persister<C extends ExperimentConfiguration<C, R>, R exten
         if (!directory.exists()) {
             throw new IllegalArgumentException("Directory " + directory.getAbsolutePath() + " does not exist.");
         }
-        String roundSaveFilePath = getRoundSaveFilePath(directory.getAbsolutePath(), roundNumber);
-        // how best to flip between binary and XML? The round save file path is different for both..
+        return restoreSavedRoundData(directory, String.valueOf(roundNumber));
+    }
 
+    public static SavedRoundData restoreSavedRoundData(File directory, String roundIndexLabel) {
+        // FIXME: provide option to restore from XML as well
+        String roundSaveFilePath = getRoundSaveFilePath(directory.getAbsolutePath(), roundIndexLabel);
         return SavedRoundData.create(roundSaveFilePath);
     }
 

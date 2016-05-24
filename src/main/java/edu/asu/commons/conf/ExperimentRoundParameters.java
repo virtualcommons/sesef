@@ -57,6 +57,12 @@ public interface ExperimentRoundParameters<T extends ExperimentConfiguration<T, 
      * Returns true iff this RoundConfiguration should repeat.
      */
     public boolean isRepeatingRound();
+
+    /**
+     * Returns true iff this RoundConfiguration is the first out of a set of repeating rounds, e.g., if it's parent
+     * configuration's current repeated round index is greater than 0.
+     */
+    public boolean isFirstRepeatingRound();
     
     public Properties getProperties();
 
@@ -133,6 +139,10 @@ public interface ExperimentRoundParameters<T extends ExperimentConfiguration<T, 
 
         public int getDuration() {
             return getIntProperty("duration", getParentConfiguration().getDefaultRoundDuration());
+        }
+
+        public boolean isFirstRepeatingRound() {
+            return getParentConfiguration().getCurrentRepeatedRoundIndex() == 0;
         }
 
         public boolean isRepeatingRound() {
