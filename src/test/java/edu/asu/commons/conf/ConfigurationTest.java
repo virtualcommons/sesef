@@ -88,7 +88,7 @@ public class ConfigurationTest {
             assertEquals(idx + 1, serverConfiguration.getCurrentRepeatedRoundIndex());
             assertEquals(0, serverConfiguration.getCurrentRoundIndex());
             assertEquals(next, firstRoundConfiguration);
-            assertEquals("Round 1." + (idx + 1), next.getRoundNumberLabel());
+            assertEquals("0." + (idx + 1), next.getRoundIndexLabel());
         }
         assertEquals(10, serverConfiguration.getCurrentRepeatedRoundIndex());
         assertEquals(0, serverConfiguration.getCurrentRoundIndex());
@@ -104,7 +104,7 @@ public class ConfigurationTest {
             assertEquals(idx + 1, serverConfiguration.getCurrentRepeatedRoundIndex());
             assertEquals(1, serverConfiguration.getCurrentRoundIndex());
             assertEquals(next, secondRoundConfiguration);
-            assertEquals("Round 2." + (idx + 1), next.getRoundNumberLabel());
+            assertEquals("1." + (idx + 1), next.getRoundIndexLabel());
         }
         nextRound = serverConfiguration.nextRound();
         assertFalse(nextRound.isRepeatingRound());

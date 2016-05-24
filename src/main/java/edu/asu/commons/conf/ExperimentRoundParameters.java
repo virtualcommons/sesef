@@ -30,22 +30,32 @@ public interface ExperimentRoundParameters<T extends ExperimentConfiguration<T, 
     public Duration getRoundDuration();
 
     /**
-     * Returns the displayable round number for this set of round parameters.
-     * FIXME: what to do about practice rounds?
-     * @return
+     * Returns a displayable round number for this round, 1-based.
+     *
+     * For practice rounds, returns 0.
      */
     public int getRoundNumber();
 
-    public String getRoundNumberLabel();
+    /**
+     * Returns a unique String label that can be used to identify the specific Round across repeated rounds.
+     */
+    public String getRoundIndexLabel();
     
     /**
-     * Returns the internal index for the given round.
-     * @return
+     * Returns this round's 0-based integer index in the list of all round configurations maintained by its parent
+     * configuration.
      */
     public int getRoundIndex();
 
+    /**
+     * Returns the number of times this RoundConfiguration should repeat before advancing to the next
+     * RoundConfiguration.
+     */
     public int getRepeat();
 
+    /**
+     * Returns true iff this RoundConfiguration should repeat.
+     */
     public boolean isRepeatingRound();
     
     public Properties getProperties();
@@ -79,15 +89,19 @@ public interface ExperimentRoundParameters<T extends ExperimentConfiguration<T, 
             return parentConfiguration.getRoundNumber((P) this);
         }
 
-        public String getRoundNumberLabel() {
-            if (isPracticeRound()) {
-                return "Practice Round " + getRoundIndex();
-            }
-            else if (isRepeatingRound()) {
-                return String.format("Round %d.%d", getRoundNumber(), parentConfiguration.getCurrentRepeatedRoundIndex());
+        /**
+         * Returns a String representation of this round index, unique across repeated rounds. For non-repeated rounds,
+         * this will simply be getRoundIndex() as a String. For repeated rounds this will be of the format n.m where n
+         * is the round index, and m is the current repeated round index, e.g., 5.10 would be the 10th repeated round of
+         * the 6th round configuration in the set of round configurations maintained by the parent experiment
+         * configuration.
+         */
+        public String getRoundIndexLabel() {
+            if (isRepeatingRound()) {
+                return String.format("%d.%d", getRoundIndex(), parentConfiguration.getCurrentRepeatedRoundIndex());
             }
             else {
-                return "Round " + getRoundNumber();
+                return String.valueOf(getRoundIndex());
             }
         }
         
