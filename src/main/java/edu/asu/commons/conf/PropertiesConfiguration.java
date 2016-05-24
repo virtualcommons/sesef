@@ -35,7 +35,7 @@ public class PropertiesConfiguration implements Serializable {
 
     private final Properties properties;
 
-    private final Map<String, Object> cachedPropertyMap = new HashMap<String, Object>();
+    private final Map<String, Object> cachedPropertyMap = new HashMap<>();
 
     public PropertiesConfiguration() {
         this(new Properties());

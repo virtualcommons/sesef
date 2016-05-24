@@ -290,7 +290,14 @@ public interface ExperimentConfiguration<C extends ExperimentConfiguration<C, R>
         }
 
         public boolean isLastRound() {
-            return currentRoundIndex == (getNumberOfRounds() - 1);
+            if (currentRoundIndex == (getNumberOfRounds() - 1)) {
+                E currentParameters = getCurrentParameters();
+                if (currentParameters.isRepeatingRound()) {
+                    return getCurrentRepeatedRoundIndex() == currentParameters.getRepeat();
+                }
+                return true;
+            }
+            return false;
         }
 
         public Map<String, Object> toMap() {
