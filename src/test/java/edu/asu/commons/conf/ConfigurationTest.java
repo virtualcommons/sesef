@@ -71,13 +71,15 @@ public class ConfigurationTest {
         // repeat has expired
         firstRoundConfiguration.setPracticeRound(false);
         // check number of rounds before setting repeat
+        assertEquals(7, serverConfiguration.getTotalNumberOfRounds());
         assertEquals(7, serverConfiguration.getNumberOfRounds());
         MockRoundConfiguration secondRoundConfiguration = serverConfiguration.getNextRoundConfiguration();
         int numberOfRepeats = 10;
         firstRoundConfiguration.setRepeat(numberOfRepeats);
         secondRoundConfiguration.setRepeat(numberOfRepeats);
         // after setting repeats, check number of rounds should be 7 + 10 + 10
-        assertEquals(27, serverConfiguration.getNumberOfRounds());
+        assertEquals(27, serverConfiguration.getTotalNumberOfRounds());
+        assertEquals(7, serverConfiguration.getNumberOfRounds());
         assertTrue(firstRoundConfiguration.isRepeatingRound());
         assertEquals(0, serverConfiguration.getCurrentRepeatedRoundIndex());
         assertEquals(0, serverConfiguration.getCurrentRoundIndex());

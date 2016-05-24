@@ -126,7 +126,7 @@ public interface ExperimentRoundParameters<T extends ExperimentConfiguration<T, 
         }
 
         public int getRepeat() {
-            return getIntProperty("repeating", 0);
+            return getIntProperty("repeat", 0);
         }
 
         public Duration getRoundDuration() {

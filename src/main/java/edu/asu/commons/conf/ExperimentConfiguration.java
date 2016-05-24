@@ -30,6 +30,7 @@ public interface ExperimentConfiguration<C extends ExperimentConfiguration<C, R>
     public R getCurrentParameters();
 
     public int getNumberOfRounds();
+    public int getTotalNumberOfRounds();
     
     public int getCurrentRoundIndex();
 
@@ -208,7 +209,18 @@ public interface ExperimentConfiguration<C extends ExperimentConfiguration<C, R>
             return getStringProperty("round" + roundNumber);
         }
 
+        /**
+         * Returns the number of round configuration files manually specified in this server.xml, not including repeated
+         * rounds.
+         */
         public int getNumberOfRounds() {
+            return getIntProperty("number-of-rounds", 0);
+        }
+
+        /**
+         * Returns the total number of rounds in this server.xml, including repeated rounds.
+         */
+        public int getTotalNumberOfRounds() {
             int numberOfRounds = getIntProperty("number-of-rounds", 0);
             for (E roundParameter: allParameters) {
                 numberOfRounds += roundParameter.getRepeat();
