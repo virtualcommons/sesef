@@ -1,5 +1,7 @@
 package edu.asu.commons.event;
 
+import java.time.Instant;
+
 /**
  * $Id$
  * 
@@ -12,4 +14,6 @@ package edu.asu.commons.event;
 public interface PersistableEvent extends Event {
 
     public void timestamp();
+
+    public Instant getInstant();
 }

@@ -4,6 +4,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 import java.util.SortedSet;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
@@ -58,13 +61,20 @@ public class SavedRoundData implements Serializable {
     }
 
     public static SavedRoundData createFromXml(String roundSaveFilePath) {
-        ObjectInputStream stream = null;
         XStream xstream = new XStream();
         SavedRoundData savedRoundData = new SavedRoundData(roundSaveFilePath);
-        try {
-            // FIXME: duplication across BinarySavedRoundData, refactor
-            stream = xstream.createObjectInputStream(new FileInputStream(roundSaveFilePath));
+        try (ObjectInputStream stream = xstream.createObjectInputStream(new FileInputStream(roundSaveFilePath))) {
+            return fromStream(stream, savedRoundData);
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+            logger.severe("Unable to load savefile from path: " + roundSaveFilePath + " exception: " + e);
+            throw new RuntimeException(e);
+        }
+    }
 
+    public static SavedRoundData fromStream(ObjectInputStream stream, SavedRoundData savedRoundData) {
+        try {
             ExperimentRoundParameters roundParameters = (ExperimentRoundParameters) stream.readObject();
             logger.info("round parameters: " + roundParameters);
             savedRoundData.setRoundParameters(roundParameters);
@@ -75,59 +85,26 @@ public class SavedRoundData implements Serializable {
             SortedSet<PersistableEvent> actions = (SortedSet<PersistableEvent>) stream.readObject();
             logger.info("actions: " + actions);
             savedRoundData.setActions(actions);
+            SortedSet<ChatRequest> chatRequests = (SortedSet<ChatRequest>) stream.readObject();
+            savedRoundData.setChatRequests(chatRequests);
             return savedRoundData;
-        } catch (IOException e) {
+        }
+        catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
-            logger.severe("Unable to load savefile from path: " + roundSaveFilePath + " exception: " + e);
+            logger.severe("Unable to read data model or actions from stream: " + e);
             throw new RuntimeException(e);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-            logger.severe(e.getMessage());
-            throw new RuntimeException(e);
-        } finally {
-            if (stream != null) {
-                try {
-                    stream.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
         }
     }
 
     public static SavedRoundData create(String roundSaveFilePath) {
-        ObjectInputStream stream = null;
         SavedRoundData savedRoundData = new SavedRoundData(roundSaveFilePath);
-        try {
-            stream = new ObjectInputStream(new FileInputStream(roundSaveFilePath));
-
-            ExperimentRoundParameters roundParameters = (ExperimentRoundParameters) stream.readObject();
-            savedRoundData.setRoundParameters(roundParameters);
-
-            DataModel dataModel = (DataModel) stream.readObject();
-            savedRoundData.setDataModel(dataModel);
-            SortedSet<PersistableEvent> actions = (SortedSet<PersistableEvent>) stream.readObject();
-            savedRoundData.setActions(actions);
-            SortedSet<ChatRequest> chatRequests = (SortedSet<ChatRequest>) stream.readObject();
-            savedRoundData.setChatRequests(chatRequests);
-            // SavedRoundData savedRoundData = new SavedRoundData(roundSaveFilePath, roundParameters, dataModel, actions);
-            return savedRoundData;
-        } catch (IOException e) {
+        try (ObjectInputStream stream = new ObjectInputStream(new FileInputStream(roundSaveFilePath))) {
+            return fromStream(stream, savedRoundData);
+        }
+        catch (IOException e) {
             e.printStackTrace();
-            logger.severe("Unable to load savefile from path: " + roundSaveFilePath + " exception: " + e);
+            logger.severe("Unable to load save file from path: " + roundSaveFilePath + " exception: " + e);
             throw new RuntimeException(e);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-            logger.severe(e.getMessage());
-            throw new RuntimeException(e);
-        } finally {
-            if (stream != null) {
-                try {
-                    stream.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
         }
     }
 
@@ -173,6 +150,14 @@ public class SavedRoundData implements Serializable {
 
     public static long toSeconds(long t, TimeUnit timeUnit) {
         return TimeUnit.SECONDS.convert(t, timeUnit);
+    }
+
+    public long getElapsedTimeRelativeToMidnight(PersistableEvent event) {
+        Instant eventInstant = Instant.ofEpochMilli(event.getCreationTime());
+        Instant eventInstantDay = eventInstant.truncatedTo(ChronoUnit.DAYS);
+        long relative = eventInstantDay.until(eventInstant, ChronoUnit.MILLIS);
+        logger.info("Relative time between " + eventInstantDay + " and " + eventInstant + " is: " + relative);
+        return relative;
     }
 
     public void setRoundParameters(ExperimentRoundParameters roundParameters) {

@@ -2,6 +2,9 @@ package edu.asu.commons.event;
 
 import edu.asu.commons.net.Identifier;
 
+import java.time.Clock;
+import java.time.Instant;
+
 /**
  * $Id$
  * 
@@ -18,6 +21,8 @@ public abstract class AbstractPersistableEvent extends AbstractEvent implements 
     private volatile static long classCounter = 0;
 
     private final long ordinal;
+
+    private Instant instant = Instant.now(Clock.systemUTC());
 
     public AbstractPersistableEvent(Identifier id) {
         this(id, null);
@@ -46,7 +51,6 @@ public abstract class AbstractPersistableEvent extends AbstractEvent implements 
             return compare(ordinal, e.ordinal);
         }
         return comparison;
-
     }
 
     private int compare(long a, long b) {
@@ -56,6 +60,11 @@ public abstract class AbstractPersistableEvent extends AbstractEvent implements 
     public final void timestamp() {
         if (creationTime == 0L) {
             creationTime = System.currentTimeMillis();
+            instant = Instant.now(Clock.systemUTC());
         }
+    }
+
+    public Instant getInstant() {
+        return instant;
     }
 }
