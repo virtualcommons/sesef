@@ -9,7 +9,7 @@ vim:sts=2:sw=2
   <artifactId>sesef</artifactId>
   <version>0.8-SNAPSHOT</version>
   <name>sesef</name>
-  <url>http://bitbucket.org/virtualcommons/sesef</url>
+  <url>http://github.com/virtualcommons/sesef</url>
   <description>The Social Ecological Systems Experiment Framework (SESEF) is a Java library providing networking, persistence, and configuration scaffolding for experiments on social ecological systems. It has been used to implement the foraging and irrigation experiments developed by the Virtual Commons.</description>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
