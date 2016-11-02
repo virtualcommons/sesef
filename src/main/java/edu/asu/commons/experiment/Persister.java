@@ -57,8 +57,8 @@ public abstract class Persister<C extends ExperimentConfiguration<C, R>, R exten
 
     private R roundConfiguration;
 
-    private final SortedSet<PersistableEvent> actions = new TreeSet<PersistableEvent>();
-    private final SortedSet<ChatRequest> chatRequests = new TreeSet<ChatRequest>();
+    private final SortedSet<PersistableEvent> actions = new TreeSet<>();
+    private final SortedSet<ChatRequest> chatRequests = new TreeSet<>();
     private String experimentSaveDirectory;
     private String persistenceDirectory;
     private EventChannel channel;
@@ -78,8 +78,8 @@ public abstract class Persister<C extends ExperimentConfiguration<C, R>, R exten
         initializeChatLogFileHandler();
     }
 
-    private String getXmlSaveFilePath() {
-        return Paths.get(getDefaultSavePath(), String.format("%s-round-save.xml", roundConfiguration.getRoundIndexLabel())).toString();
+    private String getXmlSaveFilePath(String roundIndexLabel) {
+        return Paths.get(getDefaultSavePath(), String.format("%s-round-save.xml", roundIndexLabel)).toString();
         // return getDefaultSavePath() + File.separator + roundConfiguration.getRoundNumber() + ".save.xml";
     }
 
@@ -124,9 +124,11 @@ public abstract class Persister<C extends ExperimentConfiguration<C, R>, R exten
      */
     @Override
     public void stop() {
-        channel.remove(this);
-        chatLogger.removeHandler(chatLogFileHandler);
-        chatLogFileHandler.close();
+        if (channel != null) {
+            channel.remove(this);
+            chatLogger.removeHandler(chatLogFileHandler);
+            chatLogFileHandler.close();
+        }
     }
 
     /**
@@ -334,9 +336,8 @@ public abstract class Persister<C extends ExperimentConfiguration<C, R>, R exten
         }
     }
 
-    public static String getRoundSaveFilePath(String directory, int roundNumber) {
-        return getRoundSaveFilePath(directory, String.valueOf(roundNumber));
-        // return String.format("%s%s%d-round-save.xml", directory, File.separator, roundNumber);
+    public String getDefaultRoundSaveFilePath(String roundIndexLabel) {
+        return Persister.getRoundSaveFilePath(getDefaultSavePath(), roundIndexLabel);
     }
 
     public static String getRoundSaveFilePath(String directory, String roundIndexLabel) {
@@ -400,8 +401,9 @@ public abstract class Persister<C extends ExperimentConfiguration<C, R>, R exten
 
     private <E extends DataModel<C, R>> void saveRound(E serverDataModel, String persistenceDirectory) throws IOException {
         String saveDestination = getSavePath(persistenceDirectory);
-        logger.info("saving to " + saveDestination);
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(getRoundSaveFilePath(saveDestination, roundConfiguration.getRoundIndex())))) {
+        String roundIndexLabel = roundConfiguration.getRoundIndexLabel();
+        logger.info(String.format("saving to Round %s to: %s", roundIndexLabel, saveDestination));
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(getRoundSaveFilePath(saveDestination, roundIndexLabel)))) {
             oos.writeObject(roundConfiguration);
             oos.writeObject(serverDataModel);
             synchronized (actions) {
@@ -413,7 +415,7 @@ public abstract class Persister<C extends ExperimentConfiguration<C, R>, R exten
             oos.flush();
         }
         if (xmlEnabled) {
-            try (ObjectOutputStream oos = xstream.createObjectOutputStream(new FileOutputStream(getXmlSaveFilePath()))) {
+            try (ObjectOutputStream oos = xstream.createObjectOutputStream(new FileOutputStream(getXmlSaveFilePath(roundIndexLabel)))) {
                 oos.writeObject(roundConfiguration);
                 oos.writeObject(serverDataModel);
                 synchronized (actions) {
@@ -437,7 +439,7 @@ public abstract class Persister<C extends ExperimentConfiguration<C, R>, R exten
         }
     }
 
-    private String getDefaultSavePath() {
+    public String getDefaultSavePath() {
         return getSavePath(persistenceDirectory);
     }
 
@@ -447,7 +449,7 @@ public abstract class Persister<C extends ExperimentConfiguration<C, R>, R exten
      * @param persistenceDirectory
      * @return
      */
-    private String getSavePath(String persistenceDirectory) {
-        return persistenceDirectory + File.separator + experimentSaveDirectory;
+    public String getSavePath(String persistenceDirectory) {
+        return Paths.get(persistenceDirectory, experimentSaveDirectory).toString();
     }
 }

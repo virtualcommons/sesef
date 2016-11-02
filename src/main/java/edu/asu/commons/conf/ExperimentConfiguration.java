@@ -34,6 +34,8 @@ public interface ExperimentConfiguration<C extends ExperimentConfiguration<C, R>
     
     public int getCurrentRoundIndex();
 
+    public String getCurrentRoundLabel();
+
     /**
      * Advances to the next round.
      * 
@@ -234,6 +236,10 @@ public interface ExperimentConfiguration<C extends ExperimentConfiguration<C, R>
         public int getRoundNumber(E roundParameter) {
             return allParameters.indexOf(roundParameter) - getPracticeRoundOffset();
         }
+
+        public String getCurrentRoundLabel() {
+            return getCurrentParameters().getRoundIndexLabel();
+        }
         
         public int getRoundIndex(E roundParameter) {
             return allParameters.indexOf(roundParameter);
@@ -340,7 +346,7 @@ public interface ExperimentConfiguration<C extends ExperimentConfiguration<C, R>
         public synchronized E nextRound() {
             E currentParameters = getCurrentParameters();
             if (currentParameters.isRepeatingRound()) {
-                if (currentRepeatedRoundIndex < currentParameters.getRepeat()) {
+                if (currentRepeatedRoundIndex + 1 < currentParameters.getRepeat()) {
                     currentRepeatedRoundIndex++;
                     return currentParameters;
                 }

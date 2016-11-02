@@ -83,37 +83,47 @@ public class ConfigurationTest {
         assertTrue(firstRoundConfiguration.isRepeatingRound());
         assertEquals(0, serverConfiguration.getCurrentRepeatedRoundIndex());
         assertEquals(0, serverConfiguration.getCurrentRoundIndex());
+        MockRoundConfiguration nextRound = serverConfiguration.getCurrentParameters();
+        // first round
         for (int idx = 0; idx < numberOfRepeats; idx++) {
-            MockRoundConfiguration next = serverConfiguration.nextRound();
-            assertEquals(idx + 1, serverConfiguration.getCurrentRepeatedRoundIndex());
+            assertEquals(idx, serverConfiguration.getCurrentRepeatedRoundIndex());
             assertEquals(0, serverConfiguration.getCurrentRoundIndex());
-            assertEquals(next, firstRoundConfiguration);
-            assertEquals("0." + (idx + 1), next.getRoundIndexLabel());
+            assertEquals(nextRound, firstRoundConfiguration);
+            assertEquals("0." + idx, nextRound.getRoundIndexLabel());
+            nextRound = serverConfiguration.nextRound();
         }
-        assertEquals(10, serverConfiguration.getCurrentRepeatedRoundIndex());
-        assertEquals(0, serverConfiguration.getCurrentRoundIndex());
-        assertEquals(firstRoundConfiguration, serverConfiguration.getCurrentParameters());
-
-        MockRoundConfiguration nextRound = serverConfiguration.nextRound();
         assertEquals(0, serverConfiguration.getCurrentRepeatedRoundIndex());
         assertEquals(1, serverConfiguration.getCurrentRoundIndex());
         assertEquals(secondRoundConfiguration, nextRound);
         // should be at second round now
         for (int idx = 0; idx < numberOfRepeats; idx++) {
-            MockRoundConfiguration next = serverConfiguration.nextRound();
-            assertEquals(idx + 1, serverConfiguration.getCurrentRepeatedRoundIndex());
+            assertEquals(idx, serverConfiguration.getCurrentRepeatedRoundIndex());
             assertEquals(1, serverConfiguration.getCurrentRoundIndex());
-            assertEquals(next, secondRoundConfiguration);
-            assertEquals("1." + (idx + 1), next.getRoundIndexLabel());
+            assertEquals(nextRound, secondRoundConfiguration);
+            assertEquals("1." + idx, nextRound.getRoundIndexLabel());
+            nextRound = serverConfiguration.nextRound();
         }
-        nextRound = serverConfiguration.nextRound();
         assertFalse(nextRound.isRepeatingRound());
         assertEquals(0, nextRound.getRepeat());
         assertFalse(nextRound.equals(serverConfiguration.getNextRoundConfiguration()));
     }
 
-    public static class MockServerConfiguration
-            extends ExperimentConfiguration.Base<MockServerConfiguration, MockRoundConfiguration> {
+    public static MockServerConfiguration createRepeatedRoundConfiguration(int numberOfRepeats) {
+        MockServerConfiguration serverConfiguration = new MockServerConfiguration();
+        MockRoundConfiguration firstRoundConfiguration = serverConfiguration.getCurrentParameters();
+        // do this before setting the repeats, otherwise we will be getting the same round configuration until
+        // repeat has expired
+        firstRoundConfiguration.setPracticeRound(false);
+        // check number of rounds before setting repeat
+        assertEquals(7, serverConfiguration.getTotalNumberOfRounds());
+        assertEquals(7, serverConfiguration.getNumberOfRounds());
+        MockRoundConfiguration secondRoundConfiguration = serverConfiguration.getNextRoundConfiguration();
+        firstRoundConfiguration.setRepeat(numberOfRepeats);
+        secondRoundConfiguration.setRepeat(numberOfRepeats);
+        return serverConfiguration;
+    }
+
+    public static class MockServerConfiguration extends ExperimentConfiguration.Base<MockServerConfiguration, MockRoundConfiguration> {
 
         private static final long serialVersionUID = 7867208205942476733L;
 
@@ -132,7 +142,7 @@ public class ConfigurationTest {
         }
 
         public String getPersistenceDirectory() {
-            return getStringProperty("save-dir", "data");
+            return getStringProperty("save-dir", "data/test");
         }
 
         public boolean shouldUpdateFacilitator() {

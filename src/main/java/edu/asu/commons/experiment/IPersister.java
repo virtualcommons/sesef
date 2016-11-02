@@ -25,4 +25,6 @@ public interface IPersister<C extends ExperimentConfiguration<C, R>, R extends E
 
     public void clear();
 
+    public String getDefaultSavePath();
+
 }
