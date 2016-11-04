@@ -103,6 +103,8 @@ public interface ExperimentConfiguration<C extends ExperimentConfiguration<C, R>
 
     public int getDefaultRoundDuration();
 
+    public void reset();
+
     public static abstract class Base<C extends ExperimentConfiguration<C, E>, E extends ExperimentRoundParameters<C, E>>
             extends Configuration.Base implements ExperimentConfiguration<C, E> {
 
@@ -131,7 +133,7 @@ public interface ExperimentConfiguration<C extends ExperimentConfiguration<C, R>
         private int currentRepeatedRoundIndex = 0;
         private int currentRoundIndex = 0;
         // protected final PropertiesConfiguration assistant;
-        protected final List<E> allParameters = new ArrayList<E>();
+        protected final List<E> allParameters = new ArrayList<>();
         protected String configurationDirectory;
         private Locale locale;
         private int numberOfPracticeRounds = -1;
@@ -357,6 +359,12 @@ public interface ExperimentConfiguration<C extends ExperimentConfiguration<C, R>
             currentRoundIndex++;
             currentRepeatedRoundIndex = 0;
             return allParameters.get(currentRoundIndex);
+        }
+
+        // resets all state variables, starting this ExperimentConfiguration over at the first round.
+        public void reset() {
+            currentRoundIndex = 0;
+            currentRepeatedRoundIndex = 0;
         }
 
         public String getConfigurationDirectory() {

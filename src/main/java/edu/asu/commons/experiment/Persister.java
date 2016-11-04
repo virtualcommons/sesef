@@ -78,11 +78,6 @@ public abstract class Persister<C extends ExperimentConfiguration<C, R>, R exten
         initializeChatLogFileHandler();
     }
 
-    private String getXmlSaveFilePath(String roundIndexLabel) {
-        return Paths.get(getDefaultSavePath(), String.format("%s-round-save.xml", roundIndexLabel)).toString();
-        // return getDefaultSavePath() + File.separator + roundConfiguration.getRoundNumber() + ".save.xml";
-    }
-
     public Persister(EventChannel channel, C experimentConfiguration) {
         this(experimentConfiguration);
         if (channel == null) {
@@ -99,7 +94,7 @@ public abstract class Persister<C extends ExperimentConfiguration<C, R>, R exten
     }
 
     private void initializeChatLogFileHandler() {
-        // FIXME: make it so that this will try the failsafe path as well.
+        // FIXME: test the failsafe path
         String chatLogPath = getDefaultSavePath() + File.separator + DEFAULT_CHAT_LOG_FILE_NAME;
         try {
             chatLogFileHandler = new FileHandler(chatLogPath);
@@ -175,7 +170,7 @@ public abstract class Persister<C extends ExperimentConfiguration<C, R>, R exten
         // FIXME: right now all cumulative chat requests are stored in each round file. Should either
         // switch to one set of chats per round, or a single chat file, as in the chatLogger. There
         // is some difficulty in figuring out when exactly to clear out all the old chat requests in a
-        // flexible manner. Could probably do it when the BeginCommunicationRequest is handled, actually.
+        // flexible manner. Could probably do it when the BeginCommunicationRequest is handled
         synchronized (chatRequests) {
             chatRequests.add(request);
         }
@@ -200,29 +195,29 @@ public abstract class Persister<C extends ExperimentConfiguration<C, R>, R exten
     }
 
     /**
-     * 
-     * FIXME: should we also expose a SavedExperimentData object, consists of an ExperimentConfiguration and a List<SavedRoundData>?
-     * 
-     * @param directory
-     * @param processors
+     * Applies the list of SaveFileProcessors to all binary OOS data files found in the given directory.
+     *
+     * @param directory the directory to recursively search
+     * @param processors the list of SaveFileProcessors to apply to each save file.
      */
     public static void processSaveFiles(File directory, List<SaveFileProcessor> processors) {
+        processSaveFiles(directory, processors, false);
+    }
+
+    public static void processSaveFiles(File directory, List<SaveFileProcessor> processors, boolean fromXml) {
         if (directory == null || !directory.isDirectory()) {
             logger.warning("Tried to restore a non-directory: " + directory);
             return;
         }
-        File[] subdirectories = directory.listFiles(new FileFilter() {
-            public boolean accept(File pathname) {
-                return pathname.isDirectory();
-            }
-        });
+        File[] subdirectories = directory.listFiles((pathname) -> pathname.isDirectory());
         if (subdirectories.length == 0) {
-            processSaveDirectory(directory, processors);
+            // assume that a leaf node in the directory tree contains files to be processed.
+            processSaveDirectory(directory, processors, fromXml);
         }
         else {
             for (File subdirectory : subdirectories) {
                 // recur on the subdirectory.
-                processSaveFiles(subdirectory, processors);
+                processSaveFiles(subdirectory, processors, fromXml);
             }
         }
     }
@@ -233,19 +228,23 @@ public abstract class Persister<C extends ExperimentConfiguration<C, R>, R exten
      * @param directory
      * @param processors
      */
-    private static void processSaveDirectory(File directory, List<SaveFileProcessor> processors) {
+    private static void processSaveDirectory(File directory, List<SaveFileProcessor> processors, boolean fromXml) {
         try {
-            int numberOfRounds = restoreExperimentConfiguration(directory).getAllParameters().size();
-            for (int roundNumber = 0; roundNumber < numberOfRounds; roundNumber++) {
-                SavedRoundData savedRoundData = restoreSavedRoundData(directory, roundNumber);
+            ExperimentConfiguration ec = restoreExperimentConfiguration(directory);
+            ec.reset();
+            while (!ec.isLastRound()) {
+                ExperimentRoundParameters rp = ec.getCurrentParameters();
+                SavedRoundData savedRoundData = restoreSavedRoundData(directory, rp.getRoundIndexLabel(), fromXml);
                 String roundSaveFilePath = savedRoundData.getSaveFilePath();
                 try {
-                    for (SaveFileProcessor processor : processors) {
+                    for (SaveFileProcessor processor: processors) {
                         processor.process(savedRoundData, roundSaveFilePath);
                     }
-                } catch (RuntimeException e) {
+                }
+                catch (RuntimeException e) {
                     logger.log(Level.SEVERE, "Error while processing [file:" + roundSaveFilePath + "]- ignoring", e);
                 }
+                ec.nextRound();
             }
         } catch (RuntimeException e) {
             logger.log(Level.SEVERE, "Error while processing [save directory: " + directory + "] - ignoring.", e);
@@ -304,7 +303,7 @@ public abstract class Persister<C extends ExperimentConfiguration<C, R>, R exten
         save(serverDataModel);
     }
 
-    private final <E extends DataModel<C, R>> void save(E serverDataModel) {
+    private <E extends DataModel<C, R>> void save(E serverDataModel) {
         try {
             saveRound(serverDataModel, persistenceDirectory);
         } catch (FileNotFoundException recoverable) {
@@ -341,22 +340,27 @@ public abstract class Persister<C extends ExperimentConfiguration<C, R>, R exten
     }
 
     public static String getRoundSaveFilePath(String directory, String roundIndexLabel) {
-        return Paths.get(directory, String.format("round-%s.save", roundIndexLabel)).toString();
+        return getRoundSaveFilePath(directory, roundIndexLabel, false);
     }
 
-    public static SavedRoundData restoreSavedRoundData(File directory, int roundNumber) {
-        if (roundNumber < 0) {
-            throw new IllegalArgumentException("Invalid round number: " + roundNumber);
-        }
+    public static String getRoundSaveFilePath(String directory, String roundIndexLabel, boolean xml) {
+        String filename = xml ? "%s-round-save.xml" : "round-%s.save";
+        return Paths.get(directory, String.format(filename, roundIndexLabel)).toString();
+    }
+
+    private String getXmlSaveFilePath(String roundIndexLabel) {
+        return getXmlSaveFilePath(getDefaultSavePath(), roundIndexLabel);
+    }
+
+    private static String getXmlSaveFilePath(String directory, String roundIndexLabel) {
+        return Paths.get(directory, String.format("%s-round-save.xml", roundIndexLabel)).toString();
+    }
+
+    public static SavedRoundData restoreSavedRoundData(File directory, String roundIndexLabel, boolean fromXml) {
         if (!directory.exists()) {
             throw new IllegalArgumentException("Directory " + directory.getAbsolutePath() + " does not exist.");
         }
-        return restoreSavedRoundData(directory, String.valueOf(roundNumber));
-    }
-
-    public static SavedRoundData restoreSavedRoundData(File directory, String roundIndexLabel) {
-        // FIXME: provide option to restore from XML as well
-        String roundSaveFilePath = getRoundSaveFilePath(directory.getAbsolutePath(), roundIndexLabel);
+        String roundSaveFilePath = getRoundSaveFilePath(directory.getAbsolutePath(), roundIndexLabel, fromXml);
         return SavedRoundData.create(roundSaveFilePath);
     }
 
@@ -370,7 +374,7 @@ public abstract class Persister<C extends ExperimentConfiguration<C, R>, R exten
         try {
             doSaveExperimentConfiguration(experimentConfiguration, persistenceDirectory);
         } catch (FileNotFoundException recoverable) {
-            // FIXME: this is duplicated across the regular save() as well,
+            // FIXME: duplicated across the regular save() as well,
             // see if we can extract the algorithm out.
             recoverable.printStackTrace();
             try {
@@ -446,8 +450,8 @@ public abstract class Persister<C extends ExperimentConfiguration<C, R>, R exten
     /**
      * Returns the experiment data directory concatenated with the current run's experiment directory.
      * 
-     * @param persistenceDirectory
-     * @return
+     * @param persistenceDirectory the root directory where all saved data should be stored
+     * @return root-data-directory/experimentSaveDirectory
      */
     public String getSavePath(String persistenceDirectory) {
         return Paths.get(persistenceDirectory, experimentSaveDirectory).toString();
