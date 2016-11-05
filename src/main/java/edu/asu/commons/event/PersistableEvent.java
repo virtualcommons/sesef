@@ -1,6 +1,6 @@
 package edu.asu.commons.event;
 
-import java.time.Instant;
+// import java.time.Instant;
 
 /**
  * $Id$
@@ -15,5 +15,5 @@ public interface PersistableEvent extends Event {
 
     public void timestamp();
 
-    public Instant getInstant();
+  //   public Instant getInstant();
 }

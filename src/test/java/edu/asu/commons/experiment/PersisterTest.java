@@ -89,7 +89,6 @@ public class PersisterTest {
                 String roundSaveFilePath = repeatedRoundPersister.getDefaultRoundSaveFilePath(roundNumber + "." + i);
                 assertTrue(i + " ASSERT " + roundSaveFilePath + " exists", Files.exists(Paths.get(roundSaveFilePath)));
                 ConfigurationTest.MockRoundConfiguration nextRound = repeatedRoundConfiguration.nextRound();
-                System.err.println("next round: " + nextRound.getRoundIndexLabel());
                 repeatedRoundPersister.initialize(nextRound);
             }
         }

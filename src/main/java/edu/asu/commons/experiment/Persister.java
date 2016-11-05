@@ -360,8 +360,14 @@ public abstract class Persister<C extends ExperimentConfiguration<C, R>, R exten
         if (!directory.exists()) {
             throw new IllegalArgumentException("Directory " + directory.getAbsolutePath() + " does not exist.");
         }
+        // FIXME: clean up this crap conditional is-xml based logic
         String roundSaveFilePath = getRoundSaveFilePath(directory.getAbsolutePath(), roundIndexLabel, fromXml);
-        return SavedRoundData.create(roundSaveFilePath);
+        if (fromXml) {
+            return SavedRoundData.createFromXml(roundSaveFilePath);
+        }
+        else {
+            return SavedRoundData.create(roundSaveFilePath);
+        }
     }
 
     protected abstract String getFailSafeSaveDirectory();

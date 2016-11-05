@@ -16,6 +16,7 @@ import com.thoughtworks.xstream.XStream;
 import edu.asu.commons.conf.ExperimentRoundParameters;
 import edu.asu.commons.event.ChatRequest;
 import edu.asu.commons.event.PersistableEvent;
+import edu.asu.commons.event.AbstractPersistableEvent;
 import edu.asu.commons.event.RoundStartedMarkerEvent;
 
 /**
@@ -62,6 +63,7 @@ public class SavedRoundData implements Serializable {
 
     public static SavedRoundData createFromXml(String roundSaveFilePath) {
         XStream xstream = new XStream();
+        xstream.omitField(AbstractPersistableEvent.class, "instant");
         SavedRoundData savedRoundData = new SavedRoundData(roundSaveFilePath);
         try (ObjectInputStream stream = xstream.createObjectInputStream(new FileInputStream(roundSaveFilePath))) {
             return fromStream(stream, savedRoundData);
