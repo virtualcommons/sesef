@@ -1,21 +1,24 @@
 package edu.asu.commons.conf;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
+import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.junit.Assert.*;
+
 public class ConfigurationTest {
 
     private PropertiesConfiguration assistant;
+    private MockServerConfiguration serverConfiguration;
+    private Logger logger = Logger.getLogger(getClass().getName());
 
     @Before
     public void setUp() {
         assistant = new PropertiesConfiguration();
+        serverConfiguration = new MockServerConfiguration();
     }
 
     @Test
@@ -29,8 +32,7 @@ public class ConfigurationTest {
 
     @Test
     public void testAsBeanPropertyMap() {
-        MockServerConfiguration configuration = new MockServerConfiguration();
-        MockRoundConfiguration roundConfiguration = configuration.getCurrentParameters();
+        MockRoundConfiguration roundConfiguration = serverConfiguration.getCurrentParameters();
         Map<String, Object> roundConfigAsMap = roundConfiguration.toMap();
         assertEquals(roundConfiguration.getDuration(), roundConfigAsMap.get("duration"));
         assertEquals(roundConfiguration.getClientsPerGroup(), roundConfigAsMap.get("clientsPerGroup"));
@@ -39,7 +41,6 @@ public class ConfigurationTest {
 
     @Test
     public void testRoundNumbering() {
-        MockServerConfiguration serverConfiguration = new MockServerConfiguration();
         MockRoundConfiguration roundConfiguration = serverConfiguration.getCurrentParameters();
         assertEquals(0, roundConfiguration.getRoundNumber());
         assertTrue(roundConfiguration.isPracticeRound());
@@ -50,7 +51,6 @@ public class ConfigurationTest {
 
     @Test
     public void testMultiplePracticeRounds() {
-        MockServerConfiguration serverConfiguration = new MockServerConfiguration();
         MockRoundConfiguration roundConfiguration = serverConfiguration.getCurrentParameters();
         assertEquals(0, roundConfiguration.getRoundNumber());
         assertTrue(roundConfiguration.isPracticeRound());
@@ -64,8 +64,49 @@ public class ConfigurationTest {
     }
 
     @Test
+    public void testFirstAndLastRound() {
+        MockRoundConfiguration roundConfiguration = serverConfiguration.getCurrentParameters();
+        assertTrue(serverConfiguration.isFirstRound());
+        while (!serverConfiguration.isLastRound()) {
+            roundConfiguration = serverConfiguration.nextRound();
+            assertNotNull(roundConfiguration);
+        }
+        // next round returns the last configuration, always
+        assertEquals(roundConfiguration, serverConfiguration.nextRound());
+        assertFalse(serverConfiguration.isFirstRound());
+        assertTrue(serverConfiguration.isLastRound());
+        // test reset
+        serverConfiguration.reset();
+        roundConfiguration = serverConfiguration.getCurrentParameters();
+        assertTrue(serverConfiguration.isFirstRound());
+        assertFalse(serverConfiguration.isLastRound());
+        for (int i = 0; i < serverConfiguration.getTotalNumberOfRounds(); i++) {
+            assertNotEquals(roundConfiguration, serverConfiguration.nextRound());
+        }
+        assertFalse(serverConfiguration.isFirstRound());
+        assertTrue(serverConfiguration.isLastRound());
+    }
+
+    @Test
+    public void testRepeatingLastRound() {
+        serverConfiguration = createRepeatedRoundConfiguration(10);
+        int totalNumberOfRounds = 0;
+        assertEquals(20, serverConfiguration.getTotalNumberOfRounds());
+        for (int i = 0; i < serverConfiguration.getTotalNumberOfRounds(); i++) {
+            String currentRoundLabel = serverConfiguration.getCurrentRoundLabel();
+            logger.info("current round: " + currentRoundLabel);
+            assertTrue(currentRoundLabel.endsWith(String.valueOf(i % 10)));
+            totalNumberOfRounds++;
+            serverConfiguration.nextRound();
+        }
+        assertEquals(20, totalNumberOfRounds);
+        assertTrue(serverConfiguration.isLastRound());
+        assertFalse(serverConfiguration.isFirstRound());
+
+    }
+
+    @Test
     public void testRepeatingRounds() {
-        MockServerConfiguration serverConfiguration = new MockServerConfiguration();
         MockRoundConfiguration firstRoundConfiguration = serverConfiguration.getCurrentParameters();
         // do this before setting the repeats, otherwise we will be getting the same round configuration until
         // repeat has expired
@@ -95,7 +136,7 @@ public class ConfigurationTest {
         assertEquals(0, serverConfiguration.getCurrentRepeatedRoundIndex());
         assertEquals(1, serverConfiguration.getCurrentRoundIndex());
         assertEquals(secondRoundConfiguration, nextRound);
-        // should be at second round now
+        // second round
         for (int idx = 0; idx < numberOfRepeats; idx++) {
             assertEquals(idx, serverConfiguration.getCurrentRepeatedRoundIndex());
             assertEquals(1, serverConfiguration.getCurrentRoundIndex());
@@ -109,14 +150,20 @@ public class ConfigurationTest {
     }
 
     public static MockServerConfiguration createRepeatedRoundConfiguration(int numberOfRepeats) {
-        MockServerConfiguration serverConfiguration = new MockServerConfiguration();
+        MockServerConfiguration serverConfiguration = new MockServerConfiguration() {
+            @Override
+            public int getNumberOfRounds() {
+                return 2;
+            }
+            @Override
+            public int getTotalNumberOfRounds() {
+                return 20;
+            }
+        };
         MockRoundConfiguration firstRoundConfiguration = serverConfiguration.getCurrentParameters();
         // do this before setting the repeats, otherwise we will be getting the same round configuration until
         // repeat has expired
         firstRoundConfiguration.setPracticeRound(false);
-        // check number of rounds before setting repeat
-        assertEquals(7, serverConfiguration.getTotalNumberOfRounds());
-        assertEquals(7, serverConfiguration.getNumberOfRounds());
         MockRoundConfiguration secondRoundConfiguration = serverConfiguration.getNextRoundConfiguration();
         firstRoundConfiguration.setRepeat(numberOfRepeats);
         secondRoundConfiguration.setRepeat(numberOfRepeats);

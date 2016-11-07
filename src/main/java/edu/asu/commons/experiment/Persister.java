@@ -232,7 +232,9 @@ public abstract class Persister<C extends ExperimentConfiguration<C, R>, R exten
         try {
             ExperimentConfiguration ec = restoreExperimentConfiguration(directory);
             ec.reset();
-            while (!ec.isLastRound()) {
+            for (int i = 0; i < ec.getTotalNumberOfRounds(); i++) {
+                logger.info("number of rounds: " + ec.getNumberOfRounds());
+                logger.info("current round: " + ec.getCurrentRoundIndex());
                 ExperimentRoundParameters rp = ec.getCurrentParameters();
                 SavedRoundData savedRoundData = restoreSavedRoundData(directory, rp.getRoundIndexLabel(), fromXml);
                 String roundSaveFilePath = savedRoundData.getSaveFilePath();

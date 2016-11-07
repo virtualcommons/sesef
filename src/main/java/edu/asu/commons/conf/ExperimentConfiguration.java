@@ -301,7 +301,7 @@ public interface ExperimentConfiguration<C extends ExperimentConfiguration<C, R>
             if (currentRoundIndex == (getNumberOfRounds() - 1)) {
                 E currentParameters = getCurrentParameters();
                 if (currentParameters.isRepeatingRound()) {
-                    return getCurrentRepeatedRoundIndex() == currentParameters.getRepeat();
+                    return getCurrentRepeatedRoundIndex() == (currentParameters.getRepeat() - 1);
                 }
                 return true;
             }
