@@ -78,14 +78,10 @@ public class SavedRoundData implements Serializable {
     public static SavedRoundData fromStream(ObjectInputStream stream, SavedRoundData savedRoundData) {
         try {
             ExperimentRoundParameters roundParameters = (ExperimentRoundParameters) stream.readObject();
-            logger.info("round parameters: " + roundParameters);
             savedRoundData.setRoundParameters(roundParameters);
-
             DataModel dataModel = (DataModel) stream.readObject();
-            logger.info("dataModel: " + dataModel);
             savedRoundData.setDataModel(dataModel);
             SortedSet<PersistableEvent> actions = (SortedSet<PersistableEvent>) stream.readObject();
-            logger.info("actions: " + actions);
             savedRoundData.setActions(actions);
             SortedSet<ChatRequest> chatRequests = (SortedSet<ChatRequest>) stream.readObject();
             savedRoundData.setChatRequests(chatRequests);
@@ -122,12 +118,8 @@ public class SavedRoundData implements Serializable {
         return toSeconds(getElapsedTime(event));
     }
 
-    public double getElapsedTimeDouble(PersistableEvent event) {
-        return (double) getElapsedTime(event) / 1000000000.0;
-    }
-
     public String toSecondString(PersistableEvent event) {
-        return String.format("%3.3f", getElapsedTimeDouble(event));
+        return String.format("%3.3f", (double) getElapsedTime(event) / 1000.0);
     }
 
     public ExperimentRoundParameters getRoundParameters() {
@@ -147,18 +139,25 @@ public class SavedRoundData implements Serializable {
     }
 
     public static long toSeconds(long t) {
-        return toSeconds(t, TimeUnit.NANOSECONDS);
+        return toSeconds(t, TimeUnit.MILLISECONDS);
     }
 
     public static long toSeconds(long t, TimeUnit timeUnit) {
         return TimeUnit.SECONDS.convert(t, timeUnit);
     }
 
+    /**
+     * Returns the number of milliseconds elapsed from the start of the day (midnight) to the given Event's
+     * creation time. For example, if the event was created on November 7, 2016 at 19h54m49s this would return
+     * 71689036
+     * @param event
+     * @return the number of milliseconds elapsed from the start of the day (midnight) to the given Event's creation
+     * time.
+     */
     public long getElapsedTimeRelativeToMidnight(PersistableEvent event) {
         Instant eventInstant = Instant.ofEpochMilli(event.getCreationTime());
         Instant eventInstantDay = eventInstant.truncatedTo(ChronoUnit.DAYS);
         long relative = eventInstantDay.until(eventInstant, ChronoUnit.MILLIS);
-        logger.info("Relative time between " + eventInstantDay + " and " + eventInstant + " is: " + relative);
         return relative;
     }
 
