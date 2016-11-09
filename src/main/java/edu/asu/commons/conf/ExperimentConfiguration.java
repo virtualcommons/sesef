@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Locale;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Properties;
 
 import edu.asu.commons.net.ServerDispatcher;
@@ -298,10 +299,10 @@ public interface ExperimentConfiguration<C extends ExperimentConfiguration<C, R>
         }
 
         public boolean isLastRound() {
-            if (currentRoundIndex == (getNumberOfRounds() - 1)) {
+            if (currentRoundIndex + 1 == getNumberOfRounds()) {
                 E currentParameters = getCurrentParameters();
                 if (currentParameters.isRepeatingRound()) {
-                    return getCurrentRepeatedRoundIndex() == (currentParameters.getRepeat() - 1);
+                    return getCurrentRepeatedRoundIndex() + 1 == currentParameters.getRepeat();
                 }
                 return true;
             }
@@ -312,12 +313,64 @@ public interface ExperimentConfiguration<C extends ExperimentConfiguration<C, R>
             return toMap(this);
         }
 
+        /**
+         * Returns an Iterator over this ExperimentConfiguration's round parameters. Not thread-safe and currently only
+         * one iterator can be safely active at a time for a given ExperimentConfiguration instance, due to
+         * an unfortunate enclosing instance field dependencies on the iterator's enclosing ExperimentConfiguration.
+         * Mainly this is so we can continue to ask the ExperimentConfiguration / ExperimentRoundParameters for an
+         * appropriate round index label (e.g., 1.17 for repeating round 17 of round 1).
+         * @return an Iterator over this ExperimentConfiguration's round parameters.
+         */
         public Iterator<E> iterator() {
-            return allParameters.iterator();
+            return new ExperimentRoundParametersIterator();
         }
 
-        public ListIterator<E> listIterator() {
-            return allParameters.listIterator();
+        /**
+         * XXX: re-enable if dependencies between this and enclosing ExperimentConfiguration get cleaner. need to move
+         * round label generation elsewhere
+         */
+        private class ExperimentRoundParametersIterator implements Iterator<E> {
+            private int currentRoundIndex = 0;
+            private int cursor = 0;
+            private int numberOfRounds = getNumberOfRounds();
+            private int size = getTotalNumberOfRounds();
+            private E lastReturned = null;
+            @Override
+            public boolean hasNext() {
+                return cursor < size;
+            }
+            @Override
+            public E next() {
+                E currentParameters = allParameters.get(currentRoundIndex);
+                if (cursor >= size) {
+                    throw new NoSuchElementException();
+                }
+                if (lastReturned != null) {
+                    if (currentParameters.isRepeatingRound()) {
+                        if ((currentRepeatedRoundIndex + 1) < currentParameters.getRepeat()) {
+                            currentRepeatedRoundIndex++;
+                        }
+                        else {
+                            currentRepeatedRoundIndex = 0;
+                            currentRoundIndex++;
+                            if (currentRoundIndex < numberOfRounds) {
+                                currentParameters = allParameters.get(currentRoundIndex);
+                            }
+                        }
+                    }
+                    else {
+                        currentRoundIndex++;
+                    }
+                }
+                cursor++;
+                lastReturned = currentParameters;
+                return currentParameters;
+            }
+
+            @Override
+            public void remove() {
+                throw new UnsupportedOperationException("Cannot remove experiment round parameters via iteration");
+            }
         }
 
         public E getPreviousRoundConfiguration() {
