@@ -12,15 +12,13 @@ import javax.swing.JFrame;
 import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 import javax.swing.text.html.HTMLDocument;
+import javax.swing.text.html.StyleSheet;
 
 /**
- * $Id$
- * 
- * static utility class for common UI methods to set up a consistent look & feel.
+ * Static utility class for common UI methods and establish consistent look & feel.
  * 
  * 
  * @author <a href='mailto:allen.lee@asu.edu'>Allen Lee</a>
- * @version $Rev$
  */
 public final class UserInterfaceUtils {
 
@@ -109,8 +107,24 @@ public final class UserInterfaceUtils {
     public static void addStyles(JEditorPane editorPane, int fontSize) {
         editorPane.setContentType("text/html");
         Font font = getDefaultFont();
-        String bodyRule = String.format("body { font-family: %s; font-size: %s pt; }", font.getFamily(), fontSize);
-        ((HTMLDocument) editorPane.getDocument()).getStyleSheet().addRule(bodyRule);
+        String bodyCss = String.format("body { font-family: %s; font-size: %s px; padding: 2em 1em;}", font.getFamily(), fontSize);
+        String containerCss = ".container { position: relative; margin-left: auto; margin-right: auto; padding-right: 15px; padding-left: 15px; width: 75%; }";
+        String h1 = String.format("h1 { font-size: %d px; }", (int) Math.floor(fontSize * 1.8d));
+        String h2 = String.format("h2 { font-size: %d px; }", (int) Math.floor(fontSize * 1.5d));
+        String h3 = String.format("h3 { font-size: %d px; }", (int) Math.floor(fontSize * 1.2d));
+        String quizCss = ".incorrect-answer { background-color: red; color: yellow; }";
+        addCss(editorPane, bodyCss, containerCss, h1, h2, h3, quizCss);
+    }
+
+    public static void addCss(JEditorPane editorPane, String ... cssStyles) {
+        StyleSheet styleSheet = ((HTMLDocument) editorPane.getDocument()).getStyleSheet();
+        for (String styleRule : cssStyles) {
+            styleSheet.addRule(styleRule);
+        }
+    }
+
+    public static StyleSheet getStyleSheet(JEditorPane editorPane) {
+        return ((HTMLDocument) editorPane.getDocument()).getStyleSheet();
     }
 
     public static HtmlEditorPane createInstructionsEditorPane() {
@@ -118,11 +132,15 @@ public final class UserInterfaceUtils {
     }
 
     public static HtmlEditorPane createInstructionsEditorPane(boolean editable) {
+        return createInstructionsEditorPane(editable, 20);
+    }
+
+    public static HtmlEditorPane createInstructionsEditorPane(boolean editable, int fontSize) {
         final HtmlEditorPane htmlPane = new HtmlEditorPane();
         htmlPane.setEditable(editable);
         htmlPane.setDoubleBuffered(true);
         htmlPane.setBackground(Color.WHITE);
-        UserInterfaceUtils.addStyles(htmlPane, 16);
+        UserInterfaceUtils.addStyles(htmlPane, fontSize);
         return htmlPane;
     }
 
