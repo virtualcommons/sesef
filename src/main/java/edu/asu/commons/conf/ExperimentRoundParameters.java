@@ -110,7 +110,11 @@ public interface ExperimentRoundParameters<T extends ExperimentConfiguration<T, 
                 return String.valueOf(getRoundIndex());
             }
         }
-        
+
+        public int getCurrentRoundNumber() {
+            return parentConfiguration.getCurrentRoundNumber();
+        }
+
         @SuppressWarnings("unchecked")
         public int getRoundIndex() {
             return parentConfiguration.getRoundIndex((P) this);

@@ -60,6 +60,8 @@ public interface ExperimentConfiguration<C extends ExperimentConfiguration<C, R>
     
     public int getRoundIndex(R roundConfiguration);
 
+    public int getCurrentRoundNumber();
+
     public String getServerName();
 
     public void setServerName(String serverName);
@@ -131,8 +133,9 @@ public interface ExperimentConfiguration<C extends ExperimentConfiguration<C, R>
             }
         }
 
-        private int currentRepeatedRoundIndex = 0;
-        private int currentRoundIndex = 0;
+        private int currentRepeatedRoundIndex = 0; // repeated round counter, move to next round when it == repeat
+        private int currentRoundIndex = 0; // index into the round parameter list
+        private int currentRoundNumber = 0; // integer sequential round index, e.g., 1, 2, 3, 4, 5, 6, ...
         // protected final PropertiesConfiguration assistant;
         protected final List<E> allParameters = new ArrayList<>();
         protected String configurationDirectory;
@@ -285,9 +288,8 @@ public interface ExperimentConfiguration<C extends ExperimentConfiguration<C, R>
             return currentRoundIndex;
         }
         
-        @Deprecated
         public int getCurrentRoundNumber() {
-            return currentRoundIndex;
+            return currentRoundNumber;
         }
 
         public E getCurrentParameters() {
@@ -400,6 +402,7 @@ public interface ExperimentConfiguration<C extends ExperimentConfiguration<C, R>
          */
         public synchronized E nextRound() {
             E currentParameters = getCurrentParameters();
+            currentRoundNumber++;
             if (currentParameters.isRepeatingRound()) {
                 if (currentRepeatedRoundIndex + 1 < currentParameters.getRepeat()) {
                     currentRepeatedRoundIndex++;
