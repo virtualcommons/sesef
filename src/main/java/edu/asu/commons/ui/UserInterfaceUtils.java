@@ -97,6 +97,10 @@ public final class UserInterfaceUtils {
     /** A very light magenta color. */
     public static final Color VERY_LIGHT_MAGENTA = new Color(0xFF, 0x80, 0xFF);
 
+    public static final Color OFF_WHITE = new Color(0xf0, 0xf4, 0xfa);
+
+    public static final Color LIGHT_BLUE_GRAY = new Color(0xce, 0xd9, 0xee);
+
     private static final String JAVAX_JNLP_CLIPBOARD_SERVICE = "javax.jnlp.ClipboardService";
     private static ClipboardService clipboardService;
 
@@ -139,7 +143,7 @@ public final class UserInterfaceUtils {
         final HtmlEditorPane htmlPane = new HtmlEditorPane();
         htmlPane.setEditable(editable);
         htmlPane.setDoubleBuffered(true);
-        htmlPane.setBackground(Color.WHITE);
+        htmlPane.setBackground(OFF_WHITE);
         UserInterfaceUtils.addStyles(htmlPane, fontSize);
         return htmlPane;
     }
