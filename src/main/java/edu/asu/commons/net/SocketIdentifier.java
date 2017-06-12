@@ -5,8 +5,6 @@ import java.net.Socket;
 import java.util.StringTokenizer;
 
 /**
- * $Id$
- * 
  * Uniquely identifies a socket connection and provides translation methods to convert
  * IP addresses of a certain format to "station numbers". In order of preference:
  * 

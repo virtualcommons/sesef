@@ -1,39 +1,35 @@
 package edu.asu.commons.net;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 /**
- * $Id$
- * 
  * Marker interface used to uniquely identify client connections within the
  * framework.
  * 
- * @author alllee
- * @version $Revision$
+ * @author Allen Lee
  */
 public interface Identifier extends Serializable {
 
-    // public int getAssignedNumber();
+    String getChatHandle();
 
-    // public void setAssignedNumber(int assignedNumber);
+    void setChatHandle(String handle);
 
-    public String getChatHandle();
+    String getSurveyId();
 
-    public void setChatHandle(String handle);
+    void setSurveyId(String surveyId);
 
-    public String getSurveyId();
+    String getStationId();
 
-    public void setSurveyId(String surveyId);
+    int getStationNumber();
 
-    public String getStationId();
+    UUID getUUID();
 
-    public int getStationNumber();
-
-    public static final Identifier NULL = new SystemIdentifier() {
+    Identifier NULL = new SystemIdentifier() {
         private static final long serialVersionUID = 3451864583823314294L;
     };
 
-    public static final Identifier ALL = new SystemIdentifier() {
+    Identifier ALL = new SystemIdentifier() {
         private static final long serialVersionUID = -2831336158562033508L;
 
         @Override
@@ -41,14 +37,17 @@ public interface Identifier extends Serializable {
             return "All";
         }
 
+        @Override
         public String getChatHandle() {
             return toString();
         }
 
     };
 
-    public abstract static class SystemIdentifier implements Identifier {
+    abstract class SystemIdentifier implements Identifier {
         private static final long serialVersionUID = 3504270875695958633L;
+
+        private final UUID uuid = UUID.randomUUID();
 
         public String getChatHandle() {
             return "System message";
@@ -68,6 +67,10 @@ public interface Identifier extends Serializable {
                     "Tried to set survey id on the system identifier.");
         }
 
+        public UUID getUUID() {
+            return uuid;
+        }
+
         public String getStationId() {
             return toString();
         }
@@ -81,15 +84,16 @@ public interface Identifier extends Serializable {
         }
 
         public boolean equals(Object a) {
-            return (a instanceof Identifier) && toString().equals(a.toString());
+            return (a instanceof Identifier) && ((Identifier) a).getUUID().equals(getUUID());
         }
     }
 
-    public static class Base<T extends Base<T>> implements Identifier, Comparable<T> {
+    class Base<T extends Base<T>> implements Identifier, Comparable<T> {
 
         private static final long serialVersionUID = -722419864070305185L;
 
         private final String id;
+        private final UUID uuid;
         private String surveyId;
 
         private volatile static int ordinal = 0;
@@ -102,6 +106,7 @@ public interface Identifier extends Serializable {
             hash = ordinal++;
             id = new StringBuilder().append(System.currentTimeMillis())
                     .append(hash).toString();
+            uuid = UUID.randomUUID();
         }
 
         public String toString() {
@@ -113,12 +118,12 @@ public interface Identifier extends Serializable {
         }
 
         public int hashCode() {
-            return id.hashCode();
+            return uuid.hashCode();
         }
         
         public boolean equals(Object other) {
             if (other instanceof Identifier.Base) {
-                return id.equals(((Identifier.Base<T>) other).id);
+                return uuid.equals(((Identifier) other).getUUID());
             }
             return false;
         }
@@ -149,6 +154,10 @@ public interface Identifier extends Serializable {
             this.chatHandle = chatHandle;
         }
 
+        public UUID getUUID() {
+            return uuid;
+        }
+
         public String getSurveyId() {
             return surveyId;
         }
@@ -159,7 +168,7 @@ public interface Identifier extends Serializable {
 
     }
 
-    public static class Mock extends Base<Mock> {
+    class Mock extends Base<Mock> {
         private static final long serialVersionUID = 4306532617547585781L;
     }
 }

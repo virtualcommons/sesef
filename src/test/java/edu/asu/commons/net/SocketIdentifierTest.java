@@ -18,8 +18,8 @@ public class SocketIdentifierTest {
         assertFalse(firstId.equals(secondId));
     }
 
-    private SocketIdentifier createSocketIdentifier(String hostTemplate, int port) {
-        return new SocketIdentifier(hostTemplate, port, hostTemplate + ".foo", port + 10);
+    private SocketIdentifier createSocketIdentifier(String localHostname, int port) {
+        return new SocketIdentifier(localHostname, port, "example.com", port + 1000);
     }
 
 }
