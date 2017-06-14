@@ -42,6 +42,11 @@ public interface Identifier extends Serializable {
             return toString();
         }
 
+        @Override
+        public boolean equals(Object a) {
+            return (a instanceof Identifier) && (a.toString().equals(toString()));
+        }
+
     };
 
     abstract class SystemIdentifier implements Identifier {
