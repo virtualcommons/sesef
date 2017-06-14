@@ -15,8 +15,8 @@ vim:sts=2:sw=2
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <spark.version>2.0.0</spark.version>
     <stringtemplate.version>4.0.8</stringtemplate.version>
-    <xstream.version>1.4.7</xstream.version>
-    <jetty.version>9.3.11.v20160721</jetty.version>
+    <xstream.version>1.4.10</xstream.version>
+    <jetty.version>9.4.6.v20170531</jetty.version>
     <netty.version>4.0.24.Final</netty.version>
     <!-- dev keystore -->
     <keystore.path>src/main/resources/dev.keystore</keystore.path>
@@ -27,7 +27,7 @@ vim:sts=2:sw=2
   </properties>
   <licenses>
     <license>
-      <name>GNU General Public License, Version 3.0</name>
+      <name>GPL-3.0</name>
       <url>http://www.gnu.org/copyleft/gpl.html</url>
       <distribution>repo</distribution>
     </license>
@@ -41,7 +41,7 @@ vim:sts=2:sw=2
     <mailingList>
       <name>Virtual Commons Dev Group</name>
       <archive>https://groups.google.com/d/forum/virtualcommons-dev</archive>
-      <subscribe>virtualcommons-dev+unsubscribe@googlegroups.com</subscribe>
+      <subscribe>virtualcommons-dev+subscribe@googlegroups.com</subscribe>
       <unsubscribe>virtualcommons-dev+unsubscribe@googlegroups.com</unsubscribe>
     </mailingList>
   </mailingLists>
@@ -80,6 +80,11 @@ vim:sts=2:sw=2
       <groupId>com.sparkjava</groupId>
       <artifactId>spark-template-freemarker</artifactId>
       <version>${spark.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.xhtmlrenderer</groupId>
+      <artifactId>flying-saucer-core</artifactId>
+      <version>9.1.6</version>
     </dependency>
     -->
     <dependency>
