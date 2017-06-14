@@ -22,8 +22,11 @@ import javax.swing.text.html.StyleSheet;
  */
 public final class UserInterfaceUtils {
 
-    public static final Font DEFAULT_PLAIN_FONT = new Font(getDefaultFont().getFamily(), Font.PLAIN, 16);
-    public static final Font DEFAULT_BOLD_FONT = new Font(getDefaultFont().getFamily(), Font.BOLD, 16);
+    public final static int DEFAULT_FONT_SIZE = 18;
+
+    public static final Font DEFAULT_PLAIN_FONT = new Font(getDefaultFont().getFamily(), Font.PLAIN, DEFAULT_FONT_SIZE);
+
+    public static final Font DEFAULT_BOLD_FONT = new Font(getDefaultFont().getFamily(), Font.BOLD, DEFAULT_FONT_SIZE);
 
     /** A very dark red color. */
     public static final Color VERY_DARK_RED = new Color(0x80, 0x00, 0x00);
@@ -105,14 +108,18 @@ public final class UserInterfaceUtils {
     private static ClipboardService clipboardService;
 
     public static Font getDefaultFont() {
-        return UIManager.getFont("Label.font");
+        return getDefaultFont(DEFAULT_FONT_SIZE);
+    }
+
+    public static Font getDefaultFont(float fontSize) {
+        return UIManager.getFont("Label.font").deriveFont(fontSize);
     }
 
     public static void addStyles(JEditorPane editorPane, int fontSize) {
         editorPane.setContentType("text/html");
         Font font = getDefaultFont();
-        String bodyCss = String.format("body { font-family: %s; font-size: %d px; padding: 2em 1em;}", font.getFamily(), fontSize);
-        String containerCss = ".container { position: relative; margin-left: auto; margin-right: auto; padding-right: 15px; padding-left: 15px; width: 75%; }";
+        String bodyCss = String.format("body { font-family: %s; font-size: %d px; padding: 2em 1em 2em 1em;}", font.getFamily(), fontSize);
+        String containerCss = ".container { position: relative; margin-left: auto; margin-right: auto; padding-right: 1.5em; padding-left: 1.5em; width: 75%; }";
         String h1 = String.format(".h1 { padding: 1em 0 1em 0; font-size: %d px !important; }", (int) Math.floor(fontSize * 2.0d));
         String h2 = String.format(".h2 { font-size: %d px !important; }", (int) Math.floor(fontSize * 1.6d));
         String h3 = String.format(".h3 { font-size: %d px !important; }", (int) Math.floor(fontSize * 1.2d));
@@ -121,7 +128,7 @@ public final class UserInterfaceUtils {
     }
 
     public static void addCss(JEditorPane editorPane, String ... cssStyles) {
-        StyleSheet styleSheet = ((HTMLDocument) editorPane.getDocument()).getStyleSheet();
+        StyleSheet styleSheet = getStyleSheet(editorPane);
         for (String styleRule : cssStyles) {
             styleSheet.addRule(styleRule);
         }
