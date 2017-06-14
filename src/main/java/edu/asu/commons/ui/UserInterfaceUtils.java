@@ -118,11 +118,11 @@ public final class UserInterfaceUtils {
     public static void addStyles(JEditorPane editorPane, int fontSize) {
         editorPane.setContentType("text/html");
         Font font = getDefaultFont();
-        String bodyCss = String.format("body { font-family: %s; font-size: %d px; padding: 2em 1em 2em 1em;}", font.getFamily(), fontSize);
+        String bodyCss = String.format("html { font-family: %s; font-size: %d px; padding: 2em 1em 2em 1em;}", font.getFamily(), fontSize);
         String containerCss = ".container { position: relative; margin-left: auto; margin-right: auto; padding-right: 1.5em; padding-left: 1.5em; width: 75%; }";
-        String h1 = String.format(".h1 { padding: 1em 0 1em 0; font-size: %d px !important; }", (int) Math.floor(fontSize * 2.0d));
-        String h2 = String.format(".h2 { font-size: %d px !important; }", (int) Math.floor(fontSize * 1.6d));
-        String h3 = String.format(".h3 { font-size: %d px !important; }", (int) Math.floor(fontSize * 1.2d));
+        String h1 = ".h1 { padding: 1em 0 1em 0; font-size: 2em !important; }";
+        String h2 = ".h2 { font-size: 1.8em !important; }";
+        String h3 = ".h3 { font-size: 1.6em !important; }";
         String quizCss = ".incorrect-answer { color: red; }";
         addCss(editorPane, bodyCss, containerCss, h1, h2, h3, quizCss);
     }
