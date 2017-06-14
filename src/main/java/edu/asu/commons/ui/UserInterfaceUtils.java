@@ -108,7 +108,7 @@ public final class UserInterfaceUtils {
     private static ClipboardService clipboardService;
 
     public static Font getDefaultFont() {
-        return getDefaultFont(DEFAULT_FONT_SIZE);
+        return getDefaultFont(30.0f);
     }
 
     public static Font getDefaultFont(float fontSize) {
@@ -117,14 +117,15 @@ public final class UserInterfaceUtils {
 
     public static void addStyles(JEditorPane editorPane, int fontSize) {
         editorPane.setContentType("text/html");
-        Font font = getDefaultFont();
-        String bodyCss = String.format("html { font-family: %s; font-size: %d px; padding: 2em 1em 2em 1em;}", font.getFamily(), fontSize);
-        String containerCss = ".container { position: relative; margin-left: auto; margin-right: auto; padding-right: 1.5em; padding-left: 1.5em; width: 75%; }";
-        String h1 = ".h1 { padding: 1em 0 1em 0; font-size: 2em !important; }";
+        Font font = getDefaultFont(fontSize);
+        String bodyCss = String.format("body { font-family: %s; font-size: %d px; padding: 20px 15px 20px 15px; }", font.getFamily(), fontSize);
+        String containerCss = ".container { position: relative; margin-left: auto; margin-right: auto; padding: 45px 25px 45px 25px; width: 75%; }";
+        String h1 = ".h1 { font-size: 2em !important; }";
         String h2 = ".h2 { font-size: 1.8em !important; }";
         String h3 = ".h3 { font-size: 1.6em !important; }";
-        String quizCss = ".incorrect-answer { color: red; }";
-        addCss(editorPane, bodyCss, containerCss, h1, h2, h3, quizCss);
+        String submitCss = ".btn { width: 100px; height: 33px; }";
+        String quizCss = "input { padding-left: 40px; } .incorrect-answer { color: red; } .question { padding: 30px 20px 30px 20px; }";
+        addCss(editorPane, bodyCss, containerCss, h1, h2, h3, submitCss, quizCss);
     }
 
     public static void addCss(JEditorPane editorPane, String ... cssStyles) {
@@ -143,7 +144,7 @@ public final class UserInterfaceUtils {
     }
 
     public static HtmlEditorPane createInstructionsEditorPane(boolean editable) {
-        return createInstructionsEditorPane(editable, 18);
+        return createInstructionsEditorPane(editable, 30);
     }
 
     public static HtmlEditorPane createInstructionsEditorPane(boolean editable, int fontSize) {
