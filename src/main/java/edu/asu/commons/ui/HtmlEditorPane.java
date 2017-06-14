@@ -1,5 +1,15 @@
 package edu.asu.commons.ui;
 
+import javax.swing.*;
+import javax.swing.event.HyperlinkEvent;
+import javax.swing.text.Document;
+import javax.swing.text.Element;
+import javax.swing.text.View;
+import javax.swing.text.ViewFactory;
+import javax.swing.text.html.FormView;
+import javax.swing.text.html.HTML;
+import javax.swing.text.html.HTMLEditorKit;
+import javax.swing.text.html.StyleSheet;
 import java.awt.AWTEventMulticaster;
 import java.awt.Component;
 import java.awt.Desktop;
@@ -12,30 +22,12 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Properties;
 
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JEditorPane;
-import javax.swing.JList;
-import javax.swing.JOptionPane;
-import javax.swing.JScrollPane;
-import javax.swing.event.HyperlinkEvent;
-import javax.swing.event.HyperlinkListener;
-import javax.swing.text.Document;
-import javax.swing.text.Element;
-import javax.swing.text.View;
-import javax.swing.text.ViewFactory;
-import javax.swing.text.html.FormView;
-import javax.swing.text.html.HTML;
-import javax.swing.text.html.HTMLEditorKit;
-
 /**
- * $Id$
  * 
  * Provides HTML form processing
  * (inspired by Allen Holub's JavaWorld article)
  * 
- * @author <a href='anonymouslee@gmail.com'>Allen Lee</a>
- * @version $Revision$
+ * @author <a href='allen.lee@asu.edu'>Allen Lee</a>
  */
 @SuppressWarnings("serial")
 public final class HtmlEditorPane extends JEditorPane {
@@ -47,37 +39,41 @@ public final class HtmlEditorPane extends JEditorPane {
                 HtmlEditorPaneKit.class.getName());
         setEditorKit(new HtmlEditorPaneKit());
         setContentType("text/html");
-        // putClientProperty(JEditorPane.HONOR_DISPLAY_PROPERTIES, Boolean.TRUE);
+        putClientProperty(JEditorPane.HONOR_DISPLAY_PROPERTIES, Boolean.TRUE);
         // setFont(new Font("Helvetica", Font.TRUETYPE_FONT, 14));
 
         setEditable(false);
-        addHyperlinkListener(new HyperlinkListener() {
-            @Override
-            public void hyperlinkUpdate(HyperlinkEvent e) {
-                if (e.getEventType() != HyperlinkEvent.EventType.ACTIVATED) {
+        addHyperlinkListener((HyperlinkEvent e) -> {
+            if (e.getEventType() != HyperlinkEvent.EventType.ACTIVATED) {
+                return;
+            }
+            URL url = e.getURL();
+            StringBuilder errorMessageBuilder = new StringBuilder("Couldn't display ").append(url);
+            if (Desktop.isDesktopSupported()) {
+                Desktop desktop = Desktop.getDesktop();
+                if (desktop.isSupported(Desktop.Action.BROWSE)) {
+                    try {
+                        desktop.browse(url.toURI());
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                        errorMessageBuilder.append(e1.getMessage());
+                    } catch (URISyntaxException e1) {
+                        e1.printStackTrace();
+                        errorMessageBuilder.append(e1.getMessage());
+                    }
                     return;
                 }
-                URL url = e.getURL();
-                StringBuilder errorMessageBuilder = new StringBuilder("Couldn't display ").append(url);
-                if (Desktop.isDesktopSupported()) {
-                    Desktop desktop = Desktop.getDesktop();
-                    if (desktop.isSupported(Desktop.Action.BROWSE)) {
-                        try {
-                            desktop.browse(url.toURI());
-                        } catch (IOException e1) {
-                            e1.printStackTrace();
-                            errorMessageBuilder.append(e1.getMessage());
-                        } catch (URISyntaxException e1) {
-                            e1.printStackTrace();
-                            errorMessageBuilder.append(e1.getMessage());
-                        }
-                        return;
-                    }
-                }
-                JOptionPane.showMessageDialog(HtmlEditorPane.this, errorMessageBuilder.toString());
             }
+            JOptionPane.showMessageDialog(HtmlEditorPane.this, errorMessageBuilder.toString());
         });
+    }
 
+    public HTMLEditorKit getHtmlEditorKit() {
+        return (HTMLEditorKit) getEditorKit();
+    }
+
+    public StyleSheet getStyleSheet() {
+        return getHtmlEditorKit().getStyleSheet();
     }
 
     /**

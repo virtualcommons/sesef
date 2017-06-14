@@ -1,18 +1,15 @@
 package edu.asu.commons.ui;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Frame;
-
 import javax.jnlp.ClipboardService;
 import javax.jnlp.ServiceManager;
 import javax.jnlp.UnavailableServiceException;
-import javax.swing.JEditorPane;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
 import javax.swing.WindowConstants;
-import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.StyleSheet;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Frame;
 
 /**
  * Static utility class for common UI methods and establish consistent look & feel.
@@ -22,7 +19,7 @@ import javax.swing.text.html.StyleSheet;
  */
 public final class UserInterfaceUtils {
 
-    public final static int DEFAULT_FONT_SIZE = 18;
+    public final static int DEFAULT_FONT_SIZE = 32;
 
     public static final Font DEFAULT_PLAIN_FONT = new Font(getDefaultFont().getFamily(), Font.PLAIN, DEFAULT_FONT_SIZE);
 
@@ -108,35 +105,31 @@ public final class UserInterfaceUtils {
     private static ClipboardService clipboardService;
 
     public static Font getDefaultFont() {
-        return getDefaultFont(30.0f);
+        return getDefaultFont(DEFAULT_FONT_SIZE);
     }
 
     public static Font getDefaultFont(float fontSize) {
         return UIManager.getFont("Label.font").deriveFont(fontSize);
     }
 
-    public static void addStyles(JEditorPane editorPane, int fontSize) {
+    public static void addStyles(HtmlEditorPane editorPane, int fontSize) {
         editorPane.setContentType("text/html");
         Font font = getDefaultFont(fontSize);
         String bodyCss = String.format("body { font-family: %s; font-size: %d px; padding: 20px 15px 20px 15px; }", font.getFamily(), fontSize);
         String containerCss = ".container { position: relative; margin-left: auto; margin-right: auto; padding: 45px 25px 45px 25px; width: 75%; }";
-        String h1 = ".h1 { font-size: 2em !important; }";
-        String h2 = ".h2 { font-size: 1.8em !important; }";
-        String h3 = ".h3 { font-size: 1.6em !important; }";
-        String submitCss = ".btn { width: 100px; height: 33px; }";
+        String h1 = ".h1 { padding-bottom: 20px; font-size: 2em !important; }";
+        String h2 = ".h2 { padding-top: 15px; padding-bottom: 15px; font-size: 1.8em !important; }";
+        String h3 = ".h3 { padding-top: 8px; padding-bottom: 8px; font-size: 1.6em !important; }";
+        String submitCss = ".btn { width: 100px !important; height: 33px !important; }";
         String quizCss = "input { padding-left: 40px; } .incorrect-answer { color: red; } .question { padding: 30px 20px 30px 20px; }";
         addCss(editorPane, bodyCss, containerCss, h1, h2, h3, submitCss, quizCss);
     }
 
-    public static void addCss(JEditorPane editorPane, String ... cssStyles) {
-        StyleSheet styleSheet = getStyleSheet(editorPane);
+    public static void addCss(HtmlEditorPane editorPane, String ... cssStyles) {
+        StyleSheet styleSheet = editorPane.getStyleSheet();
         for (String styleRule : cssStyles) {
             styleSheet.addRule(styleRule);
         }
-    }
-
-    public static StyleSheet getStyleSheet(JEditorPane editorPane) {
-        return ((HTMLDocument) editorPane.getDocument()).getStyleSheet();
     }
 
     public static HtmlEditorPane createInstructionsEditorPane() {
@@ -144,7 +137,7 @@ public final class UserInterfaceUtils {
     }
 
     public static HtmlEditorPane createInstructionsEditorPane(boolean editable) {
-        return createInstructionsEditorPane(editable, 30);
+        return createInstructionsEditorPane(editable, 24);
     }
 
     public static HtmlEditorPane createInstructionsEditorPane(boolean editable, int fontSize) {
@@ -153,6 +146,7 @@ public final class UserInterfaceUtils {
         htmlPane.setDoubleBuffered(true);
         htmlPane.setBackground(OFF_WHITE);
         UserInterfaceUtils.addStyles(htmlPane, fontSize);
+        htmlPane.setFont(getDefaultFont(fontSize));
         return htmlPane;
     }
 
