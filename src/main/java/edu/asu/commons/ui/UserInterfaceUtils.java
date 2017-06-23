@@ -117,9 +117,9 @@ public final class UserInterfaceUtils {
         Font font = getDefaultFont(fontSize);
         String bodyCss = String.format("body { font-family: %s; font-size: %d px; padding: 20px 15px 20px 15px; }", font.getFamily(), fontSize);
         String containerCss = ".container { position: relative; margin-left: auto; margin-right: auto; padding: 45px 25px 45px 25px; width: 75%; }";
-        String h1 = ".h1 { padding-bottom: 20px; font-size: 2em !important; }";
-        String h2 = ".h2 { padding-top: 15px; padding-bottom: 15px; font-size: 1.8em !important; }";
-        String h3 = ".h3 { padding-top: 8px; padding-bottom: 8px; font-size: 1.6em !important; }";
+        String h1 = "h1 { font-size: 1.8em; padding-bottom: 1em; }";
+        String h2 = "h2 { font-size: 1.5em; padding-top: 0.8em; padding-bottom: 0.8em; }";
+        String h3 = "h3 { font-size: 1.2em; padding-top: 0.8em; padding-bottom: 0.8em; }";
         String submitCss = ".btn { width: 100px !important; height: 33px !important; }";
         String quizCss = "input { padding-left: 40px; } .incorrect-answer { color: red; } .question { padding: 30px 20px 30px 20px; }";
         addCss(editorPane, bodyCss, containerCss, h1, h2, h3, submitCss, quizCss);
