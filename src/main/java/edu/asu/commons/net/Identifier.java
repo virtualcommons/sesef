@@ -7,7 +7,7 @@ import java.util.UUID;
  * Marker interface used to uniquely identify client connections within the
  * framework.
  * 
- * @author Allen Lee
+ * @author <a href='mailto:allen.lee@asu.edu'>Allen Lee</a>
  */
 public interface Identifier extends Serializable {
 
@@ -98,7 +98,7 @@ public interface Identifier extends Serializable {
         private static final long serialVersionUID = -722419864070305185L;
 
         private final String id;
-        private final UUID uuid;
+        private UUID uuid;
         private String surveyId;
 
         private volatile static int ordinal = 0;
@@ -123,7 +123,7 @@ public interface Identifier extends Serializable {
         }
 
         public int hashCode() {
-            return uuid.hashCode();
+            return getUUID().hashCode();
         }
         
         public boolean equals(Object other) {
@@ -160,6 +160,10 @@ public interface Identifier extends Serializable {
         }
 
         public UUID getUUID() {
+            if (uuid == null) {
+                // FIXME: this should only be exercised when deserializing legacy data files missing a UUID.
+                uuid = UUID.randomUUID();
+            }
             return uuid;
         }
 
