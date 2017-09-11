@@ -8,8 +8,7 @@ import java.io.PrintWriter;
 import edu.asu.commons.util.Utils;
 
 /**
- * $Id$
- * 
+ *
  * Concrete implementations of this interface are used as callback hooks that contain whatever custom savefile processing code is
  * needed.
  * 
@@ -21,7 +20,6 @@ import edu.asu.commons.util.Utils;
  * </ol>
  * 
  * @author <a href='mailto:Allen.Lee@asu.edu'>Allen Lee</a>
- * @version $Revision$
  */
 public interface SaveFileProcessor {
 
@@ -48,10 +46,10 @@ public interface SaveFileProcessor {
     public String getOutputFileName();
 
     public abstract static class Base implements SaveFileProcessor {
-        // FIXME: not thread safe for concurrent usage when reusing the same SaveFileProcessor in multiple threads
+        // FIXME: not thread safe for concurrent usage, do not reuse the same SaveFileProcessor in multiple threads
         // on multiple save files.
 
-        private long secondsPerInterval;
+        private long intervalDelta = 1;
         private long currentInterval = 0;
         private long intervalEnd = 0;
 
@@ -61,13 +59,21 @@ public interface SaveFileProcessor {
             this(60);
         }
 
-        public Base(int secondsPerInterval) {
-            this.secondsPerInterval = secondsPerInterval;
+        public Base(long intervalDelta) {
+            this.intervalDelta = intervalDelta;
         }
 
-        public boolean isIntervalElapsed(long secondsElapsed) {
-            intervalEnd = (currentInterval + 1) * secondsPerInterval;
-            if (secondsElapsed >= intervalEnd) {
+        /**
+         * Returns true if an interval has elapsed given the current number of elapsed seconds. This method will not
+         * return the same answer twice if you invoke it multiple times with the same argument. I.e., if
+         * isIntervalElapsed(30) returns true, subsequent isIntervalElapsed(30) invocations will always return false
+         * unless currentInterval is reset via resetCurrentInterval.
+         * @param elapsedTime
+         * @return
+         */
+        public boolean isIntervalElapsed(long elapsedTime) {
+            intervalEnd = (currentInterval + 1) * intervalDelta;
+            if (elapsedTime >= intervalEnd) {
                 currentInterval++;
                 return true;
             }
@@ -87,8 +93,13 @@ public interface SaveFileProcessor {
             currentInterval = 0;
         }
 
+        @Deprecated
         public void setSecondsPerInterval(long secondsPerInterval) {
-            this.secondsPerInterval = secondsPerInterval;
+            setIntervalDelta(secondsPerInterval);
+        }
+
+        public void setIntervalDelta(long intervalDelta) {
+            this.intervalDelta = intervalDelta;
         }
 
         public void process(SavedRoundData savedRoundData, String roundSaveFile) {
@@ -96,7 +107,7 @@ public interface SaveFileProcessor {
             FileOutputStream defaultFileOutputStream = null;
             try {
                 defaultFileOutputStream = new FileOutputStream(getOutputFileName());
-                currentInterval = 0;
+                resetCurrentInterval();
                 process(savedRoundData, defaultFileOutputStream);
             } catch (IOException e) {
                 e.printStackTrace();
