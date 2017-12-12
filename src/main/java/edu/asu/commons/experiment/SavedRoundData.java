@@ -155,7 +155,11 @@ public class SavedRoundData implements Serializable {
      * time.
      */
     public long getElapsedTimeRelativeToMidnight(PersistableEvent event) {
-        Instant eventInstant = Instant.ofEpochMilli(event.getCreationTime());
+        return getElapsedTimeRelativeToMidnight(event.getCreationTime());
+    }
+
+    public long getElapsedTimeRelativeToMidnight(long millisFromEpoch) {
+        Instant eventInstant = Instant.ofEpochMilli(millisFromEpoch);
         Instant eventInstantDay = eventInstant.truncatedTo(ChronoUnit.DAYS);
         long relative = eventInstantDay.until(eventInstant, ChronoUnit.MILLIS);
         return relative;
