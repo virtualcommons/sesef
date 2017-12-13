@@ -7,7 +7,7 @@ vim:sts=2:sw=2
   <inceptionYear>2006</inceptionYear>
   <groupId>edu.asu.commons</groupId>
   <artifactId>sesef</artifactId>
-  <version>0.9.4</version>
+  <version>0.9.5</version>
   <name>sesef</name>
   <url>https://github.com/virtualcommons/sesef</url>
   <description>The Social Ecological Systems Experiment Framework (SESEF) is a Java library providing networking, persistence, and configuration scaffolding for experiments on social ecological systems. It has been used to implement the foraging and irrigation experiments developed at Arizona State University and Indiana University.</description>

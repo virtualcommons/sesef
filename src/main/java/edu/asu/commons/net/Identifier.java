@@ -162,7 +162,7 @@ public interface Identifier extends Serializable {
         public UUID getUUID() {
             if (uuid == null) {
                 // FIXME: this should only be exercised when deserializing legacy data files missing a UUID.
-                uuid = UUID.randomUUID();
+                uuid = UUID.nameUUIDFromBytes(id.getBytes());
             }
             return uuid;
         }
