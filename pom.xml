@@ -16,7 +16,7 @@ vim:sts=2:sw=2
     <spark.version>2.0.0</spark.version>
     <stringtemplate.version>4.0.8</stringtemplate.version>
     <xstream.version>1.4.10</xstream.version>
-    <jetty.version>9.4.6.v20170531</jetty.version>
+    <jetty.version>9.4.8.v20171121</jetty.version>
     <netty.version>4.0.24.Final</netty.version>
     <!-- set up dev environment test keystore -->
     <keystore.path>src/main/resources/dev.keystore</keystore.path>
