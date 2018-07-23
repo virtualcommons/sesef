@@ -7,7 +7,7 @@ vim:sts=2:sw=2
   <inceptionYear>2006</inceptionYear>
   <groupId>edu.asu.commons</groupId>
   <artifactId>sesef</artifactId>
-  <version>0.9.5</version>
+  <version>0.9.6</version>
   <name>sesef</name>
   <url>https://github.com/virtualcommons/sesef</url>
   <description>The Social Ecological Systems Experiment Framework (SESEF) is a Java library providing networking, persistence, and configuration scaffolding for experiments on social ecological systems. It has been used to implement the foraging and irrigation experiments developed at Arizona State University and Indiana University.</description>
@@ -16,7 +16,7 @@ vim:sts=2:sw=2
     <spark.version>2.0.0</spark.version>
     <stringtemplate.version>4.0.8</stringtemplate.version>
     <xstream.version>1.4.10</xstream.version>
-    <jetty.version>9.4.8.v20171121</jetty.version>
+    <jetty.version>9.4.12.RC0</jetty.version>
     <netty.version>4.0.24.Final</netty.version>
     <!-- set up dev environment test keystore -->
     <keystore.path>src/main/resources/dev.keystore</keystore.path>
@@ -199,7 +199,7 @@ vim:sts=2:sw=2
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
-        <version>2.10.4</version>
+        <version>3.0.1</version>
         <configuration>
           <links>
             <link>http://xstream.codehaus.org/javadoc/</link>
@@ -216,7 +216,7 @@ vim:sts=2:sw=2
       <plugin>
         <groupId>org.jacoco</groupId>
         <artifactId>jacoco-maven-plugin</artifactId>
-        <version>0.7.9</version>
+        <version>0.8.1</version>
         <executions>
           <execution>
             <id>prepare-agent</id>
@@ -244,7 +244,7 @@ vim:sts=2:sw=2
       </plugin>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.6.2</version>
+        <version>3.7.0</version>
         <configuration>
           <source>1.8</source>
           <target>1.8</target>
