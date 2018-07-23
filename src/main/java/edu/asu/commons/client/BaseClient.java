@@ -61,9 +61,9 @@ public abstract class BaseClient<C extends ExperimentConfiguration<C, R>, R exte
         initializeEventProcessors();
         this.id = dispatcher.connect(serverConfiguration.getServerAddress());
         if (id == null) {
-            throw new RuntimeException("Could not connect to server: <"
-                    + serverConfiguration.getServerAddress()
-                    + "> is probably down.");
+            throw new RuntimeException(
+                    String.format("Could not connect to server <%s>", serverConfiguration.getServerAddress())
+                    );
         }
         postConnect();
     }
@@ -87,6 +87,10 @@ public abstract class BaseClient<C extends ExperimentConfiguration<C, R>, R exte
 
     public EventChannel getEventChannel() {
         return channel;
+    }
+
+    public ServerConfiguration getConfiguration() {
+        return serverConfiguration;
     }
 
     protected void setId(Identifier id) {
