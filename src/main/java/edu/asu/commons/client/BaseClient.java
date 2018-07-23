@@ -89,7 +89,7 @@ public abstract class BaseClient<C extends ExperimentConfiguration<C, R>, R exte
         return channel;
     }
 
-    public ServerConfiguration getConfiguration() {
+    public C getConfiguration() {
         return serverConfiguration;
     }
 
