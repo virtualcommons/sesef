@@ -116,6 +116,11 @@ vim:sts=2:sw=2
       <version>${jetty.version}</version>
       <scope>compile</scope>
     </dependency>
+    <dependency>
+      <groupId>com.github.jiconfont</groupId>
+      <artifactId>jiconfont-font_awesome</artifactId>
+      <version>4.7.0.0</version>
+    </dependency>
     <!--
     <dependency>
     	<groupId>io.netty</groupId>
