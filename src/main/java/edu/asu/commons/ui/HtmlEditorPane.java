@@ -23,10 +23,10 @@ import java.net.URL;
 import java.util.Properties;
 
 /**
- * 
+ *
  * Provides HTML form processing
  * (inspired by Allen Holub's JavaWorld article)
- * 
+ *
  * @author <a href='allen.lee@asu.edu'>Allen Lee</a>
  */
 @SuppressWarnings("serial")
@@ -54,12 +54,9 @@ public final class HtmlEditorPane extends JEditorPane {
                 if (desktop.isSupported(Desktop.Action.BROWSE)) {
                     try {
                         desktop.browse(url.toURI());
-                    } catch (IOException e1) {
-                        e1.printStackTrace();
-                        errorMessageBuilder.append(e1.getMessage());
-                    } catch (URISyntaxException e1) {
-                        e1.printStackTrace();
-                        errorMessageBuilder.append(e1.getMessage());
+                    } catch (IOException | URISyntaxException exception) {
+                        exception.printStackTrace();
+                        errorMessageBuilder.append(exception.getMessage());
                     }
                     return;
                 }
@@ -119,10 +116,9 @@ public final class HtmlEditorPane extends JEditorPane {
                 // route submit operations to form observers only
                 // if observers are registered.
                 //
-                FormView view =
-                        (actionListeners != null)
-                                ? new LocalFormView(element)
-                                : (FormView) (super.create(element));
+                FormView view = (actionListeners != null)
+                        ? new LocalFormView(element)
+                        : (FormView) (super.create(element));
 
                 // String type = (String)( element.getAttributes().
                 // getAttribute(HTML.Attribute.TYPE));
@@ -143,19 +139,6 @@ public final class HtmlEditorPane extends JEditorPane {
         }
 
         /**
-         * Chase up through the form hierarchy to find the <code>&lt;form&gt;</code> tag that encloses the current <code>&lt;input&gt;</code> tag. There's a
-         * similar
-         * method in the base class, but it's private so I can't use it.
-         */
-        // private Element findFormTag() {
-        // for(Element e=getElement(); e != null; e=e.getParentElement() )
-        // if(e.getAttributes().getAttribute(StyleConstants.NameAttribute)
-        // ==HTML.Tag.FORM )
-        // return e;
-        // throw new RuntimeException("LocalFormView didn't find a form tag");
-        // }
-
-        /**
          * Override the base-class method that actually submits the form
          * data to process it locally instead if the URL in the action
          * field matches the "local" URL.
@@ -167,19 +150,19 @@ public final class HtmlEditorPane extends JEditorPane {
 
         /**
          * Override the base-class image-submit-button class. Given the tag:
-         * 
+         *
          * <PRE>
          *  &lt;input type="image" src="grouchoGlasses.gif"
          *                 name=groucho value="groucho.pressed"&gt;
          * </PRE>
-         * 
+         *
          * The data will hold only two properties:
-         * 
+         *
          * <PRE>
          *  groucho.y=23
          *  groucho.x=58
          * </PRE>
-         * 
+         *
          * Where 23 and 58 are the image-relative positions of the mouse when
          * the user clicked. (Note that the value= field is ignored.)
          * Image tags are useful primarily for implementing a cancel button.
@@ -190,21 +173,6 @@ public final class HtmlEditorPane extends JEditorPane {
         {
             submitData(data);
         }
-
-        /**
-         * Special processing for the reset button. I really want to
-         * override the base-class resetForm() method, but it's package-
-         * access restricted to javax.swing.text.html.
-         * I can, however, override the actionPerformed method
-         * that calls resetForm() (Ugh).
-         */
-        // public void actionPerformed( ActionEvent e )
-        // { String type = (String)( getElement().getAttributes().
-        // getAttribute(HTML.Attribute.TYPE));
-        // if( type.equals("reset") )
-        // doReset( );
-        // super.actionPerformed(e);
-        // }
 
         /**
          * Make transparent any standard components used for input.
@@ -278,11 +246,7 @@ public final class HtmlEditorPane extends JEditorPane {
         private final Properties data = new Properties();
 
         /**
-         * @param method
-         *            method= attribute to Form tag.
-         * @param action
-         *            action= attribute to Form tag.
-         * @param data
+         * @param formData
          *            Data provided by standard HTML element. Data
          *            provided by custom tags is appended to this set.
          */
@@ -293,9 +257,8 @@ public final class HtmlEditorPane extends JEditorPane {
                 // data = UrlUtil.decodeUrlEncoding(data);
                 data.load(new ByteArrayInputStream(
                         formData.replaceAll("&", "\n").getBytes())
-                        );
-            } catch (IOException e)
-            {
+                );
+            } catch (IOException e) {
                 throw new RuntimeException("shouldn't happen", e);
             }
         }
