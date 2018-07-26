@@ -120,10 +120,11 @@ public final class UserInterfaceUtils {
         String h1 = "h1 { font-size: 1.4em; padding-bottom: 1em; }";
         String h2 = "h2 { font-size: 1.2em; text-decoration: underline; padding-top: 0.8em; padding-bottom: 0.8em; }";
         String h3 = "h3 { font-size: 1.1em; text-decoration: underline; padding-top: 0.8em; padding-bottom: 0.8em; }";
-        String li = "li { padding-bottom: 0.8em; }";
+        String h4 = "h4 { font-size: 1.0em; padding-top: 0.3em; padding-bottom: 0; }";
+        String li = "li { padding-bottom: 0.6em; }";
         String submitCss = ".btn { width: 100px !important; height: 33px !important; }";
         String quizCss = "input { padding-left: 40px; } .incorrect-answer { color: red; } .question { padding: 30px 20px 30px 20px; }";
-        addCss(editorPane, bodyCss, containerCss, h1, h2, h3, submitCss, quizCss, li);
+        addCss(editorPane, bodyCss, containerCss, h1, h2, h3, h4, submitCss, quizCss, li);
     }
 
     public static void addCss(HtmlEditorPane editorPane, String ... cssStyles) {
