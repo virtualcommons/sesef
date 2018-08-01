@@ -20,7 +20,7 @@ public class Duration implements Serializable {
     // to take up? TimeAndMoney uses 'quantity' I believe.
     // Delta is always specified in milliseconds.
     private final long delta;
-    // number of times this Duration has been restart()-ed.
+    // number of times this Duration has been restarted.
     private long startCount = 0;
     private long startTime;
     private long endTime;
@@ -104,6 +104,11 @@ public class Duration implements Serializable {
     }
     
     public boolean isModulo(int mod) {
+        return startCount % mod == 0;
+    }
+
+    public boolean hasSecondElapsed() {
+        int mod = Math.toIntExact(1000L / delta);
         return startCount % mod == 0;
     }
     
