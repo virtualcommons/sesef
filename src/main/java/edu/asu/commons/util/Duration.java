@@ -108,7 +108,7 @@ public class Duration implements Serializable {
     }
 
     public boolean hasSecondElapsed() {
-        int mod = Math.toIntExact(1000L / delta);
+        int mod = Math.toIntExact((long) (1000.0d / delta));
         return startCount % mod == 0;
     }
     
