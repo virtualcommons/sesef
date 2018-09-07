@@ -45,10 +45,16 @@ public interface SaveFileProcessor {
 
     public String getOutputFileName();
 
+    /**
+     * FIXME: this base class is not thread safe for concurrent usage, do not reuse any instance of a SaveFileProcessor
+     * based on this class in multiple threads on multiple save files.
+     */
     public abstract static class Base implements SaveFileProcessor {
-        // FIXME: not thread safe for concurrent usage, do not reuse the same SaveFileProcessor in multiple threads
-        // on multiple save files.
 
+        // the number of seconds that should elapse to be considered an interval, e.g., if intervalDelta = N, then each
+        // interval is N seconds long. Report snapshots of the state of the game world data at each interval, i.e., 
+        // 0, N, 2N, 3N, 4N, 5N, 6N, 7N, ..., M*N
+        // default value is 1s intervals
         private long intervalDelta = 1;
         private long currentInterval = 0;
         private long intervalEnd = 0;
@@ -93,7 +99,6 @@ public interface SaveFileProcessor {
             currentInterval = 0;
         }
 
-        @Deprecated
         public void setSecondsPerInterval(long secondsPerInterval) {
             setIntervalDelta(secondsPerInterval);
         }
