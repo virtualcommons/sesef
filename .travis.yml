@@ -3,3 +3,5 @@ after_success:
   - mvn clean test jacoco:report coveralls:report
 jdk:
     - oraclejdk8
+    - oraclejdk10
+    - openjdk10
