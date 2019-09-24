@@ -15,7 +15,7 @@ vim:sts=2:sw=2
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <spark.version>2.0.0</spark.version>
     <stringtemplate.version>4.0.8</stringtemplate.version>
-    <xstream.version>1.4.10</xstream.version>
+    <xstream.version>1.4.11</xstream.version>
     <jetty.version>9.4.12.v20180830</jetty.version>
     <netty.version>4.0.24.Final</netty.version>
     <!-- set up dev environment test keystore -->
