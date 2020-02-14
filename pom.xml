@@ -14,9 +14,9 @@ vim:sts=2:sw=2
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <spark.version>2.0.0</spark.version>
-    <stringtemplate.version>4.0.8</stringtemplate.version>
-    <xstream.version>1.4.11</xstream.version>
-    <jetty.version>9.4.12.v20180830</jetty.version>
+    <stringtemplate.version>4.3</stringtemplate.version>
+    <xstream.version>1.4.11.1</xstream.version>
+    <jetty.version>9.4.26.v20200117</jetty.version>
     <netty.version>4.0.24.Final</netty.version>
     <!-- set up dev environment test keystore -->
     <keystore.path>src/main/resources/dev.keystore</keystore.path>
@@ -65,32 +65,10 @@ vim:sts=2:sw=2
     </repository>
   </repositories>
   <dependencies>
-    <!--
-    <dependency>
-        <groupId>io.dropwizard</groupId>
-        <artifactId>dropwizard-core</artifactId>
-        <version>${dropwizard.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.sparkjava</groupId>
-      <artifactId>spark-core</artifactId>
-      <version>${spark.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.sparkjava</groupId>
-      <artifactId>spark-template-freemarker</artifactId>
-      <version>${spark.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.xhtmlrenderer</groupId>
-      <artifactId>flying-saucer-core</artifactId>
-      <version>9.1.6</version>
-    </dependency>
-    -->
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>4.12</version>
+      <version>4.13</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -117,12 +95,12 @@ vim:sts=2:sw=2
     <dependency>
       <groupId>com.github.jiconfont</groupId>
       <artifactId>jiconfont-font_awesome</artifactId>
-      <version>4.7.0.0</version>
+      <version>4.7.0.1</version>
     </dependency>
     <dependency>
       <groupId>com.github.jiconfont</groupId>
       <artifactId>jiconfont-swing</artifactId>
-      <version>1.0.0</version>
+      <version>1.0.1</version>
     </dependency>
     <!--
     <dependency>
@@ -182,7 +160,7 @@ vim:sts=2:sw=2
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jarsigner-plugin</artifactId>
-        <version>1.4</version>
+        <version>3.0.0</version>
         <executions>
           <execution>
             <id>sign</id>
@@ -207,7 +185,7 @@ vim:sts=2:sw=2
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
-        <version>3.0.1</version>
+        <version>3.1.1</version>
         <configuration>
           <links>
             <link>http://xstream.codehaus.org/javadoc/</link>
@@ -224,7 +202,7 @@ vim:sts=2:sw=2
       <plugin>
         <groupId>org.jacoco</groupId>
         <artifactId>jacoco-maven-plugin</artifactId>
-        <version>0.8.1</version>
+        <version>0.8.5</version>
         <executions>
           <execution>
             <id>prepare-agent</id>
@@ -252,7 +230,7 @@ vim:sts=2:sw=2
       </plugin>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.7.0</version>
+        <version>3.8.1</version>
         <configuration>
           <source>1.8</source>
           <target>1.8</target>
