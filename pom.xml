@@ -107,8 +107,6 @@ vim:sts=2:sw=2
       <groupId>javax.jnlp</groupId>
       <artifactId>jnlp-api</artifactId>
       <version>8.0</version>
-      <scope>system</scope>
-      <systemPath>${java.home}/lib/javaws.jar</systemPath>
     </dependency>
     <dependency>
       <groupId>org.eclipse.jetty</groupId>
