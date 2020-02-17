@@ -1,7 +1,11 @@
 language: java
+sudo: false
+addons:
+  apt:
+    packages:
+      - icedtea-netx
 after_success:
   - mvn clean test jacoco:report coveralls:report
 jdk:
-    - oraclejdk8
-    - oraclejdk10
-    - openjdk10
+    - openjdk8
+    - openjdk11
