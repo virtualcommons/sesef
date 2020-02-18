@@ -50,7 +50,7 @@ public final class HtmlEditorPane extends JEditorPane {
             URL url = e.getURL();
             StringBuilder errorMessageBuilder = new StringBuilder("Couldn't display ").append(url);
             if (url == null) {
-                errorMessageBuilder.append("No URL specified - this is probably due to an error in the foraging configuration.");
+                errorMessageBuilder.append("No URL found in the event, this is probably due to an error in the foraging configuration.");
                 return;
             }
             if (Desktop.isDesktopSupported()) {
@@ -58,7 +58,7 @@ public final class HtmlEditorPane extends JEditorPane {
                 if (desktop.isSupported(Desktop.Action.BROWSE)) {
                     try {
                         desktop.browse(url.toURI());
-                    } catch (IOException | URISyntaxException | Exception exception) {
+                    } catch (IOException | URISyntaxException exception) {
                         exception.printStackTrace();
                         errorMessageBuilder.append(exception.getMessage());
                     }
