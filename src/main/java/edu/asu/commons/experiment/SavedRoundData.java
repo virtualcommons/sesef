@@ -1,26 +1,27 @@
 package edu.asu.commons.experiment;
 
+import com.thoughtworks.xstream.XStream;
+import edu.asu.commons.conf.ExperimentRoundParameters;
+import edu.asu.commons.event.AbstractPersistableEvent;
+import edu.asu.commons.event.ChatRequest;
+import edu.asu.commons.event.PersistableEvent;
+import edu.asu.commons.event.RoundStartedMarkerEvent;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalUnit;
+import java.util.Arrays;
+import java.util.List;
 import java.util.SortedSet;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
-import com.thoughtworks.xstream.XStream;
-
-import edu.asu.commons.conf.ExperimentRoundParameters;
-import edu.asu.commons.event.ChatRequest;
-import edu.asu.commons.event.PersistableEvent;
-import edu.asu.commons.event.AbstractPersistableEvent;
-import edu.asu.commons.event.RoundStartedMarkerEvent;
-
 /**
- * $Id$
  * 
  * Struct-ish class for saved round data. Should see if we can somehow preserve type information here.
  * 
@@ -197,5 +198,23 @@ public class SavedRoundData implements Serializable {
 
     public void setChatRequests(SortedSet<ChatRequest> chatRequests) {
         this.chatRequests = chatRequests;
+    }
+
+    /**
+     * Given this SavedRoundData's save file path like `/code/experiment-data/t1/01-24-2019/17.21.54/round-9.save`
+     * return a List ["01-24-2019, "17.21.54"].
+     *
+     * Always expects saveFilePath to be a String path with date time information encoded in two parent directories
+     * above the save file.
+     *
+     * @return a List of two Strings, the first a date in "MM-DD-YYYY" and the second the time in "hh.mm.ss" format.
+     */
+    public List<String> extractDateTime() {
+        Path path = Paths.get(saveFilePath);
+        int numberOfElements = path.getNameCount();
+        // always assumes a path with date time information encoded in the parent
+        // directories, above the actual binary save file e.g., ../01-24-2019/17.21.54/round-X.save
+        // List.of in JDK 11.. when we get there
+        return Arrays.asList(path.getName(numberOfElements-3).toString(), path.getName(numberOfElements-2).toString());
     }
 }

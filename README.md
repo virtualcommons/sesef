@@ -26,8 +26,8 @@ There are many areas of improvement remaining:
 6. better UI support and scaffolding
 
 ### current status
-[![Build Status](https://travis-ci.org/virtualcommons/sesef.svg?branch=master)](https://travis-ci.org/virtualcommons/sesef)
-Current development is focused on [web-based collective action experiments](https://github.com/virtualcommons/vcweb). If you'd like to use sesef to develop new experiments or are interested in customizing any of our existing experiments, please [let us know](http://vcweb.asu.edu/contact). 
+[![Build Status](https://travis-ci.com/virtualcommons/sesef.svg?branch=main)](https://travis-ci.com/virtualcommons/sesef)
+Current development is focused on [web-based collective action experiments](https://github.com/virtualcommons/vcweb). If you'd like to use sesef to develop new experiments or are interested in customizing any of our existing experiments, please [let us know](http://commons.asu.edu/contact). 
 We are also working on [developer documentation](https://github.com/virtualcommons/sesef/wiki/Home) that describe how to implement new experiments.
 
 Development supported by the [Center for Behavior, Institutions, and the Environment](http://cbie.asu.edu) and the [National Science Foundation](http://nsf.gov).
