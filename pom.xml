@@ -14,7 +14,7 @@ vim:sts=2:sw=2
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <spark.version>2.0.0</spark.version>
-    <stringtemplate.version>4.3</stringtemplate.version>
+    <stringtemplate.version>4.3.1</stringtemplate.version>
     <xstream.version>1.4.17</xstream.version>
     <jetty.version>9.4.26.v20200117</jetty.version>
     <netty.version>4.0.24.Final</netty.version>
@@ -185,7 +185,7 @@ vim:sts=2:sw=2
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
-        <version>3.1.1</version>
+        <version>3.3.0</version>
         <configuration>
           <links>
             <link>http://xstream.codehaus.org/javadoc/</link>
