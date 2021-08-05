@@ -46,7 +46,7 @@ import edu.asu.commons.event.RoundEndedMarkerEvent;
 
 public abstract class Persister<C extends ExperimentConfiguration<C, R>, R extends ExperimentRoundParameters<C, R>> implements IPersister<C, R> {
 
-    private final static String ROUND_SAVE_DIRECTORY_FORMAT = "MM-dd-yyyy" + File.separator + "HH.mm.ss";
+    private final static String ROUND_SAVE_DIRECTORY_FORMAT = "yyyy-MM-dd" + File.separator + "HH.mm.ss";
     private final static String DEFAULT_EXPERIMENT_CONFIGURATION_FILE = "experiment-configuration.save";
     private final static String DEFAULT_CHAT_LOG_FILE_NAME = "chat.log";
 
